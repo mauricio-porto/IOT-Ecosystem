@@ -1,0 +1,42 @@
+Objetivo Geral
+==============
+- Selecionar, experimentar e propor um conjunto de protocolos de comunicação que propiciem o maior nível de interoperabilidade entre dispositivos heterogêneos através da Internet, com a menor alteração e investimentos possível.
+
+Analogia do MyIdea
+==================
+- Um projeto é como uma corrida de carros, limitada por tempo e recursos (combustível e pneus). Vence quem percorrer a maior distância, respeitando a resistência dos carros. Speed Racer.
+
+Conexões
+========
+
+- Os dispositivos comunicam-se localmente através de Bluetooth e remotamente através de um protocolo TCP/IP (XMPP, outro);
+
+- Dispositivos que não possuem conexão TCP/IP dependem de um proxy que o faça;
+
+Showroom e Gadgets
+==================
+
+- Já é conhecido o impacto positivo que demonstrações com gadgets produzem (vide GuideDroid); devemos investir nisso;
+
+- Reunir o maior número possível de dispositivos Bluetooth conectados diretamente à Internet ou através de um proxy (XMPP);
+
+- Lista inicial:
+	- HR monitor Zephyr
+	- OBD Scan
+	- Impressora HP Laserjet e/ou HP ePrinter
+	- VW RADIO 05
+	- Arduino Bluetooh shield
+	- Outros dispositivos HP? Notebooks? Chromebook?
+
+Cenários e Casos de Uso
+=======================
+
+- O monitor cardíaco fornece dados de batimentos e cadência que são reunidos com dados de localização (GPS) por exemplo e enviados por uma aplicação Android a outros dispositivos que fazem parte do grupo (roster) que participam de um treino ou torneio, tipo grupo de corrida. Isso amplia a experiência atual (concorrência) onde essas informações são registradas no smartphone e enviadas posteriormente como registro (log) de atividade (vide Strava, etc.); neste modelo há interação, tempo real, permite colaboração e ajustes de ritmo dos participantes durante a atividade;
+
+- O scanner OBD fornece dados de monitoração e diagnóstico do carro que são enviados por uma aplicação Android diretamente ao computador do mecânico que pode assim diagnosticar um problema intermitente sem que o carro precise ficar à disposição da oficina. Uma vez diagnosticado o problema, o proprietário é avisado e poderá levar à oficina para conserto;
+
+- A(s) impressora(s) segue(m) o cenário de uso do HP ePrint Service mas pode se conectar sem a dependência deste (no caso de Chailets, por exemplo);
+
+- O som do carro pode ser usado para chamadas telefônicas e outros serviços (pesquisar);
+
+- Uma placa Arduino pode ser dotada de muitos sensores e atuadores que podem ser monitorados e controlados remotamente; smartHome;
