@@ -1,0 +1,18 @@
+Diagnóstico Automotivo Remoto
+-----------------------------
+
+Componentes:
+
+	- Scanner OBD com Bluetooth que coleta os parametros de diagnóstico do veículo pelo barramento apropriado
+
+	- Smartphone com aplicativo que atua como intermediário para a ferramenta de diagnóstico na oficina
+
+Funcionamento:
+
+	1) No carro, um scanner OBD conectado via Bluetooth com um smartphone
+
+	2) Esse smartphone estabelece uma conexão de troca de mensagens com a oficina
+
+	3) O aplicativo de diagnóstico na oficina seleciona os parametros que deseja receber e os informa ao aplicativo no smartphone
+
+	4) O smartphone coleta os valores e os repassa à oficina
