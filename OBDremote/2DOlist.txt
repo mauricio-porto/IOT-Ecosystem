@@ -1,0 +1,9 @@
+2DO List
+========
+
+- Substituir o código de conexão BT existente em "ObdGatewayService.java" por o que existe em "HRMReceiver/GuideDroid", onde há interação do usuário para escolha do dispositivo BT;
+
+- Acrescentar o código do XMPPCommunicator;
+
+- Transferir a seleção de parâmetros OBD (PIDs) do menu do OBDproxy para o "OBDClient";
+
