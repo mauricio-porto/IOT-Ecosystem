@@ -15,7 +15,7 @@ import eu.lighthouselabs.obd.reader.IPostMonitor;
  */
 public class ObdGatewayServiceConnection implements ServiceConnection {
 
-	private static final String TAG = "ObdGatewayServiceConnection";
+	private static final String TAG = ObdGatewayServiceConnection.class.getSimpleName();
 
 	private IPostMonitor _service = null;
 	private IPostListener _listener = null;
