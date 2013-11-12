@@ -3,8 +3,6 @@
  */
 package com.hp.myidea.obdproxy.service;
 
-import com.hp.myidea.obdproxy.base.BluetoothConnector;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,6 +21,10 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import com.hp.myidea.obdproxy.R;
+import com.hp.myidea.obdproxy.app.OBDproxyActivity;
+import com.hp.myidea.obdproxy.base.BluetoothConnector;
 
 /**
  * @author mapo
@@ -128,7 +130,7 @@ public class BluetoothReceiver extends Service {
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind()");
         String action = intent.getAction();
-        if(action.equals("com.hp.myidea.guidedroid.service.BluetoothReceiver") || action.equals("com.hp.myidea.guidedroid.BLUETOOTH_RECEIVER")) {
+        if(action.equals("com.hp.myidea.obdproxy.service.BluetoothReceiver") || action.equals("com.hp.myidea.obdproxy.BLUETOOTH_RECEIVER")) {
             return activityMsgListener.getBinder();
         }
         return null;
@@ -147,9 +149,9 @@ public class BluetoothReceiver extends Service {
         this.toast = Toast.makeText(this, TAG, Toast.LENGTH_LONG);
         this.toast.setGravity(Gravity.CENTER, 0, 0);
 
-        this.notifier = new Notification(R.drawable.ic_launcher, "GuideDroid is running...", System.currentTimeMillis());
+        this.notifier = new Notification(R.drawable.ic_launcher, "OBDproxy is running...", System.currentTimeMillis());
 
-        this.notifier.setLatestEventInfo(this, "GuideDroid", "Your guide friend", this.buildIntent());	// TODO: Localize!!!!
+        this.notifier.setLatestEventInfo(this, "OBDproxy", "Your roaming service car", this.buildIntent());	// TODO: Localize!!!!
         this.notifier.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
     }
@@ -194,7 +196,7 @@ public class BluetoothReceiver extends Service {
         	return;
         }
 
-        this.notifyUser("GuideDroid is running.", "GuideDroid is running...");
+        this.notifyUser("OBDproxy is running.", "OBDproxy is running...");
         this.running = true;
     }
 
@@ -205,7 +207,7 @@ public class BluetoothReceiver extends Service {
         	this.connector.stop();
         }
        
-        this.notifyUser("Stopped. Select to start again.", "Stopping GuideDroid.");
+        this.notifyUser("Stopped. Select to start again.", "Stopping OBDproxy.");
 		this.running = false;
     }
 
@@ -238,20 +240,20 @@ public class BluetoothReceiver extends Service {
 
     private void restoreState() {
         // Restore state
-        SharedPreferences state = this.getSharedPreferences(GuideDroid.GUIDE_DROID_PREFS, 0);
-        this.obdBluetoothAddress = state.getString("ArduinoBluetoothAddress", null);
+        SharedPreferences state = this.getSharedPreferences(OBDproxyActivity.OBDPROXY_PREFS, 0);
+        this.obdBluetoothAddress = state.getString("OBDBluetoothAddress", null);
     }
 
     private void storeState() {
         // Persist state
-        SharedPreferences state = this.getSharedPreferences(GuideDroid.GUIDE_DROID_PREFS, 0);
+        SharedPreferences state = this.getSharedPreferences(OBDproxyActivity.OBDPROXY_PREFS, 0);
         SharedPreferences.Editor editor = state.edit();
-        editor.putString("ArduinoBluetoothAddress", this.obdBluetoothAddress);
+        editor.putString("OBDBluetoothAddress", this.obdBluetoothAddress);
         editor.commit();
     }
 
     private PendingIntent buildIntent() {
-        Intent intent = new Intent(this, GuideDroid.class);
+        Intent intent = new Intent(this, OBDproxyActivity.class);
 
         //intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -263,7 +265,7 @@ public class BluetoothReceiver extends Service {
      * Show a notification
      */
     private void notifyUser(String action, String alert) {
-        CharSequence serviceName = "GuideDroid";  //super.getText(R.string.service_name);
+        CharSequence serviceName = "OBDproxy";  //super.getText(R.string.service_name);
         CharSequence actionText = action;
         CharSequence notificationText = alert;
         this.notifier = new Notification(R.drawable.ic_launcher, notificationText, System.currentTimeMillis());
@@ -386,7 +388,7 @@ public class BluetoothReceiver extends Service {
     }
 
     /**
-     * Handler of incoming messages from clients, i.e., GuideDroid activity.
+     * Handler of incoming messages from clients, i.e., OBDproxy activity.
      */
     final Handler activityMessages = new Handler() {
         @Override

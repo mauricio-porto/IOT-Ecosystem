@@ -27,9 +27,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hp.myidea.obdproxy.ConfigActivity;
-import com.hp.myidea.obdproxy.MainActivity;
 import com.hp.myidea.obdproxy.R;
+import com.hp.myidea.obdproxy.app.ConfigActivity;
+import com.hp.myidea.obdproxy.app.OBDproxyActivity;
 
 import eu.lighthouselabs.obd.commands.ObdBaseCommand;
 import eu.lighthouselabs.obd.commands.protocol.EchoOffObdCommand;
@@ -333,7 +333,7 @@ public class ObdGatewayService extends Service {
         Notification notification = new Notification(R.drawable.icon, getText(R.string.service_started), System.currentTimeMillis());
 
         // Launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, OBDproxyActivity.class), 0);
 
         // Set the info for the views that show in the notification panel.
         notification.setLatestEventInfo(this, getText(R.string.notification_label), getText(R.string.service_started), contentIntent);

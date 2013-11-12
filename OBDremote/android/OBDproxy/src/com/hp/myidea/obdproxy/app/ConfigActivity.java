@@ -1,10 +1,13 @@
 /*
  * TODO put header
  */
-package com.hp.myidea.obdproxy;
+package com.hp.myidea.obdproxy.app;
 
 import java.util.ArrayList;
 import java.util.Set;
+
+import com.hp.myidea.obdproxy.R;
+import com.hp.myidea.obdproxy.R.xml;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
