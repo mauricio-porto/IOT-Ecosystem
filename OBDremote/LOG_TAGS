@@ -1,0 +1,1 @@
+export ANDROID_LOG_TAGS="OBDproxyActivity:V BluetoothReceiver:V *:E"

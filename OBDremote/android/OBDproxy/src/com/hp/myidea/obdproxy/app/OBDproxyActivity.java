@@ -244,6 +244,7 @@ public class OBDproxyActivity extends Activity {
                 // User did not enable Bluetooth or an error occurred
                 Log.d(TAG, "BT not enabled");
                 Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                this.stopBTReceiver();
                 finish();
             }
             break;
@@ -290,7 +291,7 @@ public class OBDproxyActivity extends Activity {
         }
 */
         // start command execution
-        mHandler.post(mQueueCommands);
+        // mHandler.post(mQueueCommands);
     }
 
     private void stopLiveData() {
@@ -300,7 +301,7 @@ public class OBDproxyActivity extends Activity {
             stopService(mServiceIntent);
 */
         // remove runnable
-        mHandler.removeCallbacks(mQueueCommands);
+        // mHandler.removeCallbacks(mQueueCommands);
     }
 
     protected Dialog onCreateDialog(int id) {
@@ -454,6 +455,26 @@ public class OBDproxyActivity extends Activity {
             if (messageReceiver  != null) {
                 try {
                     Message msg = Message.obtain(null, BluetoothReceiver.UNREGISTER_HANDLER);
+                    msg.replyTo = serviceMsgReceiver;
+                    messageReceiver.send(msg);
+                } catch (RemoteException e) {
+                    // There is nothing special we need to do if the service has crashed.
+                }
+            }
+            this.unbindService(btReceiverConnection);
+        } else {
+            Log.d(TAG, "unbindHRMReceiver() - \tBut it was not!!!");
+        }
+        this.receiverSvcConnected = false;
+        this.isBound = false;
+    }
+
+    private void stopBTReceiver() {
+        Log.d(TAG, "stopBluetoothReceiver() - supposing it is bound");
+        if (this.isBound) {
+            if (messageReceiver  != null) {
+                try {
+                    Message msg = Message.obtain(null, BluetoothReceiver.STOP_SERVICE);
                     msg.replyTo = serviceMsgReceiver;
                     messageReceiver.send(msg);
                 } catch (RemoteException e) {

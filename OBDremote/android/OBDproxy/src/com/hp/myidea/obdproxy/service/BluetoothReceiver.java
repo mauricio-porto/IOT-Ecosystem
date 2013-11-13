@@ -54,6 +54,7 @@ public class BluetoothReceiver extends Service {
     public static final int REGISTER_HANDLER = 4;
     public static final int UNREGISTER_HANDLER = 5;
     public static final int SEND_MESSAGE = 6;
+    public static final int STOP_SERVICE = 7;
 
     public static enum ACTION {
     	CONNECT_TO,
@@ -62,7 +63,8 @@ public class BluetoothReceiver extends Service {
     	UNREGISTER_LISTENER,
     	REGISTER_HANDLER,
     	UNREGISTER_HANDLER,
-    	SEND_MESSAGE
+    	SEND_MESSAGE,
+    	STOP_SERVICE
     }
 
     // Bluetooth and OBD statuses
@@ -209,6 +211,7 @@ public class BluetoothReceiver extends Service {
        
         this.notifyUser("Stopped. Select to start again.", "Stopping OBDproxy.");
 		this.running = false;
+		this.stopSelf();
     }
 
     private boolean connectKnownDevice() {
@@ -409,16 +412,10 @@ public class BluetoothReceiver extends Service {
             case REGISTER_LISTENER:
             	break;
             case UNREGISTER_LISTENER:
-            	activityHandler = null;
             	break;
             case REGISTER_HANDLER:
             	activityHandler = msg.replyTo;
-            	// TODO: MUST notify if we are running already
-/*            	if (!running) {
-            		notifyNotRunning();
-            		break;
-            	}
-*/            	notifyBTState();
+            	notifyBTState();
             	break;
             case UNREGISTER_HANDLER:
             	activityHandler = null;
@@ -429,6 +426,9 @@ public class BluetoothReceiver extends Service {
             		sendToDevice(message);
             	}
             	break;
+            case STOP_SERVICE:
+                stopAll();
+                break;
             default:
             	break;
             }
