@@ -36,12 +36,40 @@ public class OBDConnector {
     private double equivRatio = 1;
 
     private Handler mHandler = new Handler();
+    private Handler anotherHandler = new Handler();
 
     /**
      * 
      */
     public OBDConnector() {
         // TODO Auto-generated constructor stub
+    }
+
+    private void startStopLiveData() {
+        // Apenas para registrar como o OBD reader faz...
+        mHandler.post(mQueueCommands);  // P/ iniciar
+        mHandler.removeCallbacks(mQueueCommands); // P/ parar
+    }
+
+    private void repeatSomething() {
+        new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                anotherHandler.post(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        // The anotherHandler will run/call here the real job
+                    }
+                });
+            }
+        }).start();
     }
 
     /**
