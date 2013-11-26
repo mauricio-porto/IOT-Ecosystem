@@ -3,12 +3,16 @@
  */
 package com.hp.myidea.obdproxy.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.hp.myidea.obdproxy.R;
 
+import eu.lighthouselabs.obd.commands.ObdCommand;
 import eu.lighthouselabs.obd.commands.SpeedObdCommand;
 import eu.lighthouselabs.obd.commands.control.CommandEquivRatioObdCommand;
 import eu.lighthouselabs.obd.commands.engine.EngineRPMObdCommand;
@@ -20,6 +24,7 @@ import eu.lighthouselabs.obd.commands.fuel.FuelTrimObdCommand;
 import eu.lighthouselabs.obd.commands.temperature.AmbientAirTemperatureObdCommand;
 import eu.lighthouselabs.obd.enums.FuelTrim;
 import eu.lighthouselabs.obd.enums.FuelType;
+import eu.lighthouselabs.obd.reader.IPostListener;
 import eu.lighthouselabs.obd.reader.io.ObdCommandJob;
 
 /**
@@ -29,6 +34,12 @@ import eu.lighthouselabs.obd.reader.io.ObdCommandJob;
 public class OBDConnector {
 
     private static final String TAG = OBDConnector.class.getSimpleName();
+
+    private BluetoothConnector connector;
+    private IPostListener listener;
+
+    //private ObdCommand[] paramList;
+    private ArrayList<ObdCommand> paramList;
 
     private int speed = 1;
     private double maf = 1;
@@ -41,8 +52,61 @@ public class OBDConnector {
     /**
      * 
      */
-    public OBDConnector() {
-        // TODO Auto-generated constructor stub
+    public OBDConnector(BluetoothConnector conn, IPostListener lstnr) {
+        super();
+        if (conn == null) {
+            throw new IllegalArgumentException("MUST provide the BluetoothConenctor");
+        }
+        if (lstnr == null) {
+            throw new IllegalArgumentException("MUST provide the IPostListener");
+        }
+        this.connector = conn;
+        this.listener = lstnr;
+        this.init();
+    }
+
+    private void init() {
+        this.paramList = new ArrayList<ObdCommand>();
+        this.paramList.add(new SpeedObdCommand());
+        this.paramList.add(new EngineRPMObdCommand());
+        this.paramList.add(new FuelLevelObdCommand());
+        this.paramList.add(new MassAirFlowObdCommand());
+        this.paramList.add(new AmbientAirTemperatureObdCommand());
+    }
+
+    public void startLiveData() {
+        
+    }
+
+    public void stopLiveData() {
+        
+    }
+
+    public void setParamList(ArrayList<ObdCommand> list) {
+        if (list == null || list.size() == 0) {
+            return;
+        }
+        this.paramList = list;
+    }
+
+    public ArrayList<ObdCommand> getParamList() {
+        return this.paramList;
+    }
+
+    public boolean addParam(ObdCommand param) {
+        boolean result = false;
+        if (param != null && !this.paramList.contains(param)) {
+            result = this.paramList.add(param);
+        }
+        return result;
+    }
+
+    public boolean removeParam(ObdCommand param) {
+        boolean result = false;
+        if (param != null && this.paramList.contains(param)) {
+            result = this.paramList.remove(param);
+        }
+        return result;
     }
 
     private void startStopLiveData() {

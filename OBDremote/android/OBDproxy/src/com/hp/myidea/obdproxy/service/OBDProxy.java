@@ -26,13 +26,16 @@ import com.hp.myidea.obdproxy.R;
 import com.hp.myidea.obdproxy.app.OBDproxyActivity;
 import com.hp.myidea.obdproxy.base.BluetoothConnector;
 
+import eu.lighthouselabs.obd.reader.IPostListener;
+import eu.lighthouselabs.obd.reader.io.ObdCommandJob;
+
 /**
  * @author mapo
  *
  */
-public class BluetoothReceiver extends Service {
+public class OBDProxy extends Service implements IPostListener {
 
-    private static final String TAG = BluetoothReceiver.class.getSimpleName();
+    private static final String TAG = OBDProxy.class.getSimpleName();
 
     private static final int OBD_NOTIFICATIONS = 1;
 
@@ -132,7 +135,7 @@ public class BluetoothReceiver extends Service {
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind()");
         String action = intent.getAction();
-        if(action.equals("com.hp.myidea.obdproxy.service.BluetoothReceiver") || action.equals("com.hp.myidea.obdproxy.BLUETOOTH_RECEIVER")) {
+        if(action.equals("com.hp.myidea.obdproxy.service.OBDProxy") || action.equals("com.hp.myidea.obdproxy.BLUETOOTH_RECEIVER")) {
             return activityMsgListener.getBinder();
         }
         return null;
@@ -312,16 +315,16 @@ public class BluetoothReceiver extends Service {
                 Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
                 case BluetoothConnector.STATE_CONNECTED:
-                    BluetoothReceiver.this.mOBDStatus = OBD_CONNECTED;
+                    OBDProxy.this.mOBDStatus = OBD_CONNECTED;
                     obdConnected = true;
                     notifyBTState();
                     break;
                 case BluetoothConnector.STATE_CONNECTING:
-                    BluetoothReceiver.this.mOBDStatus = CONNECTING;
+                    OBDProxy.this.mOBDStatus = CONNECTING;
                     notifyBTState();
                     break;
                 case BluetoothConnector.STATE_FAILED:
-                	BluetoothReceiver.this.mOBDStatus = OBD_NOT_CONFIGURED;
+                	OBDProxy.this.mOBDStatus = OBD_NOT_CONFIGURED;
                     notifyBTState();
                 	break;
                 case BluetoothConnector.STATE_LISTEN:
@@ -347,8 +350,8 @@ public class BluetoothReceiver extends Service {
                 showToast("Connected to " + mConnectedDeviceName);
                 break;
             case MESSAGE_TOAST:
-            	BluetoothReceiver.this.toast.setText(msg.getData().getString(TOAST));
-            	BluetoothReceiver.this.toast.show();
+            	OBDProxy.this.toast.setText(msg.getData().getString(TOAST));
+            	OBDProxy.this.toast.show();
                 break;
             }
         }
@@ -435,5 +438,11 @@ public class BluetoothReceiver extends Service {
         }
     };
     final Messenger activityMsgListener = new Messenger(activityMessages);
+
+    @Override
+    public void stateUpdate(ObdCommandJob job) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

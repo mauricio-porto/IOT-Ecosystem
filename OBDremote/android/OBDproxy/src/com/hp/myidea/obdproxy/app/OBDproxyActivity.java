@@ -28,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hp.myidea.obdproxy.R;
-import com.hp.myidea.obdproxy.service.BluetoothReceiver;
+import com.hp.myidea.obdproxy.service.OBDProxy;
 
 import eu.lighthouselabs.obd.reader.IPostListener;
 
@@ -43,7 +43,7 @@ public class OBDproxyActivity extends Activity {
 
     private boolean isConfigured = false;
 
-    private BluetoothReceiver btReceiver;
+    private OBDProxy btReceiver;
 
     private boolean receiverSvcConnected = false;
     private boolean isBound = false;
@@ -95,8 +95,8 @@ public class OBDproxyActivity extends Activity {
 
     private void startBTReceiver() {
         Log.d(TAG, "\t\t\t\t\tWILL START!!!!");
-        Intent intent = new Intent(BluetoothReceiver.ACTION_START);
-        intent.setClass(this, BluetoothReceiver.class);
+        Intent intent = new Intent(OBDProxy.ACTION_START);
+        intent.setClass(this, OBDProxy.class);
         startService(intent);
     }
 
@@ -104,7 +104,7 @@ public class OBDproxyActivity extends Activity {
     protected void onResume() {
         super.onResume();
         if (!this.isBound) {
-            this.isBound = this.bindService(new Intent("com.hp.myidea.obdproxy.service.BluetoothReceiver"), this.btReceiverConnection, Context.BIND_AUTO_CREATE);
+            this.isBound = this.bindService(new Intent("com.hp.myidea.obdproxy.service.OBDProxy"), this.btReceiverConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
@@ -126,7 +126,7 @@ public class OBDproxyActivity extends Activity {
                 // Attempt to connect to the device
                 Log.d(TAG, "\n\n\n\nonActivityResult() - O ENDERECO DO DEVICE EH: " + address + " e receciverSvcConnected diz: " + this.receiverSvcConnected + "\n\n\n\n");
                 if (address != null) {
-                    this.sendTextToService(BluetoothReceiver.CONNECT_TO, address);
+                    this.sendTextToService(OBDProxy.CONNECT_TO, address);
                 }
                 break;
             }
@@ -139,7 +139,7 @@ public class OBDproxyActivity extends Activity {
             // When the request to enable Bluetooth returns
             if (resultCode == Activity.RESULT_OK) {
                 // Bluetooth is now enabled, so attempt to connect a device
-                this.sendTextToService(BluetoothReceiver.CONNECT_TO, null);
+                this.sendTextToService(OBDProxy.CONNECT_TO, null);
             } else {
                 // User did not enable Bluetooth or an error occurred
                 Log.d(TAG, "BT not enabled");
@@ -229,16 +229,16 @@ public class OBDproxyActivity extends Activity {
     private ServiceConnection btReceiverConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.i(TAG, "BluetoothReceiver connected");
+            Log.i(TAG, "OBDProxy connected");
             if (service == null) {
-                Log.e(TAG, "Connection to the BluetoothReceiver service failed. Giving up...");
+                Log.e(TAG, "Connection to the OBDProxy service failed. Giving up...");
                 return;
             }
             receiverSvcConnected = true;
 
             messageReceiver = new Messenger(service);
             try {
-                Message msg = Message.obtain(null, BluetoothReceiver.REGISTER_HANDLER);
+                Message msg = Message.obtain(null, OBDProxy.REGISTER_HANDLER);
                 msg.replyTo = serviceMsgReceiver;
                 messageReceiver.send(msg);
             } catch (RemoteException e) {
@@ -246,7 +246,7 @@ public class OBDproxyActivity extends Activity {
         }
 
         public void onServiceDisconnected(ComponentName name) {
-            Log.i(TAG, "BluetoothReceiver disconnected");
+            Log.i(TAG, "OBDProxy disconnected");
             receiverSvcConnected = false;
         }
 
@@ -257,7 +257,7 @@ public class OBDproxyActivity extends Activity {
         if (this.isBound) {
             if (messageReceiver  != null) {
                 try {
-                    Message msg = Message.obtain(null, BluetoothReceiver.UNREGISTER_HANDLER);
+                    Message msg = Message.obtain(null, OBDProxy.UNREGISTER_HANDLER);
                     msg.replyTo = serviceMsgReceiver;
                     messageReceiver.send(msg);
                 } catch (RemoteException e) {
@@ -277,7 +277,7 @@ public class OBDproxyActivity extends Activity {
         if (this.isBound) {
             if (messageReceiver  != null) {
                 try {
-                    Message msg = Message.obtain(null, BluetoothReceiver.STOP_SERVICE);
+                    Message msg = Message.obtain(null, OBDProxy.STOP_SERVICE);
                     msg.replyTo = serviceMsgReceiver;
                     messageReceiver.send(msg);
                 } catch (RemoteException e) {
@@ -293,7 +293,7 @@ public class OBDproxyActivity extends Activity {
     }
 
     /**
-     * Handler of incoming messages from BluetoothReceiver.
+     * Handler of incoming messages from OBDProxy.
      */
    final Handler serviceMessages = new Handler() {
         @Override
@@ -301,25 +301,25 @@ public class OBDproxyActivity extends Activity {
             if (msg.what < 0) {
                 return;
             }
-            Log.i(TAG, "Received message: " + BluetoothReceiver.BT_STATUS.values()[msg.what]);
+            Log.i(TAG, "Received message: " + OBDProxy.BT_STATUS.values()[msg.what]);
             switch (msg.what) {
-            case BluetoothReceiver.OBD_DATA:
+            case OBDProxy.OBD_DATA:
                 break;
-            case BluetoothReceiver.BT_DISABLED:
+            case OBDProxy.BT_DISABLED:
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
                 break;
-            case BluetoothReceiver.OBD_NOT_CONFIGURED:
+            case OBDProxy.OBD_NOT_CONFIGURED:
                 // Launch the BluetoothDeviceList to see devices and do scan
                 Intent serverIntent = new Intent(OBDproxyActivity.this, BluetoothDeviceList.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 break;
-            case BluetoothReceiver.OBD_CONNECTED:
+            case OBDProxy.OBD_CONNECTED:
                 break;
-            case BluetoothReceiver.CONNECTING:
+            case OBDProxy.CONNECTING:
                 Toast.makeText(OBDproxyActivity.this, R.string.title_connecting, Toast.LENGTH_SHORT).show();
                 break;
-            case BluetoothReceiver.NOT_RUNNING:
+            case OBDProxy.NOT_RUNNING:
                 serviceRunning = false;
                 //startActivityForResult(new Intent().setClass(CardioTalk.this, Controller.class), REQUEST_START_SERVICE);
                 break;
@@ -334,7 +334,7 @@ public class OBDproxyActivity extends Activity {
         if (messageReceiver != null) {
             Message msg = Message.obtain(null, what);
             Bundle bundle = new Bundle();
-            bundle.putString(BluetoothReceiver.TEXT_MSG, text);
+            bundle.putString(OBDProxy.TEXT_MSG, text);
             msg.setData(bundle);
             try {
                 messageReceiver.send(msg);

@@ -40,10 +40,10 @@
                   android:theme="@android:style/Theme.Dialog"
                   android:configChanges="orientation|keyboardHidden" />
 
-        <service android:name=".service.BluetoothReceiver"
+        <service android:name=".service.OBDProxy"
                  android:enabled="true" android:exported="false">
             <intent-filter>
-                <action android:name="com.hp.myidea.obdproxy.service.BluetoothReceiver" />
+                <action android:name="com.hp.myidea.obdproxy.service.OBDProxy" />
             </intent-filter>
         </service>
 
