@@ -1,0 +1,83 @@
+1) Uso de servidor XMPP local (ejabberd) para facilitar desenvolvimento
+
+  1.1) Ajustes do arq. de configuração (/etc/ejabberd/ejabberd.cfg) 
+
+    1.1.1) Habilitar módulo http_bind (aka Bosh)
+
+      Seção junto à definição de listeners (porta 5288 atribuída):
+
+	      {5288, ejabberd_http, [
+                         {request_handlers, [
+                                             {["jwchat"], mod_http_fileserver}
+                         ]},
+                         tls, {certfile, "/etc/ejabberd/ejabberd.pem"},
+                         http_bind
+                        ]}
+
+	      Neste caso, o handler "jwchat" (cliente em javascript) não é necessário. 
+	      Está aqui porque foi instalado tal cliente para testes.
+
+    1.1.2) Ajustar nome do servidor, usuário administrativo e nível de log (debug)
+
+	      %% Admin user
+	      {acl, admin, {user, "mapo", "poamapo_wrkstn.americas.hpqcorp.net"}}.
+
+	      %% Hostname
+	      {hosts, ["poamapo_wrkstn.americas.hpqcorp.net"]}.
+
+	      {loglevel, 5}.
+
+2) Criar certificados para uma CA local e para o servidor XMPP.
+   O certificado do servidor NÃO PODE ser auto-assinado pois o handshake SSL rejeita certificados auto-assinados.
+
+    (link útil: http://www.tc.umn.edu/~brams006/selfsign.html)
+
+  2.1) Emitir certificado para a CA local
+
+	Comandos:
+	  openssl genrsa -des3 -out ca.key 4096		(gera a chave privada para a CA - crie uma passphrase "forte" e guarde-a "com carinho")
+	  openssl req -new -x509 -days 730 -key ca.key -out ca.cert (gera o certificado da CA local)
+
+	Para verificar:
+	  openssl x509 -noout -text -in ca.cert
+
+  2.2) Emitir requisição para certificado do servidor local
+
+	Comandos:
+	  openssl genrsa -des3 -out server.key 4096		(gera a chave privada para o servidor - usei a mesma passphrase anterior)
+	  openssl req -new -key server.key -out server.csr	(gera a requisição para o certificado do servidor)
+								O campo CN (canonical name) DEVE ser o nome do servidor (FQDN do host)
+
+  2.3) Assinar com a chave da CA local a requisição anterior
+
+	Comando:
+	  openssl x509 -req -days 730 -in server.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out server.crt
+
+  2.4) Exportar para formato legível (PEM Base64 encoded) a chave privada (server.key) do servidor local
+
+	Comando: openssl rsa -in server.key -out serverDecrypted.key
+
+  2.5) Gerar o arquivo com a cadeia de certificados para o ejabberd contendo o certificado do servidor, o certificado da CA local e a chave privada do servidor
+
+	Comando: cat server.crt ca.crt serverDecrypted.key > ejabberd.pem
+
+  2.6) Verificar o resultado
+
+	Comando: openssl x509 -noout -text -in ejabberd.pem
+
+  2.7) Copiar o arquivo ejabberd.pem para o diretório de configuração do ejabberd
+
+	Comando: sudo cp ejabberd.pem /etc/ejabberd/
+
+  2.8) Reiniciar o ejabberd
+
+	Comando: sudo /etc/init.d/ejabberd restart
+
+3) Acrescentar o certificado do servidor XMPP local ao conjunto de CA certs do Java (environment) para permitir
+   conexões seguras a partir do simulador no Eclipse
+   (uso de javax.net.ssl.SSLSocketFactory ao invés de com.hp.embedded.ssl.ChaiSocketFactory)
+
+  Comandos úteis:
+    keytool -list -keystore /etc/java-1.5.0-sun/security/cacerts
+    keytool -printcert -file /local/XMPP/ejabberd.cert
+    sudo keytool -import -keystore /etc/java-1.5.0-sun/security/cacerts -storepass changeit -file /local/XMPP/ejabberd.cert
