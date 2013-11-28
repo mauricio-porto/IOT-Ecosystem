@@ -1,0 +1,1 @@
+ssh -i brazilrnd.pem ubuntu@15.185.92.3
