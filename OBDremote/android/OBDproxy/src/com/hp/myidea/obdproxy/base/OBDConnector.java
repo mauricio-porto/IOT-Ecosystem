@@ -6,11 +6,22 @@ package com.hp.myidea.obdproxy.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hp.myidea.obdproxy.IServiceProxy;
 import com.hp.myidea.obdproxy.R;
+import com.hp.myidea.obdproxy.app.OBDproxyActivity;
+import com.hp.myidea.obdproxy.service.OBDProxy;
 
 import eu.lighthouselabs.obd.commands.ObdCommand;
 import eu.lighthouselabs.obd.commands.SpeedObdCommand;
@@ -35,6 +46,45 @@ public class OBDConnector {
 
     private static final String TAG = OBDConnector.class.getSimpleName();
 
+    // Message types sent from the BluetoothConnector Handler
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_DEVICE_NAME = 4;
+
+    // Bluetooth and OBD statuses
+    public static final int NONE = -1;
+    public static final int OBD_NOT_CONFIGURED = 0;
+    public static final int BT_DISABLED = 1;
+    public static final int OBD_CONNECTED = 2;
+    public static final int CONNECTING = 3;
+    public static final int OBD_DATA = 4;
+    public static final int LOCATION_DATA = 5;
+    public static final int NOT_RUNNING = 6;
+
+    public static enum BT_STATUS {
+        OBD_NOT_CONFIGURED,
+        BT_DISABLED,
+        OBD_CONNECTED,
+        CONNECTING,
+        OBD_DATA,
+        NOT_RUNNING
+    }
+
+    private int mOBDStatus = NONE;
+
+    // Key names received
+    public static final String DEVICE_NAME = "device_name";
+    public static final String DEVICE_ADRESS = "device_address";
+
+    // MAC address of the OBD device
+    private String obdBluetoothAddress = null;
+    // Name of the connected device
+    private String mConnectedDeviceName = null;
+    private boolean obdConnected = false;
+
+    // Local Bluetooth adapter
+    private BluetoothAdapter mBluetoothAdapter = null;
+
     private BluetoothConnector connector;
     private IPostListener listener;
 
@@ -48,24 +98,45 @@ public class OBDConnector {
 
     private Handler mHandler = new Handler();
     private Handler anotherHandler = new Handler();
+    
+    private Context owner;
+    private IServiceProxy serviceProxy;
 
     /**
      * 
      */
-    public OBDConnector(BluetoothConnector conn, IPostListener lstnr) {
+    public OBDConnector(IServiceProxy service, IPostListener lstnr) {
         super();
-        if (conn == null) {
-            throw new IllegalArgumentException("MUST provide the BluetoothConenctor");
+        if (service == null) {
+            throw new IllegalArgumentException("MUST provide the IServiceProxy");
         }
         if (lstnr == null) {
             throw new IllegalArgumentException("MUST provide the IPostListener");
         }
-        this.connector = conn;
+        this.owner = service.getServiceContext();
+        this.serviceProxy = service;
         this.listener = lstnr;
         this.init();
     }
 
     private void init() {
+        if ((mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()) == null) {
+            Toast.makeText(owner, "Bluetooth is not available", Toast.LENGTH_LONG).show();   // TODO: localize!!!
+            return;
+        }
+
+        // Connect to the OBD device
+        if (!mBluetoothAdapter.isEnabled()) {
+            this.mOBDStatus = BT_DISABLED;
+            this.serviceProxy.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");
+            return;
+        }
+        if (!this.connectKnownDevice()) {
+            this.mOBDStatus = OBD_NOT_CONFIGURED;
+            this.serviceProxy.notifyUser("Select to configure OBD device.", "OBD device not configured.");
+            return;
+        }
+
         this.paramList = new ArrayList<ObdCommand>();
         this.paramList.add(new SpeedObdCommand());
         this.paramList.add(new EngineRPMObdCommand());
@@ -73,6 +144,113 @@ public class OBDConnector {
         this.paramList.add(new MassAirFlowObdCommand());
         this.paramList.add(new AmbientAirTemperatureObdCommand());
     }
+
+    private boolean connectKnownDevice() {
+        if (obdConnected) {
+            Log.d(TAG, "\n\n\n\n\n\nconnectDevice():: obdConnected says it is already connected!!!! Wrong?!?!?!");
+            return true;
+        }
+        this.restoreState();
+        if (this.obdBluetoothAddress != null && this.obdBluetoothAddress.length() > 0) {
+            this.connectDevice(this.obdBluetoothAddress);
+            return true;
+        }
+        return false;       
+    }
+
+    private void connectDevice(String deviceAddress) {
+        this.mOBDStatus = CONNECTING;
+        if (this.connector == null) {
+            this.connector = new BluetoothConnector(this.owner, btMsgHandler);
+        }
+        this.connector.connect(mBluetoothAdapter.getRemoteDevice(deviceAddress));
+    }
+
+    private void sendToDevice(String msg) {
+        if (this.connector != null) {
+            connector.write(msg.getBytes());
+        }
+    }
+
+    private void restoreState() {
+        // Restore state
+        SharedPreferences state = this.owner.getSharedPreferences(OBDproxyActivity.OBDPROXY_PREFS, 0);
+        this.obdBluetoothAddress = state.getString("OBDBluetoothAddress", null);
+    }
+
+    private void storeState() {
+        // Persist state
+        SharedPreferences state = this.owner.getSharedPreferences(OBDproxyActivity.OBDPROXY_PREFS, 0);
+        SharedPreferences.Editor editor = state.edit();
+        editor.putString("OBDBluetoothAddress", this.obdBluetoothAddress);
+        editor.commit();
+    }
+
+    // The Handler that gets information back from the BluetoothConnector
+    private final Handler btMsgHandler = new Handler() {
+        int counter = 0;
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case MESSAGE_STATE_CHANGE:
+                Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                switch (msg.arg1) {
+                case BluetoothConnector.STATE_CONNECTED:
+                    OBDConnector.this.mOBDStatus = OBD_CONNECTED;
+                    obdConnected = true;
+                    notifyBTState();
+                    break;
+                case BluetoothConnector.STATE_CONNECTING:
+                    OBDConnector.this.mOBDStatus = CONNECTING;
+                    notifyBTState();
+                    break;
+                case BluetoothConnector.STATE_FAILED:
+                    OBDConnector.this.mOBDStatus = OBD_NOT_CONFIGURED;
+                    notifyBTState();
+                    break;
+                case BluetoothConnector.STATE_LISTEN:
+                case BluetoothConnector.STATE_NONE:
+                    break;
+                }
+                break;
+            case MESSAGE_READ:
+                Log.d(TAG, "Data received.");
+                if (msg.arg1 > 0) { // msg.arg1 contains the number of bytes read
+                    Log.d(TAG, "\tRead size: " + msg.arg1);
+                    byte[] readBuf = (byte[]) msg.obj;
+                    byte[] readBytes = new byte[msg.arg1];
+                    System.arraycopy(readBuf, 0, readBytes, 0, msg.arg1);
+                    Log.d(TAG, "\tAs Hex: " + asHex(readBytes));
+                }
+                break;
+            case MESSAGE_DEVICE_NAME:
+                // save the connected device's name
+                mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                obdBluetoothAddress = msg.getData().getString(DEVICE_ADRESS);
+                storeState();
+                showToast("Connected to " + mConnectedDeviceName);
+                break;
+            default:
+                break;
+            }
+        }
+    };
+
+    private String asHex(byte[] buf) {
+        char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+
+        char[] chars = new char[2 * buf.length];
+        for (int i = 0; i < buf.length; ++i) {
+            chars[2 * i] = HEX_CHARS[(buf[i] & 0xF0) >>> 4];
+            chars[2 * i + 1] = HEX_CHARS[buf[i] & 0x0F];
+        }
+        return new String(chars);
+    }
+
+    // **********************************************
+    // ATE AQUI, COISAS MOVIDAS DO OBDProxy
+    // DAQUI PRA BAIXO, COISA NOVA
+    // **********************************************
 
     public void startLiveData() {
         
