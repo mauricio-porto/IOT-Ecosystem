@@ -166,6 +166,12 @@ public class OBDConnector {
         this.connector.connect(mBluetoothAdapter.getRemoteDevice(deviceAddress));
     }
 
+    public void stop() {
+        if (this.connector == null) {
+            this.connector.stop();
+        }
+    }
+
     private void sendToDevice(String msg) {
         if (this.connector != null) {
             connector.write(msg.getBytes());

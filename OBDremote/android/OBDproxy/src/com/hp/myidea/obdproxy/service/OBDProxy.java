@@ -78,14 +78,6 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     private static NotificationManager notifMgr;
 
     private Toast toast;
-    private Vibrator vibrator;
-    private boolean mustVibrate = false;
-
-	private float defaultDuration = (float) 0.3;
-	private int lastDist;
-
-    private boolean running = false;
-
     private OBDConnector obdConnector;
 
     private Messenger activityHandler = null;
@@ -108,7 +100,6 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     public void onCreate() {
         Log.d(TAG, "onCreate()");
         notifMgr = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
-        this.vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
         this.toast = Toast.makeText(this, TAG, Toast.LENGTH_LONG);
         this.toast.setGravity(Gravity.CENTER, 0, 0);
@@ -141,7 +132,6 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy()");
-        this.running = false;
 	    super.onDestroy();
     }
 
@@ -150,18 +140,15 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     	this.obdConnector = new OBDConnector(this, this);
 
         this.notifyUser("OBDproxy is running.", "OBDproxy is running...");
-        this.running = true;
     }
 
 	private void stopAll() {
     	Log.d(TAG, "\n\n\n\nstopAll()\n\n\n\n");
-        obdConnected = false;
-        if (this.connector != null) {
-        	this.connector.stop();
+        if (this.obdConnector != null) {
+        	this.obdConnector.stop();
         }
        
         this.notifyUser("Stopped. Select to start again.", "Stopping OBDproxy.");
-		this.running = false;
 		this.stopSelf();
     }
 

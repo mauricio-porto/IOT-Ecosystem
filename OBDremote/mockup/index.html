@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <title>Diagnostico Automotivo Remoto</title>
+
+<!-- Inicio das definicoes de estilo -->
+  <style type="text/css">
+
+    div.links {
+    width: 20%;
+    height: 40em;
+    float: left;
+    background-color: #E4E4E4;
+    }
+
+    div.content {
+    width: 80%;
+    height: 20em;
+    float:right;
+    }
+
+    div.map{
+    width: 80%;
+    height: 20em;
+    float:right;
+    }
+
+  </style>
+<!-- Fim das definicoes de estilo -->
+
+  <script type="text/javascript">
+    function changeContent(srcURL) {
+    document.getElementById("contentFrame").src = srcURL;
+    }
+
+    function toggleList(e){
+    element = document.getElementById(e).style;
+    element.display == 'none' ? element.display = 'block' : element.display='none';
+    }
+  </script>
+</head>
+
+<body>
+
+<div class="header"/>
+  <iframe frameborder="0" width="100%" scrolling="no" src="./Cabecalho.html" marginheight="0" marginwidth="0" id="headerFrame">
+  </iframe>
+</div>
+
+<!-- Inicio da divisao de navegacao -->
+<div class="links" id="navegacao">
+<ul>
+
+  <li style="width: 180px; height: 56px;"><a href="#">Algo</a></li>
+
+  <li style="width: 180px; height: 56px;"><a href="#">Alguma coisa</a></li>
+
+  <li style="width: 180px; height: 56px;"><a href="#">Outra coisa</a></li>
+
+  <li style="width: 180px; height: 56px;"><a href="#">E mais outra</a></li>
+
+  <li style="width: 180px; height: 56px;"><a style="cursor:crosshair;" href="javascript:toggleList('controleList')">Controles</a>
+    <ul id="controleList" style="display: none;">
+      <li style="font-size: small; height: 40px;"><a href="#">Controle 1</a></li>
+      <li style="font-size: small; height: 40px;"><a href="#">Controle 2</a></li>
+      <li style="font-size: small; height: 40px;"><a href="#">Controle 3</a></li>
+      <li style="font-size: small; height: 40px;"><a href="#">Controle 4</a></li>
+      <li style="font-size: small; height: 40px;"><a href="#">Controle 5</a></li>
+    </ul>
+  </li>
+
+</ul>
+
+</div>
+<!-- Fim da divisao de navegacao -->
+
+<!-- Inicio de divisao de conteudo -->
+<div id="conteudo" class="content">
+  <iframe height="60%" frameborder="0" width="100%" scrolling="no" src="./PaginaInicial.html" marginheight="0" marginwidth="0" id="contentFrame">
+  </iframe>
+</div>
+<!-- Fim de divisao de conteudo -->
+
+<!-- Inicio de divisao de mapa-->
+<div id="mapa" class="map">
+  <iframe height="40%" frameborder="0" width="100%" scrolling="no" src="./PaginaInicial.html" marginheight="0" marginwidth="0" id="contentFrame">
+  </iframe>
+</div>
+<!-- Fim de divisao de mapa-->
+
+</body>
+</html>

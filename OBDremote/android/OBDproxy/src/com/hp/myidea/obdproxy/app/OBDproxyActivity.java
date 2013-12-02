@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hp.myidea.obdproxy.R;
+import com.hp.myidea.obdproxy.base.OBDConnector;
 import com.hp.myidea.obdproxy.service.OBDProxy;
 
 import eu.lighthouselabs.obd.reader.IPostListener;
@@ -301,27 +302,26 @@ public class OBDproxyActivity extends Activity {
             if (msg.what < 0) {
                 return;
             }
-            Log.i(TAG, "Received message: " + OBDProxy.BT_STATUS.values()[msg.what]);
+            Log.i(TAG, "Received message: " + OBDConnector.BT_STATUS.values()[msg.what]);
             switch (msg.what) {
-            case OBDProxy.OBD_DATA:
+            case OBDConnector.OBD_DATA:
                 break;
-            case OBDProxy.BT_DISABLED:
+            case OBDConnector.BT_DISABLED:
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
                 break;
-            case OBDProxy.OBD_NOT_CONFIGURED:
+            case OBDConnector.OBD_NOT_CONFIGURED:
                 // Launch the BluetoothDeviceList to see devices and do scan
                 Intent serverIntent = new Intent(OBDproxyActivity.this, BluetoothDeviceList.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 break;
-            case OBDProxy.OBD_CONNECTED:
+            case OBDConnector.OBD_CONNECTED:
                 break;
-            case OBDProxy.CONNECTING:
+            case OBDConnector.CONNECTING:
                 Toast.makeText(OBDproxyActivity.this, R.string.title_connecting, Toast.LENGTH_SHORT).show();
                 break;
-            case OBDProxy.NOT_RUNNING:
+            case OBDConnector.NOT_RUNNING:
                 serviceRunning = false;
-                //startActivityForResult(new Intent().setClass(CardioTalk.this, Controller.class), REQUEST_START_SERVICE);
                 break;
             default:
                 break;
