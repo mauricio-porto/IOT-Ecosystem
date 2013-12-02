@@ -145,7 +145,7 @@ public class OBDConnector {
         this.paramList.add(new AmbientAirTemperatureObdCommand());
     }
 
-    private boolean connectKnownDevice() {
+    public boolean connectKnownDevice() {
         if (obdConnected) {
             Log.d(TAG, "\n\n\n\n\n\nconnectDevice():: obdConnected says it is already connected!!!! Wrong?!?!?!");
             return true;
@@ -158,7 +158,7 @@ public class OBDConnector {
         return false;       
     }
 
-    private void connectDevice(String deviceAddress) {
+    public void connectDevice(String deviceAddress) {
         this.mOBDStatus = CONNECTING;
         if (this.connector == null) {
             this.connector = new BluetoothConnector(this.owner, btMsgHandler);
@@ -198,15 +198,15 @@ public class OBDConnector {
                 case BluetoothConnector.STATE_CONNECTED:
                     OBDConnector.this.mOBDStatus = OBD_CONNECTED;
                     obdConnected = true;
-                    notifyBTState();
+                    serviceProxy.notifyBTState(OBDConnector.this.mOBDStatus);
                     break;
                 case BluetoothConnector.STATE_CONNECTING:
                     OBDConnector.this.mOBDStatus = CONNECTING;
-                    notifyBTState();
+                    serviceProxy.notifyBTState(OBDConnector.this.mOBDStatus);
                     break;
                 case BluetoothConnector.STATE_FAILED:
                     OBDConnector.this.mOBDStatus = OBD_NOT_CONFIGURED;
-                    notifyBTState();
+                    serviceProxy.notifyBTState(OBDConnector.this.mOBDStatus);
                     break;
                 case BluetoothConnector.STATE_LISTEN:
                 case BluetoothConnector.STATE_NONE:
@@ -228,7 +228,7 @@ public class OBDConnector {
                 mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                 obdBluetoothAddress = msg.getData().getString(DEVICE_ADRESS);
                 storeState();
-                showToast("Connected to " + mConnectedDeviceName);
+                Toast.makeText(owner, "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

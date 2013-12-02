@@ -12,4 +12,5 @@ import android.content.Context;
 public interface IServiceProxy {
     public Context getServiceContext();
     public void notifyUser(String action, String alert);
+    public void notifyBTState(int status);
 }

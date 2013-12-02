@@ -26,6 +26,7 @@ import com.hp.myidea.obdproxy.IServiceProxy;
 import com.hp.myidea.obdproxy.R;
 import com.hp.myidea.obdproxy.app.OBDproxyActivity;
 import com.hp.myidea.obdproxy.base.BluetoothConnector;
+import com.hp.myidea.obdproxy.base.OBDConnector;
 
 import eu.lighthouselabs.obd.reader.IPostListener;
 import eu.lighthouselabs.obd.reader.io.ObdCommandJob;
@@ -51,7 +52,6 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     public static final int UNREGISTER_LISTENER = 3;
     public static final int REGISTER_HANDLER = 4;
     public static final int UNREGISTER_HANDLER = 5;
-    public static final int SEND_MESSAGE = 6;
     public static final int STOP_SERVICE = 7;
 
     public static enum ACTION {
@@ -85,6 +85,8 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
 	private int lastDist;
 
     private boolean running = false;
+
+    private OBDConnector obdConnector;
 
     private Messenger activityHandler = null;
 
@@ -145,6 +147,7 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
 
     private void init() {
     	Log.d(TAG, "init()\n\n\n\n");
+    	this.obdConnector = new OBDConnector(this, this);
 
         this.notifyUser("OBDproxy is running.", "OBDproxy is running...");
         this.running = true;
@@ -181,51 +184,15 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
         this.notifier = new Notification(R.drawable.ic_launcher, notificationText, System.currentTimeMillis());
         this.notifier.setLatestEventInfo(this, serviceName, actionText, this.buildIntent());	// TODO: Localize!!!!
         notifMgr.notify(OBD_NOTIFICATIONS, this.notifier);
-        this.thumpthump();
     }
 
-    /**
-     * Show a toast with the given text.
-     *
-     * @param message string to show (if null, nothing will be shown)
-     */
-    private void showToast(String toastText) {
-        if (toastText != null) {
-
-            this.thumpthump();
-
-            Message msg = mHandler.obtainMessage(MESSAGE_TOAST);
-            Bundle bundle = new Bundle();
-            bundle.putString(TOAST, toastText);
-            msg.setData(bundle);
-            mHandler.sendMessage(msg);
-
-        }
-    }
-
-    private void thumpthump() {
-    	if (this.mustVibrate) {
-    		this.vibrator.vibrate(new long[]{50, 200, 50, 50, 500, 200, 50, 50, 500, 200, 50, 50, 500}, -1);
-    	}
-    }
-
-    private void notifyNotRunning() {
+    public void notifyBTState(int status) {
         if (activityHandler != null) {
-        	try {
-				activityHandler.send(Message.obtain(null, NOT_RUNNING, null));
-			} catch (RemoteException e) {
-				// Nothing to do
-			}
-        }
-    }
-
-    private void notifyBTState() {
-        if (activityHandler != null) {
-        	if (this.mOBDStatus > NONE) {
-        		Log.d(TAG, "notifyBTState() - " + BT_STATUS.values()[this.mOBDStatus]);
+        	if (status > OBDConnector.NONE) {
+        		Log.d(TAG, "notifyBTState() - " +OBDConnector.BT_STATUS.values()[status]);
         	}
         	try {
-				activityHandler.send(Message.obtain(null, this.mOBDStatus, null));
+				activityHandler.send(Message.obtain(null, status, null));
 			} catch (RemoteException e) {
 				// Nothing to do
 			}
@@ -248,9 +215,9 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
             	String rcvdAddress = msg.getData().getString(TEXT_MSG);
             	Log.i(TAG, "Received address: " + rcvdAddress);
             	if (rcvdAddress == null || rcvdAddress.length() == 0 ) {
-            		connectKnownDevice();
+            		obdConnector.connectKnownDevice();
             	} else {
-            		connectDevice(rcvdAddress);
+            		obdConnector.connectDevice(rcvdAddress);
             	}
             	break;
             case REGISTER_LISTENER:
@@ -259,16 +226,9 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
             	break;
             case REGISTER_HANDLER:
             	activityHandler = msg.replyTo;
-            	notifyBTState();
             	break;
             case UNREGISTER_HANDLER:
             	activityHandler = null;
-            	break;
-            case SEND_MESSAGE:
-            	String message = msg.getData().getString(TEXT_MSG);
-            	if (message != null && message.length() > 0) {
-            		sendToDevice(message);
-            	}
             	break;
             case STOP_SERVICE:
                 stopAll();
