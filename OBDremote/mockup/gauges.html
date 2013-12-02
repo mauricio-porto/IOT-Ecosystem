@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+ .center
+ { margin-left:auto;
+   margin-right:auto;
+   width:90%;
+   padding: 10px;
+ }
+</style>
 <title>Gauges - HTML5</title>
 <link rel="stylesheet" href="../HTML5AquaGaugeCode/css/styles.css">
 <link rel="stylesheet" href="../HTML5AquaGaugeCode/css/smoothness/jquery-ui-1.8.16.custom.css">
@@ -10,18 +18,42 @@
 <script src="../HTML5AquaGaugeCode/js/helper.js" type="text/javascript"></script>
 
 <script language="javascript" type="text/javascript">
+    var aGauge = null;
     var wGauge = null;
+    var sGauge = null;
+    var smallGauge = null;
     $(document).ready(function () {        
+        aGauge = new AquaGauge('aGauge');
+        aGauge.props.minValue = 0;
+        aGauge.props.maxValue = 100;
+        aGauge.props.noOfDivisions = 5;
+        aGauge.props.noOfSubDivisions = 4;
+        aGauge.props.showMinorScaleValue = true;
+        aGauge.refresh(0);
+
         wGauge = new AquaGauge('gaugeWhite');
+        sGauge = new AquaGauge('secondGauge');
+        smallGauge = new AquaGauge('smallGauge');
         setupWhiteGauge(wGauge);
+        setupWhiteGauge(sGauge);
+        setupSmallGauge(smallGauge);
     });    
 </script>
 </head>
 <body>
-<div class="header">Mostradores do Veiculo</div>
-<div style="text-align: center; width: 100%; padding: 10px;">
+<div class="header">Diagnostico Automotivo Remoto - Mostradores do Veiculo amarokMapo</div>
+<div class="center">
     <div class="drop-shadow lifted">
-        <canvas id="gaugeWhite" width="150" height="150"></canvas>
+        <canvas id="gaugeWhite" width="200" height="200"></canvas>
+    </div>
+    <div class="drop-shadow lifted">
+        <canvas id="secondGauge" width="200" height="200"></canvas>
+    </div>
+    <div class="drop-shadow lifted">
+        <canvas id="smallGauge" width="200" height="200"></canvas>
+    </div>
+    <div class="drop-shadow lifted">
+        <canvas id="aGauge" width="200" height="200"></canvas>
     </div>
 </div>
 </body>
