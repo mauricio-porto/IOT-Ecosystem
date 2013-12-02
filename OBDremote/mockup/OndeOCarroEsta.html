@@ -12,13 +12,12 @@
 </script>
 <script type="text/javascript">
   var amarokMapo = new google.maps.LatLng(-30.022222,-51.186944);
-  var fiestaRicardo = new google.maps.LatLng(-30.039861,-51.666334);
   var marker;
   var map;
 
   function initialize() {
     var myOptions = {
-      zoom: 10,
+      zoom: 15,
       center: amarokMapo,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -32,12 +31,6 @@
       animation: google.maps.Animation.DROP
     });
 
-    markerPaty = new google.maps.Marker({
-      position: fiestaRicardo,
-      map: map, 
-      title:"fiestaRicardo", 
-      animation: google.maps.Animation.DROP
-    });
   }
 
 </script>

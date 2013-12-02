@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gauges - HTML5</title>
+<link rel="stylesheet" href="../HTML5AquaGaugeCode/css/styles.css">
+<link rel="stylesheet" href="../HTML5AquaGaugeCode/css/smoothness/jquery-ui-1.8.16.custom.css">
+<script src="../HTML5AquaGaugeCode/js/jquery-1.6.2.min.js" type="text/javascript"></script>
+<script src="../HTML5AquaGaugeCode/js/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
+<script src="../HTML5AquaGaugeCode/js/AquaGauge.js" type="text/javascript"></script>
+<script src="../HTML5AquaGaugeCode/js/helper.js" type="text/javascript"></script>
+
+<script language="javascript" type="text/javascript">
+    var wGauge = null;
+    $(document).ready(function () {        
+        wGauge = new AquaGauge('gaugeWhite');
+        setupWhiteGauge(wGauge);
+    });    
+</script>
+</head>
+<body>
+<div class="header">Mostradores do Veiculo</div>
+<div style="text-align: center; width: 100%; padding: 10px;">
+    <div class="drop-shadow lifted">
+        <canvas id="gaugeWhite" width="150" height="150"></canvas>
+    </div>
+</div>
+</body>
+</html>
+
