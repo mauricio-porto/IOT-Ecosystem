@@ -120,23 +120,6 @@ public class OBDConnector {
     }
 
     private void init() {
-        if ((mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()) == null) {
-            Toast.makeText(owner, "Bluetooth is not available", Toast.LENGTH_LONG).show();   // TODO: localize!!!
-            return;
-        }
-
-        // Connect to the OBD device
-        if (!mBluetoothAdapter.isEnabled()) {
-            this.mOBDStatus = BT_DISABLED;
-            this.serviceProxy.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");
-            return;
-        }
-        if (!this.connectKnownDevice()) {
-            this.mOBDStatus = OBD_NOT_CONFIGURED;
-            this.serviceProxy.notifyUser("Select to configure OBD device.", "OBD device not configured.");
-            return;
-        }
-
         this.paramList = new ArrayList<ObdCommand>();
         this.paramList.add(new SpeedObdCommand());
         this.paramList.add(new EngineRPMObdCommand());
@@ -164,6 +147,28 @@ public class OBDConnector {
             this.connector = new BluetoothConnector(this.owner, btMsgHandler);
         }
         this.connector.connect(mBluetoothAdapter.getRemoteDevice(deviceAddress));
+    }
+
+    public boolean start() {
+
+        if ((mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()) == null) {
+            Toast.makeText(owner, "Bluetooth is not available", Toast.LENGTH_LONG).show();   // TODO: localize!!!
+            return false;
+        }
+
+        // Connect to the OBD device
+        if (!mBluetoothAdapter.isEnabled()) {
+            this.mOBDStatus = BT_DISABLED;
+            this.serviceProxy.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");
+            return false;
+        }
+        if (!this.connectKnownDevice()) {
+            this.mOBDStatus = OBD_NOT_CONFIGURED;
+            this.serviceProxy.notifyUser("Select to configure OBD device.", "OBD device not configured.");
+            return false;
+        }
+
+        return true;
     }
 
     public void stop() {

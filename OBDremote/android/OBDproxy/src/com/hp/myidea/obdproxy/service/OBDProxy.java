@@ -138,8 +138,9 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     private void init() {
     	Log.d(TAG, "init()\n\n\n\n");
     	this.obdConnector = new OBDConnector(this, this);
-
-        this.notifyUser("OBDproxy is running.", "OBDproxy is running...");
+    	if (this.obdConnector.start()) {
+    	    this.notifyUser("OBDproxy is running.", "OBDproxy is running...");
+    	}
     }
 
 	private void stopAll() {
