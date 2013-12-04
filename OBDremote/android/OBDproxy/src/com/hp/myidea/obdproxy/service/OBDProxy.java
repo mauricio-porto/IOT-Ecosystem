@@ -81,6 +81,7 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     private OBDConnector obdConnector;
 
     private Messenger activityHandler = null;
+    private int mOBDStatus;
 
     private Notification notifier;
 
@@ -175,12 +176,17 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     }
 
     public void notifyBTState(int status) {
+        this.mOBDStatus = status;
+        this.notifyBTState();
+    }
+
+    private void notifyBTState() {
         if (activityHandler != null) {
-        	if (status > OBDConnector.NONE) {
-        		Log.d(TAG, "notifyBTState() - " +OBDConnector.BT_STATUS.values()[status]);
+        	if (this.mOBDStatus > OBDConnector.NONE) {
+        		Log.d(TAG, "notifyBTState() - " +OBDConnector.BT_STATUS.values()[this.mOBDStatus]);
         	}
         	try {
-				activityHandler.send(Message.obtain(null, status, null));
+				activityHandler.send(Message.obtain(null, this.mOBDStatus, null));
 			} catch (RemoteException e) {
 				// Nothing to do
 			}
@@ -214,6 +220,7 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
             	break;
             case REGISTER_HANDLER:
             	activityHandler = msg.replyTo;
+            	notifyBTState();
             	break;
             case UNREGISTER_HANDLER:
             	activityHandler = null;
