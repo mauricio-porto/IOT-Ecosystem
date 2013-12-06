@@ -197,6 +197,10 @@ public class OBDConnector {
         editor.commit();
     }
 
+    public int getStatus() {
+        return this.mOBDStatus;
+    }
+
     // The Handler that gets information back from the BluetoothConnector
     private final Handler btMsgHandler = new Handler() {
         int counter = 0;
@@ -209,15 +213,15 @@ public class OBDConnector {
                 case BluetoothConnector.STATE_CONNECTED:
                     OBDConnector.this.mOBDStatus = OBD_CONNECTED;
                     obdConnected = true;
-                    serviceProxy.notifyBTState(OBDConnector.this.mOBDStatus);
+                    serviceProxy.notifyOBDStatus(OBDConnector.this.mOBDStatus);
                     break;
                 case BluetoothConnector.STATE_CONNECTING:
                     OBDConnector.this.mOBDStatus = CONNECTING;
-                    serviceProxy.notifyBTState(OBDConnector.this.mOBDStatus);
+                    serviceProxy.notifyOBDStatus(OBDConnector.this.mOBDStatus);
                     break;
                 case BluetoothConnector.STATE_FAILED:
                     OBDConnector.this.mOBDStatus = OBD_NOT_CONFIGURED;
-                    serviceProxy.notifyBTState(OBDConnector.this.mOBDStatus);
+                    serviceProxy.notifyOBDStatus(OBDConnector.this.mOBDStatus);
                     break;
                 case BluetoothConnector.STATE_LISTEN:
                 case BluetoothConnector.STATE_NONE:

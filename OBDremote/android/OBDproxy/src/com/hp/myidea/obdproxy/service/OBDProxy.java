@@ -81,7 +81,6 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     private OBDConnector obdConnector;
 
     private Messenger activityHandler = null;
-    private int mOBDStatus;
 
     private Notification notifier;
 
@@ -175,24 +174,27 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
         notifMgr.notify(OBD_NOTIFICATIONS, this.notifier);
     }
 
-    public void notifyBTState(int status) {
-        this.mOBDStatus = status;
-        this.notifyBTState();
-    }
-
-    private void notifyBTState() {
+    private void notifyBTState(int status) {
         if (activityHandler != null) {
-        	if (this.mOBDStatus > OBDConnector.NONE) {
-        		Log.d(TAG, "notifyBTState() - " +OBDConnector.BT_STATUS.values()[this.mOBDStatus]);
+        	if (status > OBDConnector.NONE) {
+        		Log.d(TAG, "notifyBTState() - " +OBDConnector.BT_STATUS.values()[status]);
         	}
         	try {
-				activityHandler.send(Message.obtain(null, this.mOBDStatus, null));
+				activityHandler.send(Message.obtain(null, status, null));
 			} catch (RemoteException e) {
 				// Nothing to do
 			}
         } else {
         	Log.d(TAG, "notifyBTState() - NO Activity handler to receive!");
         }
+    }
+
+    private void checkOBDStatus() {
+        this.notifyBTState(this.obdConnector.getStatus());
+    }
+
+    public void notifyOBDStatus(int status) {
+        this.notifyBTState(status);
     }
 
     /**
@@ -220,7 +222,7 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
             	break;
             case REGISTER_HANDLER:
             	activityHandler = msg.replyTo;
-            	notifyBTState();
+            	checkOBDStatus();
             	break;
             case UNREGISTER_HANDLER:
             	activityHandler = null;
@@ -238,7 +240,6 @@ public class OBDProxy extends Service implements IPostListener, IServiceProxy {
     @Override
     public void stateUpdate(ObdCommandJob job) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
