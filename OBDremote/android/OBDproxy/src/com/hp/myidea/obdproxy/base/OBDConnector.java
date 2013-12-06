@@ -150,25 +150,22 @@ public class OBDConnector {
     }
 
     public boolean start() {
+        boolean result = true;
 
         if ((mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()) == null) {
+            result = false;
             Toast.makeText(owner, "Bluetooth is not available", Toast.LENGTH_LONG).show();   // TODO: localize!!!
-            return false;
-        }
-
-        // Connect to the OBD device
-        if (!mBluetoothAdapter.isEnabled()) {
+        } else if (!mBluetoothAdapter.isEnabled()) {
+            result = false;
             this.mOBDStatus = BT_DISABLED;
             this.serviceProxy.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");
-            return false;
-        }
-        if (!this.connectKnownDevice()) {
+        } else if (!this.connectKnownDevice()) {
+            result = false;
             this.mOBDStatus = OBD_NOT_CONFIGURED;
             this.serviceProxy.notifyUser("Select to configure OBD device.", "OBD device not configured.");
-            return false;
         }
 
-        return true;
+        return result;
     }
 
     public void stop() {
