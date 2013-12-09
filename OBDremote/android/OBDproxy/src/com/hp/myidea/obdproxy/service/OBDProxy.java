@@ -102,7 +102,7 @@ public class OBDProxy extends Service implements IPostListener {
     public static final int UNREGISTER_LISTENER = 3;
     public static final int REGISTER_HANDLER = 4;
     public static final int UNREGISTER_HANDLER = 5;
-    public static final int STOP_SERVICE = 7;
+    public static final int STOP_SERVICE = 6;
 
     public static enum ACTION {
     	CONNECT_TO,
@@ -111,7 +111,6 @@ public class OBDProxy extends Service implements IPostListener {
     	UNREGISTER_LISTENER,
     	REGISTER_HANDLER,
     	UNREGISTER_HANDLER,
-    	SEND_MESSAGE,
     	STOP_SERVICE
     }
 
@@ -335,7 +334,7 @@ public class OBDProxy extends Service implements IPostListener {
     private void notifyOBDStatus() {
         if (activityHandler != null) {
         	if (this.mOBDStatus > NONE) {
-        		Log.d(TAG, "notifyBTState() - " + BT_STATUS.values()[this.mOBDStatus]);
+        		Log.d(TAG, "notifyOBDStatus() - " + BT_STATUS.values()[this.mOBDStatus]);
         	}
         	try {
 				activityHandler.send(Message.obtain(null, this.mOBDStatus, null));
@@ -343,7 +342,7 @@ public class OBDProxy extends Service implements IPostListener {
 				// Nothing to do
 			}
         } else {
-        	Log.d(TAG, "notifyBTState() - NO Activity handler to receive!");
+        	Log.d(TAG, "notifyOBDStatus() - NO Activity handler to receive!");
         }
     }
 

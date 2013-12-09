@@ -84,13 +84,6 @@ public class OBDproxyActivity extends Activity {
         this.startBTReceiver();
     }
 
-    private void startBTReceiver() {
-        Log.d(TAG, "\t\t\t\t\tWILL START!!!!");
-        Intent intent = new Intent(OBDProxy.ACTION_START);
-        intent.setClass(this, OBDProxy.class);
-        startService(intent);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -122,7 +115,7 @@ public class OBDproxyActivity extends Activity {
                 break;
             }
             // User did not enable Bluetooth or an error occurred
-            Log.d(TAG, "\t\t\tHRM selection failed. Giving up...");
+            Log.d(TAG, "\t\t\tOBD selection failed. Giving up...");
             Toast.makeText(this, R.string.none_paired, Toast.LENGTH_SHORT).show();
             finish();
             break;
@@ -166,6 +159,20 @@ public class OBDproxyActivity extends Activity {
             break;
         }
         return true;
+    }
+
+    private void startBTReceiver() {
+        Log.d(TAG, "\t\t\t\t\tWILL START!!!!");
+        Intent intent = new Intent(OBDProxy.ACTION_START);
+        intent.setClass(this, OBDProxy.class);
+        startService(intent);
+    }
+
+    private void stopBTReceiver() {
+        Log.d(TAG, "\t\t\t\t\tWILL STOP!!!!");
+        Intent intent = new Intent(OBDProxy.ACTION_STOP);
+        intent.setClass(this, OBDProxy.class);
+        stopService(intent);
     }
 
     private void startLiveData() {
@@ -220,7 +227,7 @@ public class OBDproxyActivity extends Activity {
     private ServiceConnection btReceiverConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.i(TAG, "OBDProxy connected");
+            Log.d(TAG, "OBDProxy connected");
             if (service == null) {
                 Log.e(TAG, "Connection to the OBDProxy service failed. Giving up...");
                 return;
@@ -237,7 +244,7 @@ public class OBDproxyActivity extends Activity {
         }
 
         public void onServiceDisconnected(ComponentName name) {
-            Log.i(TAG, "OBDProxy disconnected");
+            Log.d(TAG, "OBDProxy disconnected");
             receiverSvcConnected = false;
         }
 
@@ -257,27 +264,7 @@ public class OBDproxyActivity extends Activity {
             }
             this.unbindService(btReceiverConnection);
         } else {
-            Log.d(TAG, "unbindHRMReceiver() - \tBut it was not!!!");
-        }
-        this.receiverSvcConnected = false;
-        this.isBound = false;
-    }
-
-    private void stopBTReceiver() {
-        Log.d(TAG, "stopBluetoothReceiver() - supposing it is bound");
-        if (this.isBound) {
-            if (messageReceiver  != null) {
-                try {
-                    Message msg = Message.obtain(null, OBDProxy.STOP_SERVICE);
-                    msg.replyTo = serviceMsgReceiver;
-                    messageReceiver.send(msg);
-                } catch (RemoteException e) {
-                    // There is nothing special we need to do if the service has crashed.
-                }
-            }
-            this.unbindService(btReceiverConnection);
-        } else {
-            Log.d(TAG, "unbindHRMReceiver() - \tBut it was not!!!");
+            Log.d(TAG, "unbindBTReceiver() - \tBut it was not!!!");
         }
         this.receiverSvcConnected = false;
         this.isBound = false;
@@ -292,7 +279,7 @@ public class OBDproxyActivity extends Activity {
             if (msg.what < 0) {
                 return;
             }
-            Log.i(TAG, "Received message: " + OBDProxy.BT_STATUS.values()[msg.what]);
+            Log.d(TAG, "Received message: " + OBDProxy.BT_STATUS.values()[msg.what]);
             switch (msg.what) {
             case OBDProxy.OBD_DATA:
                 break;
