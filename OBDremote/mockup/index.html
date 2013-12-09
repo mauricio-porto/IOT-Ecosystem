@@ -24,7 +24,8 @@
 
   <script type="text/javascript">
     function changeContent(srcURL) {
-    document.getElementById("contentFrame").src = srcURL;
+    document.getElementById("contentFrame").src = srcURL + ".html";
+    document.getElementById("mapFrame").src = srcURL + "-map.html";
     }
 
     function toggleList(e){
@@ -40,21 +41,16 @@
 <div class="links" id="navegacao">
 <ul>
 
-  <li style="width: 180px; height: 56px;"><a href="#">Algo</a></li>
-
-  <li style="width: 180px; height: 56px;"><a href="#">Alguma coisa</a></li>
+  <li style="width: 180px; height: 56px;"><a onclick="changeContent('./FerraruKaReno')" href="#">Pagina Inicial</a></li>
 
   <li style="width: 180px; height: 56px;"><a href="#">Outra coisa</a></li>
 
-  <li style="width: 180px; height: 56px;"><a href="#">E mais outra</a></li>
-
-  <li style="width: 180px; height: 56px;"><a style="cursor:crosshair;" href="javascript:toggleList('controleList')">Controles</a>
-    <ul id="controleList" style="display: none;">
-      <li style="font-size: small; height: 40px;"><a href="#">Controle 1</a></li>
-      <li style="font-size: small; height: 40px;"><a href="#">Controle 2</a></li>
-      <li style="font-size: small; height: 40px;"><a href="#">Controle 3</a></li>
-      <li style="font-size: small; height: 40px;"><a href="#">Controle 4</a></li>
-      <li style="font-size: small; height: 40px;"><a href="#">Controle 5</a></li>
+  <li style="width: 180px; height: 56px;"><a style="cursor:crosshair;" href="javascript:toggleList('veiculosList')">Veiculos</a>
+    <ul id="veiculosList" style="display: none;">
+      <li style="font-size: small; height: 40px;"><a onclick="changeContent('./amarokPorto')" href="#">Amarok do Porto</a></li>
+      <li style="font-size: small; height: 40px;"><a onclick="changeContent('./civicRoque')" href="#">Civic do Roque</a></li>
+      <li style="font-size: small; height: 40px;"><a onclick="changeContent('./fiestaRicardo')" href="#">Fiesta do Ricardo</a></li>
+      <li style="font-size: small; height: 40px;"><a onclick="changeContent('./gtSchramm')" href="#">GT do Schramm</a></li>
     </ul>
   </li>
 
@@ -65,9 +61,9 @@
 
 <!-- Inicio de divisao de conteudo -->
 <div id="conteudo" class="content">
-  <iframe height="60%" frameborder="0" width="100%" scrolling="no" src="./gauges.html" marginheight="0" marginwidth="0" id="contentFrame">
+  <iframe height="60%" frameborder="0" width="100%" scrolling="no" src="./FerraruKaReno.html" marginheight="0" marginwidth="0" id="contentFrame">
   </iframe>
-  <iframe height="40%" frameborder="0" width="100%" scrolling="no" src="./OndeOCarroEsta.html" marginheight="0" marginwidth="0" id="mapFrame">
+  <iframe height="40%" frameborder="0" width="100%" scrolling="no" src="./FerraruKaReno-map.html" marginheight="0" marginwidth="0" id="mapFrame">
   </iframe>
 </div>
 <!-- Fim de divisao de conteudo -->

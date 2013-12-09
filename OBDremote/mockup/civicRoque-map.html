@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript"
+    src="http://maps.google.com/maps/api/js?sensor=false">
+</script>
+<script type="text/javascript">
+  var civicRoque = new google.maps.LatLng(-30.0152,-51.1581);
+  var marker;
+  var map;
+
+  function initialize() {
+    var myOptions = {
+      zoom: 15,
+      center: civicRoque,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+    markerMapo = new google.maps.Marker({
+      position: civicRoque,
+      map: map, 
+      title:"Civic Roque", 
+      animation: google.maps.Animation.DROP
+    });
+
+  }
+
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+</body>
+</html>
