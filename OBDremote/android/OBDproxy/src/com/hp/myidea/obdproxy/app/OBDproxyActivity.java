@@ -8,7 +8,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -16,22 +15,13 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hp.myidea.obdproxy.R;
-import com.hp.myidea.obdproxy.base.OBDConnector;
 import com.hp.myidea.obdproxy.service.OBDProxy;
-
-import eu.lighthouselabs.obd.reader.IPostListener;
 
 public class OBDproxyActivity extends Activity {
 
@@ -302,25 +292,25 @@ public class OBDproxyActivity extends Activity {
             if (msg.what < 0) {
                 return;
             }
-            Log.i(TAG, "Received message: " + OBDConnector.BT_STATUS.values()[msg.what]);
+            Log.i(TAG, "Received message: " + OBDProxy.BT_STATUS.values()[msg.what]);
             switch (msg.what) {
-            case OBDConnector.OBD_DATA:
+            case OBDProxy.OBD_DATA:
                 break;
-            case OBDConnector.BT_DISABLED:
+            case OBDProxy.BT_DISABLED:
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
                 break;
-            case OBDConnector.OBD_NOT_CONFIGURED:
+            case OBDProxy.OBD_NOT_CONFIGURED:
                 // Launch the BluetoothDeviceList to see devices and do scan
                 Intent serverIntent = new Intent(OBDproxyActivity.this, BluetoothDeviceList.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 break;
-            case OBDConnector.OBD_CONNECTED:
+            case OBDProxy.OBD_CONNECTED:
                 break;
-            case OBDConnector.CONNECTING:
+            case OBDProxy.CONNECTING:
                 Toast.makeText(OBDproxyActivity.this, R.string.title_connecting, Toast.LENGTH_SHORT).show();
                 break;
-            case OBDConnector.NOT_RUNNING:
+            case OBDProxy.NOT_RUNNING:
                 serviceRunning = false;
                 break;
             default:
