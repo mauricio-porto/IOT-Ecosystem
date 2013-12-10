@@ -81,12 +81,13 @@ public class OBDproxyActivity extends Activity {
             finish();
             return;
         }
-        this.startBTReceiver();
     }
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume()");
         super.onResume();
+        this.startBTReceiver();
         if (!this.isBound) {
             this.isBound = this.bindService(new Intent("com.hp.myidea.obdproxy.service.OBDProxy"), this.btReceiverConnection, Context.BIND_AUTO_CREATE);
         }

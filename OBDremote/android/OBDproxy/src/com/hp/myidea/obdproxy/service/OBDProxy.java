@@ -201,6 +201,7 @@ public class OBDProxy extends Service implements IPostListener {
             this.notifyUser("Select to configure OBD device.", "OBD device not configured.");
             return;
         }
+        this.notifyUser("OBD Proxy is running. Select to see data and configure.", "OBD Proxy is running...");
     }
 
     public boolean connectKnownDevice() {
@@ -358,7 +359,7 @@ public class OBDProxy extends Service implements IPostListener {
             	break;
             case CONNECT_TO:
             	String rcvdAddress = msg.getData().getString(TEXT_MSG);
-            	Log.i(TAG, "Received address: " + rcvdAddress);
+            	Log.d(TAG, "Received address: " + rcvdAddress);
             	if (rcvdAddress == null || rcvdAddress.length() == 0 ) {
             		connectKnownDevice();
             	} else {
