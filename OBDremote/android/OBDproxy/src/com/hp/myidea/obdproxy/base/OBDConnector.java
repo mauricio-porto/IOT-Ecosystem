@@ -169,6 +169,7 @@ public class OBDConnector {
                     mOBDStatus = OBD_CONNECTED;
                     obdConnected = true;
                     service.notifyOBDStatus();
+                    startObdConnection();
                     break;
                 case BluetoothConnector.STATE_CONNECTING:
                     mOBDStatus = CONNECTING;
@@ -233,7 +234,31 @@ public class OBDConnector {
 
 
     
-    
+
+    private void startObdConnection() {
+        // TODO: enviar estas coisas:
+        
+        OBDCommand.SET_DEFAULTS.getOBDcode();
+        OBDCommand.RESET_ALL.getOBDcode();
+        OBDCommand.ECHO_OFF.getOBDcode();
+        OBDCommand.ECHO_OFF.getOBDcode();
+        OBDCommand.LINE_FEED_OFF.getOBDcode();
+        OBDCommand.TIME_OUT.getOBDcode();
+
+        OBDCommand.AMBIENT_AIR_TEMPERATURE.getOBDcode();
+    }
+
+    private String getOBDData(OBDCommand param) {
+        //Envia isto...
+        param.getOBDcode();
+
+        // Captura resposta (como???)
+        byte[] data = new byte[0]; // TODO: hehehehe
+
+        // Le resultado
+        return param.getReader().readFormattedResult(data);
+    }
+
     public void startLiveData() {
         
     }
