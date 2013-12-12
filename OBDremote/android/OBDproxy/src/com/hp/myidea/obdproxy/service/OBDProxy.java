@@ -3,15 +3,13 @@
  */
 package com.hp.myidea.obdproxy.service;
 
-import java.util.ArrayList;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -21,19 +19,16 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.hp.myidea.obdproxy.IProxyService;
 import com.hp.myidea.obdproxy.R;
 import com.hp.myidea.obdproxy.app.OBDproxyActivity;
-import com.hp.myidea.obdproxy.base.BluetoothConnector;
-
-import eu.lighthouselabs.obd.commands.ObdCommand;
-import eu.lighthouselabs.obd.reader.IPostListener;
-import eu.lighthouselabs.obd.reader.io.ObdCommandJob;
+import com.hp.myidea.obdproxy.base.OBDConnector;
 
 /**
  * @author mapo
  *
  */
-public class OBDProxy extends Service implements IPostListener {
+public class OBDProxy extends Service implements IProxyService {
 
     private static final String TAG = OBDProxy.class.getSimpleName();
 
@@ -42,58 +37,6 @@ public class OBDProxy extends Service implements IPostListener {
     public static final String ACTION_START = "startService";
     public static final String ACTION_STOP = "stopService";
 
-    // Message types sent from the BluetoothConnector Handler
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-
-    // Bluetooth and OBD statuses
-    public static final int NONE = -1;
-    public static final int OBD_NOT_CONFIGURED = 0;
-    public static final int BT_DISABLED = 1;
-    public static final int OBD_CONNECTED = 2;
-    public static final int CONNECTING = 3;
-    public static final int OBD_DATA = 4;
-    public static final int NOT_RUNNING = 5;
-
-    public static enum BT_STATUS {
-        OBD_NOT_CONFIGURED,
-        BT_DISABLED,
-        OBD_CONNECTED,
-        CONNECTING,
-        OBD_DATA,
-        NOT_RUNNING
-    }
-
-    private int mOBDStatus = NONE;
-
-    // Key names received
-    public static final String DEVICE_NAME = "device_name";
-    public static final String DEVICE_ADRESS = "device_address";
-
-    // MAC address of the OBD device
-    private String obdBluetoothAddress = null;
-    // Name of the connected device
-    private String mConnectedDeviceName = null;
-    private boolean obdConnected = false;
-
-    // Local Bluetooth adapter
-    private BluetoothAdapter mBluetoothAdapter = null;
-
-    private BluetoothConnector connector;
-    private IPostListener listener;
-
-    //private ObdCommand[] paramList;
-    private ArrayList<ObdCommand> paramList;
-
-    private int speed = 1;
-    private double maf = 1;
-    private float ltft = 0;
-    private double equivRatio = 1;
-
-    private Handler mHandler = new Handler();
-    private Handler anotherHandler = new Handler();
-    
     // Message types received from the activity messenger
     // MUST start by zero due the enum mapping
     public static final int CONNECT_TO = 0;
@@ -132,6 +75,8 @@ public class OBDProxy extends Service implements IPostListener {
 
     private Notification notifier;
 
+    private OBDConnector obdConnector;
+
     private boolean communicatorSvcConnected = false;
 
     @Override
@@ -147,10 +92,12 @@ public class OBDProxy extends Service implements IPostListener {
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate()");
-        if ((mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()) == null) {
+        if ((BluetoothAdapter.getDefaultAdapter()) == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();   // TODO: localize!!!
             return;
         }
+
+        this.obdConnector = new OBDConnector(this);
 
         notifMgr = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
@@ -191,124 +138,25 @@ public class OBDProxy extends Service implements IPostListener {
     private void init() {
     	Log.d(TAG, "init()\n\n\n\n");
         // Connect to the ARDUINO device
-        if (!mBluetoothAdapter.isEnabled()) {
-            this.mOBDStatus = BT_DISABLED;
+        if (!this.obdConnector.isBluetoothEnabled()) {
             this.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");
             return;
         }
-        if (!this.connectKnownDevice()) {
-            this.mOBDStatus = OBD_NOT_CONFIGURED;
+        if (!this.obdConnector.connectKnownDevice()) {
             this.notifyUser("Select to configure OBD device.", "OBD device not configured.");
             return;
         }
         this.notifyUser("OBD Proxy is running. Select to see data and configure.", "OBD Proxy is running...");
     }
 
-    public boolean connectKnownDevice() {
-        if (obdConnected) {
-            Log.d(TAG, "\n\n\n\n\n\nconnectDevice():: obdConnected says it is already connected!!!! Wrong?!?!?!");
-            return true;
-        }
-        this.restoreState();
-        if (this.obdBluetoothAddress != null && this.obdBluetoothAddress.length() > 0) {
-            this.connectDevice(this.obdBluetoothAddress);
-            return true;
-        }
-        return false;       
-    }
-
-    public void connectDevice(String deviceAddress) {
-        this.mOBDStatus = CONNECTING;
-        if (this.connector == null) {
-            this.connector = new BluetoothConnector(this, btMsgHandler);
-        }
-        this.connector.connect(mBluetoothAdapter.getRemoteDevice(deviceAddress));
-    }
-
 	private void stopAll() {
     	Log.d(TAG, "\n\n\n\nstopAll()\n\n\n\n");
-        obdConnected = false;
-        if (this.connector != null) {
-            this.connector.stop();
+        if (this.obdConnector != null) {
+            this.obdConnector.stop();
         }
 
         this.notifyUser("Stopped. Select to start again.", "Stopping OBDproxy.");
 		this.stopSelf();
-    }
-
-    private void restoreState() {
-        // Restore state
-        SharedPreferences state = this.getSharedPreferences(OBDproxyActivity.OBDPROXY_PREFS, 0);
-        this.obdBluetoothAddress = state.getString("OBDBluetoothAddress", null);
-    }
-
-    private void storeState() {
-        // Persist state
-        SharedPreferences state = this.getSharedPreferences(OBDproxyActivity.OBDPROXY_PREFS, 0);
-        SharedPreferences.Editor editor = state.edit();
-        editor.putString("OBDBluetoothAddress", this.obdBluetoothAddress);
-        editor.commit();
-    }
-
-    // The Handler that gets information back from the BluetoothConnector
-    private final Handler btMsgHandler = new Handler() {
-        int counter = 0;
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-            case MESSAGE_STATE_CHANGE:
-                Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
-                switch (msg.arg1) {
-                case BluetoothConnector.STATE_CONNECTED:
-                    mOBDStatus = OBD_CONNECTED;
-                    obdConnected = true;
-                    notifyOBDStatus();
-                    break;
-                case BluetoothConnector.STATE_CONNECTING:
-                    mOBDStatus = CONNECTING;
-                    notifyOBDStatus();
-                    break;
-                case BluetoothConnector.STATE_FAILED:
-                    mOBDStatus = OBD_NOT_CONFIGURED;
-                    notifyOBDStatus();
-                    break;
-                case BluetoothConnector.STATE_LISTEN:
-                case BluetoothConnector.STATE_NONE:
-                    break;
-                }
-                break;
-            case MESSAGE_READ:
-                Log.d(TAG, "Data received.");
-                if (msg.arg1 > 0) { // msg.arg1 contains the number of bytes read
-                    Log.d(TAG, "\tRead size: " + msg.arg1);
-                    byte[] readBuf = (byte[]) msg.obj;
-                    byte[] readBytes = new byte[msg.arg1];
-                    System.arraycopy(readBuf, 0, readBytes, 0, msg.arg1);
-                    Log.d(TAG, "\tAs Hex: " + asHex(readBytes));
-                }
-                break;
-            case MESSAGE_DEVICE_NAME:
-                // save the connected device's name
-                mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-                obdBluetoothAddress = msg.getData().getString(DEVICE_ADRESS);
-                storeState();
-                Toast.makeText(OBDProxy.this, "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-            }
-        }
-    };
-
-    private String asHex(byte[] buf) {
-        char[] HEX_CHARS = "0123456789abcdef".toCharArray();
-
-        char[] chars = new char[2 * buf.length];
-        for (int i = 0; i < buf.length; ++i) {
-            chars[2 * i] = HEX_CHARS[(buf[i] & 0xF0) >>> 4];
-            chars[2 * i + 1] = HEX_CHARS[buf[i] & 0x0F];
-        }
-        return new String(chars);
     }
 
     private PendingIntent buildIntent() {
@@ -332,13 +180,14 @@ public class OBDProxy extends Service implements IPostListener {
         notifMgr.notify(OBD_NOTIFICATIONS, this.notifier);
     }
 
-    private void notifyOBDStatus() {
+    public void notifyOBDStatus() {
         if (activityHandler != null) {
-        	if (this.mOBDStatus > NONE) {
-        		Log.d(TAG, "notifyOBDStatus() - " + BT_STATUS.values()[this.mOBDStatus]);
+            int status = this.obdConnector.getOBDStatus();
+        	if (status > OBDConnector.NONE) {
+        		Log.d(TAG, "notifyOBDStatus() - " + OBDConnector.BT_STATUS.values()[status]);
         	}
         	try {
-				activityHandler.send(Message.obtain(null, this.mOBDStatus, null));
+				activityHandler.send(Message.obtain(null, status, null));
 			} catch (RemoteException e) {
 				// Nothing to do
 			}
@@ -361,9 +210,9 @@ public class OBDProxy extends Service implements IPostListener {
             	String rcvdAddress = msg.getData().getString(TEXT_MSG);
             	Log.d(TAG, "Received address: " + rcvdAddress);
             	if (rcvdAddress == null || rcvdAddress.length() == 0 ) {
-            		connectKnownDevice();
+            		obdConnector.connectKnownDevice();
             	} else {
-            		connectDevice(rcvdAddress);
+            		obdConnector.connectDevice(rcvdAddress);
             	}
             	break;
             case REGISTER_LISTENER:
@@ -388,8 +237,8 @@ public class OBDProxy extends Service implements IPostListener {
     final Messenger activityMsgListener = new Messenger(activityMessages);
 
     @Override
-    public void stateUpdate(ObdCommandJob job) {
-        // TODO Auto-generated method stub
+    public Context getServiceContext() {
+        return this;
     }
 
 }

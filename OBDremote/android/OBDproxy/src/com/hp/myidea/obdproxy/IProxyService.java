@@ -1,0 +1,16 @@
+/**
+ * 
+ */
+package com.hp.myidea.obdproxy;
+
+import android.content.Context;
+
+/**
+ * @author mauricio
+ *
+ */
+public interface IProxyService {
+
+    public Context getServiceContext();
+    public void notifyOBDStatus();
+}
