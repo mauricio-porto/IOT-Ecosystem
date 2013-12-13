@@ -69,13 +69,20 @@ public class OBDConnector {
     private Context owner;
     private IProxyService service;
 
+    OBDCommand[] commandList = {
+            OBDCommand.ENGINE_RPM,
+            OBDCommand.SPEED,
+            OBDCommand.AMBIENT_AIR_TEMPERATURE,
+            OBDCommand.COOLANT_TEMPERATURE,
+            OBDCommand.FUEL_LEVEL};
+
     /**
      * 
      */
     public OBDConnector(IProxyService service) {
         super();
         if (service == null) {
-            throw new IllegalArgumentException("MUST provide the IProsyService");
+            throw new IllegalArgumentException("MUST provide the IProxyService");
         }
         this.service = service;
         this.owner = service.getServiceContext();
@@ -205,6 +212,10 @@ public class OBDConnector {
 
     
 
+    public void stopLiveData() {
+        mHandler.removeCallbacks(mQueueCommands);
+    }
+
     private void startObdConnection() {
         sendToDevice(OBDCommand.SET_DEFAULTS.getOBDcode());
         sendToDevice(OBDCommand.RESET_ALL.getOBDcode());
@@ -214,6 +225,8 @@ public class OBDConnector {
         sendToDevice(OBDCommand.TIME_OUT.getOBDcode());
 
         sendToDevice(OBDCommand.AMBIENT_AIR_TEMPERATURE.getOBDcode());
+        
+        mHandler.post(mQueueCommands);
     }
 
     private String getOBDData(OBDCommand param) {
@@ -272,6 +285,11 @@ public class OBDConnector {
      */
     private Runnable mQueueCommands = new Runnable() {
         public void run() {
+            for (int i = 0; i < commandList.length; i++) {
+                OBDCommand command = commandList[i];
+                String readParam = getOBDData(command);
+                Log.d(TAG, "\t\t " + command.getName() + ": " + readParam);
+            }
             // run again in 2s
             mHandler.postDelayed(mQueueCommands, 2000);
         }
