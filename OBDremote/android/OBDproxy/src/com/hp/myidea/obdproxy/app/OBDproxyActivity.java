@@ -154,8 +154,6 @@ public class OBDproxyActivity extends Activity {
             stopLiveData();
             break;
         case SETTINGS:
-            Intent configIntent = new Intent(this, ConfigActivity.class);
-            startActivity(configIntent);
             break;
         default:
             break;

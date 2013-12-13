@@ -9,19 +9,19 @@ import com.hp.myidea.obdproxy.IResultReader;
  * @author mauricio
  *
  */
-public class AirTempReader implements IResultReader {
+public class TemperatureReader implements IResultReader {
 
     @Override
     public String readResult(byte[] input) {
-        // TODO Auto-generated method stub
-        return null;
+        String res = new String(input);
+        return res;
     }
 
     @Override
     public String readFormattedResult(byte[] input) {
         String res = new String(input);
 
-        if (!"NODATA".equals(res)) {
+/*        if (!"NODATA".equals(res)) {
             // ignore first two bytes [hh hh] of the response
             temperature = prepareTempValue(buffer.get(2));
             
@@ -31,7 +31,7 @@ public class AirTempReader implements IResultReader {
             else
                 res = String.format("%.0f%s", temperature, "C");
         }
-
+*/
         return res;
     }
 

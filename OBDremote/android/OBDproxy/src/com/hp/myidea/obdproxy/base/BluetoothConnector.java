@@ -196,6 +196,23 @@ public class BluetoothConnector {
     }
 
     /**
+     * Read from the ListenerThread in an unsynchronized manner
+     * 
+     * @see ListenerThread#read()
+     */
+    public byte[] read() {
+        // Create temporary object
+        ListenerThread r;
+        // Synchronize a copy of the ListenerThread
+        synchronized (this) {
+            if (mState != STATE_CONNECTED) return null;
+            r = mListenerThread;
+        }
+        // Perform the read unsynchronized
+        return r.read();
+    }
+
+    /**
      * Indicate that the connection attempt failed and notify the UI Activity.
      */
     private void sayConnectionFailed(BluetoothDevice device) {
@@ -336,7 +353,8 @@ public class BluetoothConnector {
 
             // Keep listening to the InputStream while connected
             while (true) {
-                try {
+
+/*                try {
                     // Read from the InputStream
                 	buffer = new byte[256];
                     bytes = mmInStream.read(buffer);
@@ -351,7 +369,31 @@ public class BluetoothConnector {
                     connectionLost();
                     break;
                 }
+*/
             }
+        }
+
+        /**
+         * Read from the connected InputStream
+         * 
+         * @return - byte array read
+         */
+        public byte[] read() {
+            // Read from the InputStream
+            byte[] buffer = new byte[1024];
+            int bytes;
+            byte[] readBuffer = null;
+            try {
+                bytes = mmInStream.read(buffer);
+                if (bytes > 0) {
+                    readBuffer = new byte[bytes];
+                    System.arraycopy(buffer, 0, readBuffer, 0, bytes);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during read", e);
+                connectionLost();
+            }
+            return readBuffer;
         }
 
         /**
