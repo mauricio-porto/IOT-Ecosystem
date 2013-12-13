@@ -3,6 +3,8 @@
  */
 package com.hp.myidea.obdproxy.base;
 
+import com.hp.myidea.obdproxy.IResultReader;
+
 /**
  * @author mauricio
  *
@@ -18,8 +20,8 @@ public enum OBDCommand {
     TIME_OUT("set timeout","AT ST ", null),
 
     // Comandos de leitura de dados correntes (current data - ver http://en.wikipedia.org/wiki/OBD-II_PIDs)
-    AMBIENT_AIR_TEMPERATURE("ambient air temperature", "01 46", new AmbientAirTempReader()),
-    COOLANT_TEMPERATURE("coolant temperature", "01 05", null),
+    AMBIENT_AIR_TEMPERATURE("ambient air temperature", "01 46", new AirTempReader()),
+    COOLANT_TEMPERATURE("coolant temperature", "01 05", new AirTempReader()),
     ENGINE_RPM("engine rpm", "01 0C", null),
     SPEED("speed", "01 0D", null),
     FUEL_LEVEL("fuel level", "01 2F", null);

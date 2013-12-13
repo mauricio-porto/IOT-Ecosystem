@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hp.myidea.obdproxy.base;
+package com.hp.myidea.obdproxy;
 
 /**
  * @author mauricio
