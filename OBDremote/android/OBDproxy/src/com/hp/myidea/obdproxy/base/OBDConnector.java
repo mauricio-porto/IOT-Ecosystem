@@ -156,6 +156,12 @@ public class OBDConnector {
                     mOBDStatus = OBD_NOT_CONFIGURED;
                     service.notifyOBDStatus();
                     break;
+                case BluetoothConnector.STATE_LOST:
+                    stopObdConnection();
+                    stop();
+                    mOBDStatus = OBD_NOT_CONFIGURED;
+                    service.notifyOBDStatus();
+                    break;
                 case BluetoothConnector.STATE_LISTEN:
                 case BluetoothConnector.STATE_NONE:
                     break;
@@ -212,7 +218,7 @@ public class OBDConnector {
 
     
 
-    public void stopLiveData() {
+    public void stopObdConnection() {
         mHandler.removeCallbacks(mQueueCommands);
     }
 
@@ -235,10 +241,11 @@ public class OBDConnector {
         }
 
         byte[] data = sendToDevice(param.getOBDcode());
-
-        IResultReader reader = param.getReader();
-        if (reader != null) {
-            return reader.readFormattedResult(data);
+        if (data != null && data.length > 0) {
+            IResultReader reader = param.getReader();
+            if (reader != null) {
+                return reader.readFormattedResult(data);
+            }
         }
         return null;
     }
@@ -249,7 +256,9 @@ public class OBDConnector {
             connector.write(msg.getBytes());
             Log.d(TAG, "Sent to scanner: " + msg);
             bytes = connector.read();
-            Log.d(TAG, "Scanner response: " + new String(bytes));
+            if (bytes != null && bytes.length > 0) {
+                Log.d(TAG, "Scanner response: " + new String(bytes));
+            }
         }
         return bytes;
     }
@@ -288,7 +297,11 @@ public class OBDConnector {
             for (int i = 0; i < commandList.length; i++) {
                 OBDCommand command = commandList[i];
                 String readParam = getOBDData(command);
-                Log.d(TAG, "\t\t " + command.getName() + ": " + readParam);
+                if (readParam != null) {
+                    Log.d(TAG, "\t\t " + command.getName() + ": " + readParam);
+                } else {
+                    Log.e(TAG, "\t\t " + command.getName() + " got null!!!");
+                }
             }
             // run again in 2s
             mHandler.postDelayed(mQueueCommands, 2000);

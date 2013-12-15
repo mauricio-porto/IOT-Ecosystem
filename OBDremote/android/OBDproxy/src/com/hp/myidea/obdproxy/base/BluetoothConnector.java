@@ -41,9 +41,6 @@ public class BluetoothConnector {
     private static final String TAG = BluetoothConnector.class.getSimpleName();
     private static final boolean D = true;
 
-    // Name for the SDP record when creating server socket
-    private static final String NAME = "BluetoothReceiverActivity";
-
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); 
 
@@ -73,6 +70,7 @@ public class BluetoothConnector {
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
     public static final int STATE_FAILED = 4;     // failed to connect
+    public static final int STATE_LOST = 5;       // an existing connection was lost
 
     /**
      * Constructor. Prepares a new BluetoothReceiverActivity session.

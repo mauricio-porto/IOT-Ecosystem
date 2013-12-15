@@ -17,7 +17,7 @@ public enum OBDCommand {
     ECHO_OFF("echo off", "AT E0", null),
     LINE_FEED_OFF("linefeed off", "AT L0", null),
     SELECT_AUTO_PROTOCOL("select protocol auto","AT SP 0", null),
-    TIME_OUT("set timeout","AT ST ", null),
+    TIME_OUT("set timeout","AT ST F0", null),
 
     // Comandos de leitura de dados correntes (current data - ver http://en.wikipedia.org/wiki/OBD-II_PIDs)
     AMBIENT_AIR_TEMPERATURE("ambient air temperature", "01 46", new TemperatureReader()),

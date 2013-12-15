@@ -39,11 +39,6 @@
       <TableRow
       	android:layout_margin="2dip"
         android:background="#000000">
-        <eu.lighthouselabs.obd.reader.drawable.CoolantGaugeView
-          android:layout_width="330px"
-          android:id="@+id/coolant_gauge"
-		  android:layout_height="50px"
-		  android:layout_margin="7px"/>
 		<ImageView
 		  android:src="@drawable/temp"
 		  android:layout_width="wrap_content"
@@ -56,21 +51,6 @@
       	  android:layout_marginLeft="15px"
       	  android:layout_gravity="center_vertical|center_horizontal"/>
 	  </TableRow>
-	  <!--
-	  <TableRow
-      	android:layout_margin="2dip"
-        android:background="#000000">
-        <TextView
-          android:id="@+id/accel_text"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"/>
-		<eu.lighthouselabs.obd.reader.drawable.AccelGaugeView
-		  android:id="@+id/accel_gauge"
-		  android:layout_width="330px"
-		  android:layout_height="50px"
-		  android:layout_margin="7px"/>
-      </TableRow>
-      -->
     </TableLayout>
     <TableLayout
       android:layout_width="fill_parent"
