@@ -26,11 +26,6 @@ public class OBDConnector {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
 
-    // Message types sent from the BluetoothConnector Handler
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-
     // Key names received
     public static final String DEVICE_NAME = "device_name";
     public static final String DEVICE_ADRESS = "device_address";
@@ -135,11 +130,10 @@ public class OBDConnector {
 
     // The Handler that gets information back from the BluetoothConnector
     private final Handler btMsgHandler = new Handler() {
-        int counter = 0;
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-            case MESSAGE_STATE_CHANGE:
+            case BluetoothConnector.MESSAGE_STATE_CHANGE:
                 Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
                 case BluetoothConnector.STATE_CONNECTED:
@@ -167,7 +161,7 @@ public class OBDConnector {
                     break;
                 }
                 break;
-            case MESSAGE_READ:
+            case BluetoothConnector.MESSAGE_READ:
                 Log.d(TAG, "Data received.");
                 if (msg.arg1 > 0) { // msg.arg1 contains the number of bytes read
                     Log.d(TAG, "\tRead size: " + msg.arg1);
@@ -177,12 +171,15 @@ public class OBDConnector {
                     Log.d(TAG, "\tAs Hex: " + asHex(readBytes));
                 }
                 break;
-            case MESSAGE_DEVICE_NAME:
+            case BluetoothConnector.MESSAGE_DEVICE_NAME:
                 // save the connected device's name
                 mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                 obdBluetoothAddress = msg.getData().getString(DEVICE_ADRESS);
                 storeState();
                 Toast.makeText(owner, "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                break;
+            case BluetoothConnector.MESSAGE_TOAST:
+                Toast.makeText(owner, msg.getData().getString(BluetoothConnector.TOAST), Toast.LENGTH_LONG).show();
                 break;
             default:
                 break;

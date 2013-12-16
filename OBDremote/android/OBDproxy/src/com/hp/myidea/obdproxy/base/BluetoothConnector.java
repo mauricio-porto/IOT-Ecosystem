@@ -228,7 +228,7 @@ public class BluetoothConnector {
      * Indicate that the connection was lost and notify the UI Activity.
      */
     private void connectionLost() {
-        setState(STATE_LISTEN);
+        setState(STATE_LOST);
 
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(BluetoothConnector.MESSAGE_TOAST);
