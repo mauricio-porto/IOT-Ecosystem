@@ -306,7 +306,7 @@ public class XMPPCommunicator extends Service {
                 return;
             }
             ChatManager chatmanager = connection.getChatManager();
-            Chat chato = chatmanager.createChat("FerraruKaReno@15.185.92.3", new MessageListener() {
+            Chat chato = chatmanager.createChat("FerraroKaReno@15.185.92.3", new MessageListener() {
                 public void processMessage(Chat chat, Message message) {}
             });
             try {

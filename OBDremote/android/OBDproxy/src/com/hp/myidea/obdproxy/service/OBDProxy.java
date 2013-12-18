@@ -168,7 +168,7 @@ public class OBDProxy extends Service implements IProxyService {
         }
         if (this.communicatorSvcConnected) {
             try {
-                this.communicatorService.sendMessage("cardiotalk.hu@gmail.com", "Bye, see ya.");
+                this.communicatorService.sendMessage("FerraroKaReno@15.185.92.3", "Bye, see ya.");
                 this.communicatorService.stop();
             } catch (RemoteException e) {
                 Log.e(TAG, "Call to Subscriptions Service failed.", e);
@@ -275,6 +275,9 @@ public class OBDProxy extends Service implements IProxyService {
             msg.setData(bundle);
             try {
                 activityHandler.send(msg);
+                if (this.communicatorService != null) {
+                    this.communicatorService.sendMessage("FerraroKaReno@15.185.92.3", data);
+                }
             } catch (RemoteException e) {
                 // Nothing to do
             }
@@ -300,7 +303,7 @@ public class OBDProxy extends Service implements IProxyService {
             communicatorSvcConnected = true;
             try {
                 OBDProxy.this.communicatorService.start();
-                OBDProxy.this.communicatorService.sendMessage("cardiotalk.hu@gmail.com", "Hello, say something...");
+                OBDProxy.this.communicatorService.sendMessage("FerraroKaReno@15.185.92.3", "Hello, say something...");
             } catch (RemoteException e) {
                 Log.e(TAG, "Call to XMPPCommunicator Service failed.", e);
             }
