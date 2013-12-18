@@ -157,6 +157,7 @@ public class OBDProxy extends Service implements IProxyService {
             this.notifyUser("Select to configure OBD device.", "OBD device not configured.");
             return;
         }
+
         this.notifyUser("OBD Proxy is running. Select to see data and configure.", "OBD Proxy is running...");
     }
 

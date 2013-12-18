@@ -169,7 +169,7 @@ public class XMPPCommunicator extends Service {
         //SharedPreferences state = this.getSharedPreferences(ApplicationPreference.SHARED_PREFS_FILE, 0);
         //this.userEmailAddress = state.getString("emailAddress", "cardiotalk@gmail.com");
         //this.userPassword = state.getString("userPassword", "cardiotalk2011");
-        this.userEmailAddress = "amarokMapo@15.185.92.3";
+        this.userEmailAddress = "amarokMapo";
         this.userPassword = "mapoAmarok";
     }
 
@@ -191,7 +191,7 @@ public class XMPPCommunicator extends Service {
 
     private void connect() throws XMPPException {
         // Create the configuration for this new connection
-        ConnectionConfiguration config = new ConnectionConfiguration("15.185.92.3", 5222);
+        ConnectionConfiguration config = new ConnectionConfiguration("15.185.92.3", 5222, "15.185.92.3");
         // config.setCompressionEnabled(true);
         // config.setSASLAuthenticationEnabled(true);
 
@@ -200,9 +200,12 @@ public class XMPPCommunicator extends Service {
         this.connection.connect();
 
         // You have to put this code before you login
-        //SASLAuthentication.supportSASLMechanism("PLAIN", 0);
+        SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 
         // Log into the server
+        // See http://community.igniterealtime.org/thread/35976
+        // For GMAIL you have to specify your gmail addres WITH @gmail.com at the end
+        // For Ejabberd you have to specify your Jabber ID addres WITHOUT @jabber.org at the end
         connection.login(this.userEmailAddress, this.userPassword, OBDRemoteResourceFilter.RESOURCE);
         
         this.isConnected = this.connection.isAuthenticated();
