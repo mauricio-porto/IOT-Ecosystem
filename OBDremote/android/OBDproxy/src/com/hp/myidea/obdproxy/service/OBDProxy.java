@@ -10,6 +10,7 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -62,8 +63,8 @@ public class OBDProxy extends Service implements IProxyService {
     public static final String BOOL_MSG = "bool";
 
     // Key names sent
-    public static final String KEY_OBD_DATA = "OBD_data";
-    public static final String KEY_LOCATION_DATA = "location_data";
+    public static final int OBD_DATA = 0xda1a;
+    public static final int LOCATION_DATA = 0x1ada;
 
     public static final int DIST_FREQ_RATIO = 75000;
 
@@ -120,12 +121,14 @@ public class OBDProxy extends Service implements IProxyService {
     }
 
     private void handleCommand(Intent intent) {
-        if (ACTION_START.equals(intent.getAction())) {
-            Log.d(TAG, "\n\nhandleCommand() - START ACTION");
-            this.init();
-        } else if (ACTION_STOP.equals(intent.getAction())) {
-            Log.d(TAG, "\n\nhandleCommand() - STOP ACTION");
-            this.stopAll(); 
+        if (intent != null) {
+            if (ACTION_START.equals(intent.getAction())) {
+                Log.d(TAG, "\n\nhandleCommand() - START ACTION");
+                this.init();
+            } else if (ACTION_STOP.equals(intent.getAction())) {
+                Log.d(TAG, "\n\nhandleCommand() - STOP ACTION");
+                this.stopAll(); 
+            }
         }
     }
 
@@ -239,6 +242,23 @@ public class OBDProxy extends Service implements IProxyService {
     @Override
     public Context getServiceContext() {
         return this;
+    }
+
+    @Override
+    public void notifyDataReceived(String data) {
+        if (activityHandler != null) {
+            Message msg = Message.obtain(null,OBDProxy.OBD_DATA);
+            Bundle bundle = new Bundle();
+            bundle.putString(OBDProxy.TEXT_MSG, data);
+            msg.setData(bundle);
+            try {
+                activityHandler.send(msg);
+            } catch (RemoteException e) {
+                // Nothing to do
+            }
+        } else {
+            Log.d(TAG, "notifyDataReceived() - NO Activity handler to receive!");
+        }
     }
 
 }

@@ -60,6 +60,8 @@ public class OBDproxyActivity extends Activity {
     static final int TABLE_ROW_MARGIN = 7;
     static final int NO_ORIENTATION_SENSOR = 8;
 
+    private TextView dataView;
+
     public void updateTextView(final TextView view, final String txt) {
         new Handler().post(new Runnable() {
             public void run() {
@@ -83,6 +85,7 @@ public class OBDproxyActivity extends Activity {
             return;
         }
         this.startBTReceiver();
+        this.dataView = (TextView) findViewById(R.id.data_text);
     }
 
     @Override
@@ -279,9 +282,16 @@ public class OBDproxyActivity extends Activity {
             if (msg.what < 0) {
                 return;
             }
-            Log.d(TAG, "Received message: " + OBDConnector.BT_STATUS.values()[msg.what]);
             switch (msg.what) {
-            case OBDConnector.OBD_DATA:
+            case OBDProxy.OBD_DATA:
+                final String data = msg.getData().getString(OBDProxy.TEXT_MSG);
+                Log.d(TAG, "Received data: " + data);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dataView.setText(data);
+                    }
+                });
                 break;
             case OBDConnector.BT_DISABLED:
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
