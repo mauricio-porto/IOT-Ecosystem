@@ -8,8 +8,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,6 +22,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.hp.myidea.obdproxy.ICommunicator;
 import com.hp.myidea.obdproxy.IProxyService;
 import com.hp.myidea.obdproxy.R;
 import com.hp.myidea.obdproxy.app.OBDproxyActivity;
@@ -78,6 +81,7 @@ public class OBDProxy extends Service implements IProxyService {
 
     private OBDConnector obdConnector;
 
+    private ICommunicator communicatorService = null;
     private boolean communicatorSvcConnected = false;
 
     @Override
@@ -140,7 +144,11 @@ public class OBDProxy extends Service implements IProxyService {
 
     private void init() {
     	Log.d(TAG, "init()\n\n\n\n");
-        // Connect to the ARDUINO device
+        if (!this.communicatorSvcConnected) {
+            this.bindToXMPPService();
+        }
+
+        // Connect to the BT device
         if (!this.obdConnector.isBluetoothEnabled()) {
             this.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");
             return;
@@ -156,6 +164,19 @@ public class OBDProxy extends Service implements IProxyService {
     	Log.d(TAG, "\n\n\n\nstopAll()\n\n\n\n");
         if (this.obdConnector != null) {
             this.obdConnector.stop();
+        }
+        if (this.communicatorSvcConnected) {
+            try {
+                this.communicatorService.sendMessage("cardiotalk.hu@gmail.com", "Bye, see ya.");
+                this.communicatorService.stop();
+            } catch (RemoteException e) {
+                Log.e(TAG, "Call to Subscriptions Service failed.", e);
+            }
+            try {
+                this.unbindService(communicatorServiceConnection);
+            } catch (Throwable e) {
+                // Nothing to do
+            }
         }
 
         this.notifyUser("Stopped. Select to start again.", "Stopping OBDproxy.");
@@ -260,5 +281,29 @@ public class OBDProxy extends Service implements IProxyService {
             Log.d(TAG, "notifyDataReceived() - NO Activity handler to receive!");
         }
     }
+
+    private boolean bindToXMPPService() {
+        return bindService(new Intent("com.hp.myidea.obdproxy.XMPPCommunicator"), communicatorServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection communicatorServiceConnection = new ServiceConnection() {
+        
+        public void onServiceDisconnected(ComponentName name) {
+            communicatorSvcConnected = false;
+            Log.d(TAG, "XMPPCommunicator Service disconnected.");
+        }
+        
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "XMPPCommunicator Service connected.");
+            communicatorService = ICommunicator.Stub.asInterface(service);
+            communicatorSvcConnected = true;
+            try {
+                OBDProxy.this.communicatorService.start();
+                OBDProxy.this.communicatorService.sendMessage("cardiotalk.hu@gmail.com", "Hello, say something...");
+            } catch (RemoteException e) {
+                Log.e(TAG, "Call to XMPPCommunicator Service failed.", e);
+            }
+        }
+    };    
 
 }

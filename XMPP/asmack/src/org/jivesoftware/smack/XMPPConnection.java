@@ -33,6 +33,9 @@ import javax.net.ssl.SSLSocket;
 import org.apache.harmony.javax.security.auth.callback.Callback;
 import org.apache.harmony.javax.security.auth.callback.CallbackHandler;
 import org.apache.harmony.javax.security.auth.callback.PasswordCallback;
+
+import android.os.StrictMode;
+
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -86,6 +89,10 @@ public class XMPPConnection extends Connection {
      */
     private boolean usingCompression;
 
+
+    static {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+    }
 
     /**
      * Creates a new connection to the specified XMPP server. A DNS SRV lookup will be

@@ -295,7 +295,7 @@ public class OBDConnector {
                 OBDCommand command = commandList[i];
                 String readParam = getOBDData(command);
                 if (readParam != null) {
-                    Log.d(TAG, "\t\t " + command.getName() + ": " + readParam);
+                    //Log.d(TAG, "\t\t " + command.getName() + ": " + readParam);
                     service.notifyDataReceived(readParam);
                 } else {
                     Log.e(TAG, "\t\t " + command.getName() + " got null!!!");
