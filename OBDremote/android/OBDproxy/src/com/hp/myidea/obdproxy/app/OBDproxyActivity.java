@@ -84,8 +84,8 @@ public class OBDproxyActivity extends Activity {
             finish();
             return;
         }
-        this.startBTReceiver();
         this.dataView = (TextView) findViewById(R.id.data_text);
+        this.startOBDProxy();
     }
 
     @Override
@@ -99,6 +99,7 @@ public class OBDproxyActivity extends Activity {
 
     @Override
     protected void onPause() {
+        Log.d(TAG, "onPause()");
         super.onPause();
         this.unbindBTReceiver();
     }
@@ -133,7 +134,7 @@ public class OBDproxyActivity extends Activity {
                 // User did not enable Bluetooth or an error occurred
                 Log.d(TAG, "BT not enabled");
                 Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
-                this.stopBTReceiver();
+                this.stopOBDProxy();
                 finish();
             }
             break;
@@ -164,15 +165,15 @@ public class OBDproxyActivity extends Activity {
         return true;
     }
 
-    private void startBTReceiver() {
-        Log.d(TAG, "\t\t\t\t\tWILL START!!!!");
+    private void startOBDProxy() {
+        Log.d(TAG, "startOBDProxy()");
         Intent intent = new Intent(OBDProxy.ACTION_START);
         intent.setClass(this, OBDProxy.class);
         startService(intent);
     }
 
-    private void stopBTReceiver() {
-        Log.d(TAG, "\t\t\t\t\tWILL STOP!!!!");
+    private void stopOBDProxy() {
+        Log.d(TAG, "stopOBDProxy()");
         Intent intent = new Intent(OBDProxy.ACTION_STOP);
         intent.setClass(this, OBDProxy.class);
         stopService(intent);
@@ -282,6 +283,7 @@ public class OBDproxyActivity extends Activity {
             if (msg.what < 0) {
                 return;
             }
+            Log.d(TAG, "Received message: " + msg.what);
             switch (msg.what) {
             case OBDProxy.OBD_DATA:
                 final String data = msg.getData().getString(OBDProxy.TEXT_MSG);

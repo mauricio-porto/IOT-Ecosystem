@@ -1,1 +1,1 @@
-export ANDROID_LOG_TAGS="OBDproxyActivity:V BluetoothReceiver:V *:E"
+export ANDROID_LOG_TAGS="OBDproxyActivity:V BluetoothConnector:V OBDConnector:V OBDProxy:V *:E"

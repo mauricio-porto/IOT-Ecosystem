@@ -84,6 +84,8 @@ public class OBDProxy extends Service implements IProxyService {
     private ICommunicator communicatorService = null;
     private boolean communicatorSvcConnected = false;
 
+    private boolean initialized = false;
+
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind()");
@@ -128,7 +130,7 @@ public class OBDProxy extends Service implements IProxyService {
         if (intent != null) {
             if (ACTION_START.equals(intent.getAction())) {
                 Log.d(TAG, "\n\nhandleCommand() - START ACTION");
-                this.init();
+                //this.init();
             } else if (ACTION_STOP.equals(intent.getAction())) {
                 Log.d(TAG, "\n\nhandleCommand() - STOP ACTION");
                 this.stopAll(); 
@@ -143,7 +145,13 @@ public class OBDProxy extends Service implements IProxyService {
     }
 
     private void init() {
-    	Log.d(TAG, "init()\n\n\n\n");
+        Log.d(TAG, "\n\n\n\ninit()");
+        if (this.initialized) {
+            Log.d(TAG, "\t\t\tAlready initialized...");
+            return;
+        } else {
+            Log.d(TAG, "\t\t\tWill initialize...");
+        }
         if (!this.communicatorSvcConnected) {
             this.bindToXMPPService();
         }
@@ -158,6 +166,7 @@ public class OBDProxy extends Service implements IProxyService {
             return;
         }
 
+        this.initialized = true;
         this.notifyUser("OBD Proxy is running. Select to see data and configure.", "OBD Proxy is running...");
     }
 
@@ -245,6 +254,7 @@ public class OBDProxy extends Service implements IProxyService {
             case UNREGISTER_LISTENER:
             	break;
             case REGISTER_HANDLER:
+                init();
             	activityHandler = msg.replyTo;
             	notifyOBDStatus();
             	break;
