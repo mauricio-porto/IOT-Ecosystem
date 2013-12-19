@@ -386,6 +386,7 @@ public class BluetoothConnector {
                 if (bytes > 0) {
                     readBuffer = new byte[bytes];
                     System.arraycopy(buffer, 0, readBuffer, 0, bytes);
+                    Log.d(TAG, bytes + " read as " + asHex(readBuffer));
                 }
             } catch (IOException e) {
                 Log.e(TAG, "Exception during read", e);
@@ -418,4 +419,16 @@ public class BluetoothConnector {
             }
         }
     }
+
+    private String asHex(byte[] buf) {
+        char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+
+        char[] chars = new char[2 * buf.length];
+        for (int i = 0; i < buf.length; ++i) {
+            chars[2 * i] = HEX_CHARS[(buf[i] & 0xF0) >>> 4];
+            chars[2 * i + 1] = HEX_CHARS[buf[i] & 0x0F];
+        }
+        return new String(chars);
+    }
+
 }
