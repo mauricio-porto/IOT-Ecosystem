@@ -9,7 +9,9 @@ import com.hp.myidea.obdproxy.IResultReader;
  * @author mauricio
  *
  */
-public class TemperatureReader implements IResultReader {
+public class TemperatureReader extends OBDResponseReader implements IResultReader {
+
+    private float temperature = 0.0f;
 
     @Override
     public String readResult(byte[] input) {
@@ -21,17 +23,12 @@ public class TemperatureReader implements IResultReader {
     public String readFormattedResult(byte[] input) {
         String res = new String(input);
 
-/*        if (!"NODATA".equals(res)) {
-            // ignore first two bytes [hh hh] of the response
-            temperature = prepareTempValue(buffer.get(2));
+        if (!"NODATA".equals(res)) {
+            temperature = getValue(input) - 40;  // It ranges from -40 to 215 °C
             
-            // convert?
-            if (useImperialUnits)
-                res = String.format("%.1f%s", getImperialUnit(), "F");
-            else
-                res = String.format("%.0f%s", temperature, "C");
+            res = String.format("%.0f%s", temperature, " C");
         }
-*/
+
         return res;
     }
 

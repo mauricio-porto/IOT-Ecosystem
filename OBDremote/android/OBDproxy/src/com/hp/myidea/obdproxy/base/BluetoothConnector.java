@@ -42,7 +42,7 @@ public class BluetoothConnector {
     // Debugging
     private static final String TAG = BluetoothConnector.class.getSimpleName();
     private static final boolean D = true;
-    private static String FILE_NAME = "ODBProxy_log.txt";
+    private static String FILE_NAME = "OBDProxy_log.txt";
     private Context appContext;
     private FileOutputStream fos;
 
@@ -404,22 +404,25 @@ public class BluetoothConnector {
          * @return - byte array read
          */
         public byte[] read() {
-            // Read from the InputStream
-            byte[] buffer = new byte[1024];
-            int bytes;
-            byte[] readBuffer = null;
+            byte b = 0;
+            StringBuilder res = new StringBuilder();
+
+            // read until '>' arrives
             try {
-                bytes = mmInStream.read(buffer);
-                if (bytes > 0) {
-                    readBuffer = new byte[bytes];
-                    System.arraycopy(buffer, 0, readBuffer, 0, bytes);
-                    Log.d(TAG, bytes + " read as " + asHex(readBuffer));
+                while ((char) (b = (byte) mmInStream.read()) != '>') {
+                    if ((char) b != ' ') {
+                        res.append((char) b);
+                    }
                 }
             } catch (IOException e) {
                 Log.e(TAG, "Exception during read", e);
                 connectionLost();
             }
-            return readBuffer;
+            String rawData = res.toString().trim();
+            if (rawData.contains("SEARCHING") || rawData.contains("DATA")) {
+                rawData = "NODATA";
+            }
+            return rawData.getBytes();
         }
 
         /**
@@ -446,16 +449,4 @@ public class BluetoothConnector {
             }
         }
     }
-
-    private String asHex(byte[] buf) {
-        char[] HEX_CHARS = "0123456789abcdef".toCharArray();
-
-        char[] chars = new char[2 * buf.length];
-        for (int i = 0; i < buf.length; ++i) {
-            chars[2 * i] = HEX_CHARS[(buf[i] & 0xF0) >>> 4];
-            chars[2 * i + 1] = HEX_CHARS[buf[i] & 0x0F];
-        }
-        return new String(chars);
-    }
-
 }

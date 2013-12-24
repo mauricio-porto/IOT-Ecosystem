@@ -294,6 +294,7 @@ public class OBDproxyActivity extends Activity {
                     @Override
                     public void run() {
                         dataView.append(data);
+                        dataView.append("\n");
                     }
                 });
                 break;

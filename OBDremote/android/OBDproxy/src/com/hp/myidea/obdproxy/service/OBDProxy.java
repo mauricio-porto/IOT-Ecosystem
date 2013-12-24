@@ -153,10 +153,10 @@ public class OBDProxy extends Service implements IProxyService {
         } else {
             Log.d(TAG, "\t\t\tWill initialize...");
         }
-/*        if (!this.communicatorSvcConnected) {
+        if (!this.communicatorSvcConnected) {
             this.bindToXMPPService();
         }
-*/
+
         // Connect to the BT device
         if (!this.obdConnector.isBluetoothEnabled()) {
             this.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");

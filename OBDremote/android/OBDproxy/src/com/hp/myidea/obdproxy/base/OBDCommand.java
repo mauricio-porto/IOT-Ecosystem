@@ -24,6 +24,7 @@ public enum OBDCommand {
     COOLANT_TEMPERATURE("coolant temperature", "01 05", new TemperatureReader()),
     ENGINE_RPM("engine rpm", "01 0C", new RPMReader()),
     SPEED("speed", "01 0D", new SpeedReader()),
+    MAF("Mass Air Flow", "01 10", new MAFReader()),
     FUEL_LEVEL("fuel level", "01 2F", new FuelReader());
 
     private final String name;

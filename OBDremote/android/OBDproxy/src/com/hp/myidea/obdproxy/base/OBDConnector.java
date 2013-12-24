@@ -69,7 +69,7 @@ public class OBDConnector {
             OBDCommand.SPEED,
             OBDCommand.AMBIENT_AIR_TEMPERATURE,
             OBDCommand.COOLANT_TEMPERATURE,
-            OBDCommand.FUEL_LEVEL};
+            OBDCommand.MAF};
 
     /**
      * 
@@ -220,12 +220,12 @@ public class OBDConnector {
     }
 
     private void startObdConnection() {
-        //sendToDevice(OBDCommand.SET_DEFAULTS.getOBDcode());
         getOBDData(OBDCommand.RESET_ALL);
         getOBDData(OBDCommand.ECHO_OFF);
         getOBDData(OBDCommand.ECHO_OFF);
         getOBDData(OBDCommand.LINE_FEED_OFF);
         getOBDData(OBDCommand.TIME_OUT);
+        getOBDData(OBDCommand.SELECT_AUTO_PROTOCOL);
 
         getOBDData(OBDCommand.AMBIENT_AIR_TEMPERATURE);
         

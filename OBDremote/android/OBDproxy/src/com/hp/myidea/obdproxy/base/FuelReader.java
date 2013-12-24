@@ -9,7 +9,7 @@ import com.hp.myidea.obdproxy.IResultReader;
  * @author mapo
  *
  */
-public class FuelReader implements IResultReader {
+public class FuelReader extends OBDResponseReader implements IResultReader {
 
     /* (non-Javadoc)
      * @see com.hp.myidea.obdproxy.IResultReader#readResult(byte[])

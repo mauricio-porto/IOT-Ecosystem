@@ -9,9 +9,9 @@ import com.hp.myidea.obdproxy.IResultReader;
  * @author mapo
  *
  */
-public class SpeedReader extends OBDResponseReader implements IResultReader {
+public class MAFReader extends OBDResponseReader implements IResultReader {
 
-    private int speed;
+    private float maf = 0.0f;
 
     /* (non-Javadoc)
      * @see com.hp.myidea.obdproxy.IResultReader#readResult(byte[])
@@ -28,10 +28,10 @@ public class SpeedReader extends OBDResponseReader implements IResultReader {
     @Override
     public String readFormattedResult(byte[] input) {
         String res = new String(input);
-        
+
         if (!"NODATA".equals(res)) {
-            speed = (int) getValue(input);
-            res = String.format("%d%s", speed, " km/h");
+            maf = (int) getValue(input) / 100;
+            res = String.format("%.0f%s", maf, " grams/sec");
         }
 
         return res;
