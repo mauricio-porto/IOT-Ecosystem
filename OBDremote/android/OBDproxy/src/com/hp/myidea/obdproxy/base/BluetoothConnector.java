@@ -16,6 +16,8 @@
 
 package com.hp.myidea.obdproxy.base;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,6 +42,9 @@ public class BluetoothConnector {
     // Debugging
     private static final String TAG = BluetoothConnector.class.getSimpleName();
     private static final boolean D = true;
+    private static String FILE_NAME = "ODBProxy_log.txt";
+    private Context appContext;
+    private FileOutputStream fos;
 
     // Unique UUID for this application
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); 
@@ -78,6 +83,7 @@ public class BluetoothConnector {
      * @param handler  A Handler to send messages back to the UI Activity
      */
     public BluetoothConnector(Context context, Handler handler) {
+        appContext = context;
         mHandler = handler;
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
@@ -189,6 +195,16 @@ public class BluetoothConnector {
             if (mState != STATE_CONNECTED) return;
             r = mListenerThread;
         }
+        try {
+            this.fos = this.appContext.openFileOutput(FILE_NAME, Context.MODE_APPEND);
+            this.fos.write("\nSent: ".getBytes());
+            this.fos.write(out);
+            this.fos.close();
+        } catch (FileNotFoundException e) {
+            // Nothing to do
+        } catch (IOException e) {
+            // Nothing to do
+        }
         // Perform the write unsynchronized
         r.write(out);
     }
@@ -207,7 +223,18 @@ public class BluetoothConnector {
             r = mListenerThread;
         }
         // Perform the read unsynchronized
-        return r.read();
+        byte[] read = r.read();
+        try {
+            this.fos = this.appContext.openFileOutput(FILE_NAME, Context.MODE_APPEND);
+            this.fos.write("\nReceived: ".getBytes());
+            this.fos.write(read);
+            this.fos.close();
+        } catch (FileNotFoundException e) {
+            // Nothing to do
+        } catch (IOException e) {
+            // Nothing to do
+        }
+        return read;
     }
 
     /**

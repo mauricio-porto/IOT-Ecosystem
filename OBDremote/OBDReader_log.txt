@@ -1,0 +1,125 @@
+
+Sent: AT Z
+Sent: AT E0
+Received: ELM327v1.5
+Sent: AT E0
+Received: ATE0
+OK
+Sent: AT L0
+Received: OK
+Sent: AT ST 3e
+Received: OK
+Sent: AT SP 0
+Received: OK
+Sent: 01 46
+Received: SEARCHING...414641
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0CFA
+Sent: 01 10
+Received: 411002FE
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0CF4
+Sent: 01 10
+Received: 411002EB
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0D02
+Sent: 01 10
+Received: 411002DA
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0CF6
+Sent: 01 10
+Received: 411002EB
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0CFC
+Sent: 01 10
+Received: 411002F9
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0CF4
+Sent: 01 10
+Received: 411002F3
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0E84
+Sent: 01 10
+Received: 4110038C
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C1B9A
+Sent: 01 10
+Received: 4110061B
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C1CDC
+Sent: 01 10
+Received: 41100664
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0CF8
+Sent: 01 10
+Received: 41100301
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA
+Sent: 01 0D
+Received: 410D00
+Sent: 01 0C
+Received: 410C0D02
+Sent: 01 10
+Received: 411002EB
+Sent: 01 2F
+Received: NODATA
+Sent: 01 7
+Received: NODATA

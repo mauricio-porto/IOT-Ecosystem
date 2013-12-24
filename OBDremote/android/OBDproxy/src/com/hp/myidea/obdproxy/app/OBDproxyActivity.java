@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hp.myidea.obdproxy.R;
+import com.hp.myidea.obdproxy.base.LogTextBox;
 import com.hp.myidea.obdproxy.base.OBDConnector;
 import com.hp.myidea.obdproxy.service.OBDProxy;
 
@@ -60,7 +61,7 @@ public class OBDproxyActivity extends Activity {
     static final int TABLE_ROW_MARGIN = 7;
     static final int NO_ORIENTATION_SENSOR = 8;
 
-    private TextView dataView;
+    private LogTextBox dataView;
 
     public void updateTextView(final TextView view, final String txt) {
         new Handler().post(new Runnable() {
@@ -72,6 +73,7 @@ public class OBDproxyActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -84,7 +86,7 @@ public class OBDproxyActivity extends Activity {
             finish();
             return;
         }
-        this.dataView = (TextView) findViewById(R.id.data_text);
+        this.dataView = (LogTextBox) findViewById(R.id.data_text);
         this.startOBDProxy();
     }
 
@@ -257,7 +259,7 @@ public class OBDproxyActivity extends Activity {
     private void unbindBTReceiver() {
         Log.d(TAG, "unbindBluetoothReceiver() - supposing it is bound");
         if (this.isBound) {
-            if (messageReceiver  != null) {
+            if (messageReceiver != null) {
                 try {
                     Message msg = Message.obtain(null, OBDProxy.UNREGISTER_HANDLER);
                     msg.replyTo = serviceMsgReceiver;
@@ -291,7 +293,7 @@ public class OBDproxyActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        dataView.setText(data);
+                        dataView.append(data);
                     }
                 });
                 break;

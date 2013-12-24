@@ -4,17 +4,27 @@
 
 package eu.lighthouselabs.obd.commands;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import eu.lighthouselabs.obd.reader.OBDReaderApplication;
+
+import android.content.Context;
+import android.util.Log;
+
 /**
  * TODO put description
  */
 public abstract class ObdBaseCommand {
+    private static final String TAG = ObdBaseCommand.class.getSimpleName();
+    private static String FILE_NAME = "ODBReader_log.txt";
+    private Context appContext;
+    private FileOutputStream fos;
 
-	protected ArrayList<Integer> buffer = null;
+    protected ArrayList<Integer> buffer = null;
 	protected String cmd = null;
 	protected boolean useImperialUnits = false;
 	protected String rawData = null;
@@ -28,6 +38,7 @@ public abstract class ObdBaseCommand {
 	public ObdBaseCommand(String command) {
 		this.cmd = command;
 		this.buffer = new ArrayList<Integer>();
+		this.appContext = OBDReaderApplication.getAppContext();
 	}
 
 	/**
@@ -53,8 +64,10 @@ public abstract class ObdBaseCommand {
 	 */
 	public void run(InputStream in, OutputStream out) throws IOException,
 			InterruptedException {
+        this.fos = this.appContext.openFileOutput(FILE_NAME, Context.MODE_APPEND);
 		sendCommand(out);
 		readResult(in);
+		this.fos.close();
 	}
 
 	/**
@@ -72,8 +85,12 @@ public abstract class ObdBaseCommand {
 		cmd += "\r";
 
 		// write to OutputStream, or in this case a BluetoothSocket
+		Log.d(TAG, "sendCommand() will send: " + cmd);
+		this.fos.write("\nSent: ".getBytes());
+		this.fos.write(cmd.getBytes());
 		out.write(cmd.getBytes());
 		out.flush();
+		this.fos.flush();
 
 		/*
 		 * HACK GOLDEN HAMMER ahead!!
@@ -136,7 +153,12 @@ public abstract class ObdBaseCommand {
 		 * some more processing..
 		 */
         //
+        Log.d(TAG, "readRawData() received (no trim): " + res.toString());
         rawData = res.toString().trim();
+        Log.d(TAG, "readRawData() will put rawData as (trimmed): " + rawData);
+        this.fos.write("\nReceived: ".getBytes());
+        this.fos.write(rawData.getBytes());
+        this.fos.flush();
     }
 
 	/**

@@ -120,6 +120,7 @@ public class OBDProxy extends Service implements IProxyService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand()");
         handleCommand(intent);
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -152,10 +153,10 @@ public class OBDProxy extends Service implements IProxyService {
         } else {
             Log.d(TAG, "\t\t\tWill initialize...");
         }
-        if (!this.communicatorSvcConnected) {
+/*        if (!this.communicatorSvcConnected) {
             this.bindToXMPPService();
         }
-
+*/
         // Connect to the BT device
         if (!this.obdConnector.isBluetoothEnabled()) {
             this.notifyUser("Select to enable bluetooth.", "Must enable bluetooth.");
@@ -318,6 +319,6 @@ public class OBDProxy extends Service implements IProxyService {
                 Log.e(TAG, "Call to XMPPCommunicator Service failed.", e);
             }
         }
-    };    
+    };
 
 }

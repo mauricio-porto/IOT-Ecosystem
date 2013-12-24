@@ -220,14 +220,14 @@ public class OBDConnector {
     }
 
     private void startObdConnection() {
-        sendToDevice(OBDCommand.SET_DEFAULTS.getOBDcode());
-        sendToDevice(OBDCommand.RESET_ALL.getOBDcode());
-        sendToDevice(OBDCommand.ECHO_OFF.getOBDcode());
-        sendToDevice(OBDCommand.ECHO_OFF.getOBDcode());
-        sendToDevice(OBDCommand.LINE_FEED_OFF.getOBDcode());
-        sendToDevice(OBDCommand.TIME_OUT.getOBDcode());
+        //sendToDevice(OBDCommand.SET_DEFAULTS.getOBDcode());
+        getOBDData(OBDCommand.RESET_ALL);
+        getOBDData(OBDCommand.ECHO_OFF);
+        getOBDData(OBDCommand.ECHO_OFF);
+        getOBDData(OBDCommand.LINE_FEED_OFF);
+        getOBDData(OBDCommand.TIME_OUT);
 
-        sendToDevice(OBDCommand.AMBIENT_AIR_TEMPERATURE.getOBDcode());
+        getOBDData(OBDCommand.AMBIENT_AIR_TEMPERATURE);
         
         mHandler.post(mQueueCommands);
     }
@@ -250,6 +250,8 @@ public class OBDConnector {
     private byte[] sendToDevice(String msg) {
         byte[] bytes = null;
         if (this.connector != null) {
+            // add the carriage return char
+            msg += "\r";
             connector.write(msg.getBytes());
             Log.d(TAG, "Sent to scanner: " + msg);
             bytes = connector.read();

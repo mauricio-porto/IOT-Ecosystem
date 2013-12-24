@@ -1,0 +1,426 @@
+
+Sent: AT Z
+Received: 
+
+ELM32
+Sent: AT E0
+Received: 7 v1.5
+
+Sent: AT E0
+Received: 
+>
+Sent: AT L0
+Received: AT E0
+Sent: AT ST F0
+Received: 
+OK
+Sent: 01 46
+Received: 
+
+>
+Sent: 01 0C
+Received: OK
+
+Sent: 01 0D
+Received: 
+>
+Sent: 01 46
+Received: OK>
+Sent: 01 05
+Received: OK>
+Sent: 01 2F
+Received: STOPPED
+Sent: 01 0C
+Received: >41 46 40 STOPPED>STOPPED>41 0D 00 STOPPED>41 46 40 STOPPED>41 05 40 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  7E 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 
+Sent: 01 2F
+Received: 0D 1E 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 STOPPED>41 46 40 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 00 
+Sent: 01 2F
+Received: STOPPED>
+Sent: 01 0C
+Received: STOPPED>41 46 40 STOPPED>41 05 40 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 
+Sent: 01 2F
+Received: 00 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 
+Sent: 01 2F
+Received: 0C STOPP
+Sent: 01 0C
+Received: ED>41 46 40 STOPPED>STOPPED>41 05 40 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 
+Sent: 01 2F
+Received: 0C FE 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>41 05 40 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 
+Sent: 01 2F
+Received: 06 STOPPED>
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 
+Sent: 01 2F
+Received: 0C FC 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 STOPPED>41 46 40 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED>
+Sent: 01 46
+Received: 41 0C 0D 02 
+Sent: 01 05
+Received: STOPPED
+Sent: 01 2F
+Received: >
+Sent: 01 0C
+Received: 41 46 40 STOPPED>STOPPED>41 05 41 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C A4 41 0D 0
+Sent: 01 2F
+Received: 0 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>41 05 41 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 2A STO
+Sent: 01 2F
+Received: PPED>
+Sent: 01 0C
+Received: STOPPED>41 46 40 STOPPED>41 05 41 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D
+Sent: 01 2F
+Received:  42 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 41 46 40 STOPPED>41 05 41 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 46 
+Sent: 01 2F
+Received: STOPPED
+Sent: 01 0C
+Received: >41 46 40 STOPPED>STOPPED>41 05 41 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  FC 
+Sent: 01 0C
+Received: 41 0D 00 STOPPED>41 46 40 STOPPED>STOPPED>41 05 41 >
+Sent: 01 0D
+Received: 41 0C 0C
+Sent: 01 46
+Received:  EA STOPPE
+Sent: 01 05
+Received: D>
+Sent: 01 2F
+Received: 41 0D 00 
+Sent: 01 0C
+Received: >STOPPED>41 46 40 STOPPED>41 05 42 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  F2 
+Sent: 01 0C
+Received: 41 0D 00 >41 46 40 >STOPPED>41 05 42 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 0
+Sent: 01 2F
+Received: 8 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>41 05 42 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D
+Sent: 01 2F
+Received:  08 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 STOPPED>41 46 40 STOPPED>41 05 42 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  F8 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>41 05 42 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  F4 
+Sent: 01 0C
+Received: 41 0D 00 STOPPED>41 46 40 STOPPED>41 05 42 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C F2 ST
+Sent: 01 2F
+Received: OPPED>
+Sent: 01 0C
+Received: STOPPED>41 46 40 STOPPED>41 05 43 >
+Sent: 01 0D
+Received: STOPPED>
+Sent: 01 46
+Received: 41 0C 0C FC 
+Sent: 01 05
+Received: 41 0D
+Sent: 01 2F
+Received:  00 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>41 05 43 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 
+Sent: 01 2F
+Received: 0C F4 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>41 05 43 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  DC 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 STOPPED>41 46 40 41 05 43 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 10
+Sent: 01 2F
+Received:  26 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>41 05 43 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 11
+Sent: 01 2F
+Received:  3A 
+Sent: 01 0C
+Received: 41 0D 00 STOPPED>STOPPED>41 46 40 STOPPED>41 05 43 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 1
+Sent: 01 2F
+Received: 1 2A 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 41 46 40 STOPPED>STOPPED>41 05 43 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 12 4C STOPPED>
+Sent: 01 2F
+Received: 41 46 40
+Sent: 01 0C
+Received:  STOPPED>STOPPED>41 05 44 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 15
+Sent: 01 2F
+Received:  7C 
+Sent: 01 0C
+Received: 41 0D 00 STOPPED>STOPPED>41 46 40 STOPPED>41 05 44 >
+Sent: 01 0D
+Received: STOPPED>
+Sent: 01 46
+Received: 41 0C 
+Sent: 01 05
+Received: 0C 92 
+Sent: 01 2F
+Received: STOPPED>
+Sent: 01 0C
+Received: 41 0D 00 STOPPED>41 46 40 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  F8 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 STOPPED>41 46 40 STOPPED>41 05 44 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0D 00 
+Sent: 01 2F
+Received: STOPPED
+Sent: 01 0C
+Received: >41 46 40 STOPPED>41 05 44 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED>
+Sent: 01 46
+Received: 41 0C 
+Sent: 01 05
+Received: 0C F0 
+Sent: 01 2F
+Received: STOPPED>
+Sent: 01 0C
+Received: STOPPED>41 46 40 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C
+Sent: 01 2F
+Received:  FA 
+Sent: 01 0C
+Received: STOPPED>41 0D 00 STOPPED>41 46 40 STOPPED>41 05 45 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C
+Sent: 01 2F
+Received:  0D 02 
+Sent: 01 0C
+Received: STOPPED>STOPPED>41 46 40 STOPPED>NO DATA>
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C FE ST
+Sent: 01 2F
+Received: OPPED>
+Sent: 01 0C
+Received: STOPPED>41 46 40 STOPPED>41 05 45 >41 0C 0C F6 
+Sent: 01 0D
+Received: >
+Sent: 01 46
+Received: STOPPED
+Sent: 01 05
+Received: >
+Sent: 01 2F
+Received: 41 0
+Sent: 01 0C
+Received: D 00 STOPPED>STOPPED>41 05 45 >
+Sent: 01 0D
+Received: STOPP
+Sent: 01 46
+Received: ED>
+Sent: 01 05
+Received: 41 0C 0C EC 
+Sent: 01 2F
+Received: STOPP
+Sent: 01 0C
+Received: ED>STOPPED>41 46 40 STOPPED>41 05 45 >
+Sent: 01 0D
+Received: STOPPED
+Sent: 01 46
+Received: >
+Sent: 01 05
+Received: 41 0C 0C 
+Sent: 01 2F
+Received: F8 
+Sent: 01 0C
+Received: STOPPED>STOPPED>STOPPED>41 46 40 >
+Sent: 01 0D
+Received: 
