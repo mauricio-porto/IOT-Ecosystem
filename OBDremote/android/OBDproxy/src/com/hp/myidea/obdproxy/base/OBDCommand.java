@@ -20,12 +20,14 @@ public enum OBDCommand {
     TIME_OUT("set timeout","AT ST F0", null),
 
     // Comandos de leitura de dados correntes (current data - ver http://en.wikipedia.org/wiki/OBD-II_PIDs)
-    AMBIENT_AIR_TEMPERATURE("ambient air temperature", "01 46", new TemperatureReader()),
-    COOLANT_TEMPERATURE("coolant temperature", "01 05", new TemperatureReader()),
-    ENGINE_RPM("engine rpm", "01 0C", new RPMReader()),
-    SPEED("speed", "01 0D", new SpeedReader()),
+    AMBIENT_AIR_TEMPERATURE("Ambient Air Temperature", "01 46", new TemperatureReader()),
+    COOLANT_TEMPERATURE("Coolant Temperature", "01 05", new TemperatureReader()),
+    INTAKE_AIR_TEMPERATURE("Intake Air Temperature", "01 0F", new TemperatureReader()),
+    ENGINE_LOAD("Engine Load", "01 04", new PercentualReader()),
+    ENGINE_RPM("Engine RPM", "01 0C", new RPMReader()),
+    SPEED("Vehicle Speed", "01 0D", new SpeedReader()),
     MAF("Mass Air Flow", "01 10", new MAFReader()),
-    FUEL_LEVEL("fuel level", "01 2F", new FuelReader());
+    FUEL_LEVEL("Fuel Level", "01 2F", new FuelReader());
 
     private final String name;
     private final String obdCode;

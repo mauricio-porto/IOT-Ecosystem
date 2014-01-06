@@ -14,4 +14,5 @@ public interface IProxyService {
     public Context getServiceContext();
     public void notifyOBDStatus();
     public void notifyDataReceived(String data);
+    public void showToastMsg(String msg);
 }

@@ -36,6 +36,8 @@ public class OBDProxy extends Service implements IProxyService {
 
     private static final String TAG = OBDProxy.class.getSimpleName();
 
+    public static final String CAR_SERVICE_JID = "FerraroKaReno@15.185.92.3";    // Deverá ser configurável
+
     private static final int OBD_NOTIFICATIONS = 1;
 
     public static final String ACTION_START = "startService";
@@ -178,7 +180,7 @@ public class OBDProxy extends Service implements IProxyService {
         }
         if (this.communicatorSvcConnected) {
             try {
-                this.communicatorService.sendMessage("FerraroKaReno@15.185.92.3", "Bye, see ya.");
+                this.communicatorService.sendMessage(OBDProxy.CAR_SERVICE_JID, "Bye, see ya.");
                 this.communicatorService.stop();
             } catch (RemoteException e) {
                 Log.e(TAG, "Call to Subscriptions Service failed.", e);
@@ -287,7 +289,7 @@ public class OBDProxy extends Service implements IProxyService {
             try {
                 activityHandler.send(msg);
                 if (this.communicatorService != null) {
-                    this.communicatorService.sendMessage("FerraroKaReno@15.185.92.3", data);
+                    this.communicatorService.sendMessage(OBDProxy.CAR_SERVICE_JID, data);
                 }
             } catch (RemoteException e) {
                 // Nothing to do
@@ -314,11 +316,16 @@ public class OBDProxy extends Service implements IProxyService {
             communicatorSvcConnected = true;
             try {
                 OBDProxy.this.communicatorService.start();
-                OBDProxy.this.communicatorService.sendMessage("FerraroKaReno@15.185.92.3", "Hello, say something...");
+                OBDProxy.this.communicatorService.sendMessage(OBDProxy.CAR_SERVICE_JID, "Hello, say something...");
             } catch (RemoteException e) {
                 Log.e(TAG, "Call to XMPPCommunicator Service failed.", e);
             }
         }
     };
+
+    @Override
+    public void showToastMsg(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
 
 }

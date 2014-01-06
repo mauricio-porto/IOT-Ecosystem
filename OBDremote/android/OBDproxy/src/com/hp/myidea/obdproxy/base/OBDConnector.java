@@ -66,9 +66,11 @@ public class OBDConnector {
 
     OBDCommand[] commandList = {
             OBDCommand.ENGINE_RPM,
+            OBDCommand.ENGINE_LOAD,
             OBDCommand.SPEED,
             OBDCommand.AMBIENT_AIR_TEMPERATURE,
             OBDCommand.COOLANT_TEMPERATURE,
+            OBDCommand.INTAKE_AIR_TEMPERATURE,
             OBDCommand.MAF};
 
     /**
@@ -293,16 +295,26 @@ public class OBDConnector {
      */
     private Runnable mQueueCommands = new Runnable() {
         public void run() {
+            service.showToastMsg("...");
+            StringBuilder sb = new StringBuilder();
+            sb.append('{');
             for (int i = 0; i < commandList.length; i++) {
                 OBDCommand command = commandList[i];
+                sb.append('"').append(command.ordinal()).append('"').append(':').append('[');
+                sb.append('"').append(command.getName()).append('"').append(',');
                 String readParam = getOBDData(command);
                 if (readParam != null) {
-                    //Log.d(TAG, "\t\t " + command.getName() + ": " + readParam);
-                    service.notifyDataReceived(readParam);
+                    sb.append('"').append(readParam).append('"').append(']');
                 } else {
+                    sb.append('0').append(']');
                     Log.e(TAG, "\t\t " + command.getName() + " got null!!!");
                 }
+                if (i < commandList.length - 1) {
+                    sb.append(',');
+                }
             }
+            sb.append('}');
+            service.notifyDataReceived(sb.toString());
             // run again in 2s
             mHandler.postDelayed(mQueueCommands, 2000);
         }

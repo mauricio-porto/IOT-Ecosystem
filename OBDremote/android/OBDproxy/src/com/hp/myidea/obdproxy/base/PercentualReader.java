@@ -9,9 +9,9 @@ import com.hp.myidea.obdproxy.IResultReader;
  * @author mapo
  *
  */
-public class MAFReader extends OBDResponseReader implements IResultReader {
+public class PercentualReader extends OBDResponseReader implements IResultReader {
 
-    private float maf = 0.0f;
+    private float percent;
 
     /* (non-Javadoc)
      * @see com.hp.myidea.obdproxy.IResultReader#readResult(byte[])
@@ -28,10 +28,10 @@ public class MAFReader extends OBDResponseReader implements IResultReader {
     @Override
     public String readFormattedResult(byte[] input) {
         String res = new String(input);
-
+        
         if (!"NODATA".equals(res)) {
-            maf = getValue(input) / 100;
-            res = String.format("%.0f%s", maf, " g/s");
+            percent = getValue(input);
+            res = String.format("%.0f%s", percent, " %");
         }
 
         return res;

@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.hp.myidea.obdproxy.ICommunicator;
 import com.hp.myidea.obdproxy.IMessageListener;
 import com.hp.myidea.obdproxy.IRosterListener;
+import com.hp.myidea.obdproxy.service.OBDProxy;
 
 /**
  * @author mapo
@@ -306,7 +307,7 @@ public class XMPPCommunicator extends Service {
                 return;
             }
             ChatManager chatmanager = connection.getChatManager();
-            Chat chato = chatmanager.createChat("FerraroKaReno@15.185.92.3", new MessageListener() {
+            Chat chato = chatmanager.createChat(OBDProxy.CAR_SERVICE_JID, new MessageListener() {
                 public void processMessage(Chat chat, Message message) {}
             });
             try {
