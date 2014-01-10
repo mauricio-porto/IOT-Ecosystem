@@ -1,0 +1,104 @@
+body
+{
+    font: bold 11pt Calibri;
+    background-color: #eae9f2;
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+}
+
+.header 
+{
+    font: bold 23pt Segoe UI;
+    padding: 10px;
+    color:#999;
+    text-align:center;
+    background-color: #454545;
+    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    text-shadow: -1px -1px #222;    
+}
+
+.title
+{
+    font: bold 12pt Trebuchet MS;
+    padding-top: 10px;
+}
+
+.label
+{
+    width: 105px;
+    display: block;
+    font: bold 8pt Segoe UI;
+    color: #757575;
+    vertical-align: middle;
+    text-align: left;
+    padding-top: 5px;
+    padding-left: 20px;
+}
+
+input[type=text]
+{
+    font: 8pt Segoe UI;
+    vertical-align: middle;
+    width: 150px;
+    padding: 1px;
+}
+
+/* Shared styles */
+.drop-shadow
+{
+    position: relative;
+    float: left;
+    padding: 1.5em;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+.drop-shadow:before, .drop-shadow:after
+{
+    content: "";
+    position: absolute;
+    z-index: -2;
+}
+
+.drop-shadow p
+{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Lifted corners */
+.lifted
+{
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.lifted:before, .lifted:after
+{
+    bottom: 15px;
+    left: 10px;
+    width: 50%;
+    height: 20%;
+    -webkit-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+    -webkit-transform: rotate(-3deg);
+    -moz-transform: rotate(-3deg);
+    -ms-transform: rotate(-3deg);
+    -o-transform: rotate(-3deg);
+    transform: rotate(-3deg);
+}
+
+.lifted:after
+{
+    right: 10px;
+    left: auto;
+    -webkit-transform: rotate(3deg);
+    -moz-transform: rotate(3deg);
+    -ms-transform: rotate(3deg);
+    -o-transform: rotate(3deg);
+    transform: rotate(3deg);
+}

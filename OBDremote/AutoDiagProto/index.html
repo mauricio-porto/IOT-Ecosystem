@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aqua Gauge - HTML5</title>
+
+    <!-- WinJS references -->
+    <link href="//Microsoft.WinJS.1.0/css/ui-dark.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
+    <!-- HTML5AquaGauge references WinJS-->
+    <link href="/css/default.css" rel="stylesheet" />
+    <script src="/js/default.js"></script>
+
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/smoothness/jquery-ui-1.8.16.custom.css">
+    <script src="js/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <script src="js/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
+    <script src="js/AquaGauge.js" type="text/javascript"></script>
+    <script src="js/helper.js" type="text/javascript"></script>
+    <script src="js/initGauges.js" type="text/javascript"></script>
+</head>
+
+<body onload="initGauges()">
+    <div class="header">HTML5 Canvas - Gauge Control</div>
+    <div style="text-align: center; width: 100%; padding: 10px;">
+        <table style="width: 1080px;">
+            <tr>
+                <td style="padding: 5px; vertical-align: top; width: 350px; text-align: center;">
+                    <div class="drop-shadow lifted">
+                        <canvas id="gauge" width="300" height="300">Sorry, your browser is very old. Please upgrade.</canvas>
+                        <br />
+                        <canvas id="gaugeSmall" width="150" height="150"></canvas>
+                        <br />
+                        <canvas id="gaugeWhite" width="150" height="150"></canvas>
+                    </div>
+                </td>
+                <td style="vertical-align: top; text-align: left;">
+                    <table>
+                        <tr>
+                            <td colspan="5" class="title">Dial</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Title</td>
+                            <td class="edit">
+                                <input id="title" type="text" maxlength="25" onkeyup="refreshView()" /></td>
+                            <td class="label">Sub Title</td>
+                            <td class="edit">
+                                <input id="subTitle" type="text" maxlength="25" onkeyup="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Dial Color</td>
+                            <td class="edit">
+                                <input id="dialColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Dial Gradient</td>
+                            <td class="edit">
+                                <input id="dialGradient" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Title Font</td>
+                            <td class="edit">
+                                <input id="titleFont" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Subtitle Font</td>
+                            <td class="edit">
+                                <input id="subTitleFont" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Title Color</td>
+                            <td class="edit">
+                                <input id="titleColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Subtitle Color</td>
+                            <td class="edit">
+                                <input id="subTitleColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Background Color</td>
+                            <td class="edit">
+                                <input id="backgroundColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Value Color</td>
+                            <td class="edit">
+                                <input id="valueColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Glossiness</td>
+                            <td class="edit">
+                                <input id="glossiness" type="checkbox" checked="checked" onchange="refreshView()" /></td>
+                            <td class="label">Value Font</td>
+                            <td class="edit">
+                                <input id="valueFont" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="title">Scale</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Min Value</td>
+                            <td class="edit">
+                                <input id="minValue" type="text" maxlength="25" onchange="refreshView(); resetRange();" /></td>
+                            <td class="label">Max Value</td>
+                            <td class="edit">
+                                <input id="maxValue" type="text" maxlength="25" onchange="refreshView(); resetRange();" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Value</td>
+                            <td class="edit" style="padding-left: 10px;">
+                                <div id="slider"></div>
+                            </td>
+                            <td class="label">Show Minor Value</td>
+                            <td class="edit">
+                                <input id="showMinorValue" type="checkbox" checked="checked" onclick="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">No. Of Divs</td>
+                            <td class="edit">
+                                <input id="noOfDivs" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">No. Of SubDivs</td>
+                            <td class="edit">
+                                <input id="noOfSubDivs" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Rim Color</td>
+                            <td class="edit">
+                                <input id="rimColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Rim Width</td>
+                            <td class="edit">
+                                <input id="rimWidth" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding: 10px 20px 5px 20px;"><b>Major</b></td>
+                            <td colspan="2" style="padding: 10px 20px 5px 20px;"><b>Minor</b></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Graduation Color</td>
+                            <td class="edit">
+                                <input id="majorGraduationColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Graduation Color</td>
+                            <td class="edit">
+                                <input id="minorGraduationColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Scale Font</td>
+                            <td class="edit">
+                                <input id="majorScaleFont" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Scale Font</td>
+                            <td class="edit">
+                                <input id="minorScaleFont" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Text Color</td>
+                            <td class="edit">
+                                <input id="majorTextColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Text Color</td>
+                            <td class="edit">
+                                <input id="minorTextColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="title">Scale Color Ranges</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Range[0]</td>
+                            <td class="edit" style="padding-right: 10px;">
+                                <div id="sliderG"></div>
+                            </td>
+                            <td class="label">Color[0]</td>
+                            <td class="edit">
+                                <input id="gColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Range[1]</td>
+                            <td class="edit" style="padding-right: 10px;">
+                                <div id="sliderY"></div>
+                            </td>
+                            <td class="label">Color[1]</td>
+                            <td class="edit">
+                                <input id="yColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Range[2]</td>
+                            <td class="edit" style="padding-right: 10px;">
+                                <div id="sliderR"></div>
+                            </td>
+                            <td class="label">Color[2]</td>
+                            <td class="edit">
+                                <input id="rColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="title">Pointer</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Color</td>
+                            <td class="edit">
+                                <input id="pointerColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td class="label">Gradient Color</td>
+                            <td class="edit">
+                                <input id="pointerGradientColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Shadow Color</td>
+                            <td class="edit">
+                                <input id="pointerShadowColor" type="text" maxlength="25" onchange="refreshView()" /></td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+
