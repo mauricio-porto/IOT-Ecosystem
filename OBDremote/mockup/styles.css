@@ -1,0 +1,24 @@
+
+.center
+ { margin-left:auto;
+   margin-right:auto;
+   width:90%;
+   padding: 10px;
+ }
+
+div.links {
+width: 15%;
+height: 100%;
+float: left;
+}
+
+div.content {
+width: 85%;
+height: 100%;
+float:right;
+}
+
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map_canvas { height: 100% }
+ 
