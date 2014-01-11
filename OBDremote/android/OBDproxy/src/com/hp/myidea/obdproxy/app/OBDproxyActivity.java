@@ -6,8 +6,10 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -61,6 +63,9 @@ public class OBDproxyActivity extends Activity {
     static final int TABLE_ROW_MARGIN = 7;
     static final int NO_ORIENTATION_SENSOR = 8;
 
+    private boolean useGPS = true;     // TODO: MUST BE A PREFERENCE
+    private static final int USE_GPS_DIALOG = 0xb0b0ca;
+
     private LogTextBox dataView;
 
     public void updateTextView(final TextView view, final String txt) {
@@ -88,6 +93,11 @@ public class OBDproxyActivity extends Activity {
         }
         this.dataView = (LogTextBox) findViewById(R.id.data_text);
         this.startOBDProxy();
+
+        // Se GPS desligado e aceita usar GPS (settings), abre diálogo para habilitar GPS (tipo checkGPS)
+        if (useGPS && !((LocationManager)getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            showDialog(USE_GPS_DIALOG);
+        }
     }
 
     @Override
@@ -206,6 +216,24 @@ public class OBDproxyActivity extends Activity {
     protected Dialog onCreateDialog(int id) {
         AlertDialog.Builder build = new AlertDialog.Builder(this);
         switch (id) {
+        case USE_GPS_DIALOG:
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.enable_gps)
+                .setMessage(R.string.why_enable_gps)
+                .setCancelable(false)  
+                .setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {  
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }  
+                });  
+            builder.setNegativeButton(R.string.no,
+                new DialogInterface.OnClickListener() {  
+                    public void onClick(DialogInterface dialog, int id) {  
+                        dialog.cancel();  
+                    }
+                });
+            return builder.create();  
         case NO_BLUETOOTH_ID:
             build.setMessage("Sorry, your device doesn't support Bluetooth.");
             return build.create();

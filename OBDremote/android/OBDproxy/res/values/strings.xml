@@ -22,4 +22,8 @@
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for devices</string>
 
+    <string name="why_enable_gps">GPS is the best source for location info, being able to determine your address more precisely. Would you like to start the settings screen to enable GPS now?</string>
+    <string name="enable_gps">Enable GPS?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

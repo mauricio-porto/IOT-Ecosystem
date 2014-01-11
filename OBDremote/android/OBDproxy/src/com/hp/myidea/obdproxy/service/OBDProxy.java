@@ -3,6 +3,9 @@
  */
 package com.hp.myidea.obdproxy.service;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +15,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -87,6 +94,15 @@ public class OBDProxy extends Service implements IProxyService {
     private boolean communicatorSvcConnected = false;
 
     private boolean initialized = false;
+
+    private LocationManager locationManager;
+    private String provider;
+    private Criteria criteria;
+
+    private Location lastLocation;
+    private static final long MAX_GPS_WAIT = 10 * 1000; // TEN SECONDS
+    private final Timer timer = new Timer();
+    private KillGPSWait killGPSWait = null;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -169,6 +185,31 @@ public class OBDProxy extends Service implements IProxyService {
             return;
         }
 
+        this.locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        // Se GPS ligado, tenta c/ GPS por 10 seg então cai para triangulação
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+            // TODO: AJUSTA PROVIDER PARA GPS
+            criteria = new Criteria(); 
+            criteria.setAccuracy(Criteria.ACCURACY_FINE); 
+            criteria.setAltitudeRequired(false); 
+            criteria.setBearingRequired(false); 
+            criteria.setCostAllowed(true); 
+            criteria.setPowerRequirement(Criteria.POWER_HIGH);
+
+            // provider = LocationManager.GPS_PROVIDER; 
+            provider = locationManager.getBestProvider(criteria, true);
+
+            this.killGPSWait = new KillGPSWait();
+            this.timer.schedule(this.killGPSWait, MAX_GPS_WAIT);
+        } else {
+            provider = LocationManager.NETWORK_PROVIDER;
+        }
+        updateLocation(locationManager.getLastKnownLocation(provider));
+
+        this.locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
+
         this.initialized = true;
         this.notifyUser("OBD Proxy is running. Select to see data and configure.", "OBD Proxy is running...");
     }
@@ -191,6 +232,8 @@ public class OBDProxy extends Service implements IProxyService {
                 // Nothing to do
             }
         }
+
+        this.locationManager.removeUpdates(locationListener);
 
         this.notifyUser("Stopped. Select to start again.", "Stopping OBDproxy.");
 		this.stopSelf();
@@ -328,4 +371,52 @@ public class OBDProxy extends Service implements IProxyService {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
+    private final LocationListener locationListener = new LocationListener() {
+
+        @Override 
+        public void onLocationChanged(Location location) { 
+            Log.d(TAG, "LocationListener::onLocationChanged()");
+            if (OBDProxy.this.killGPSWait != null) {
+                OBDProxy.this.killGPSWait.cancel();
+            }
+            updateLocation(location);
+        }
+    
+        @Override 
+        public void onProviderDisabled(String provider) { 
+            Log.d(TAG, "LocationListener::onProviderDisabled()");
+        }
+    
+        @Override 
+        public void onProviderEnabled(String provider) { 
+            Log.d(TAG, "LocationListener::onProviderEnabled()");
+        }
+    
+        @Override 
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.d(TAG, "LocationListener::onStatusChanged()");
+        }
+    }; 
+
+    private void updateLocation(Location location) {
+        if (location == null) {
+            Log.d(TAG, "\n\n\nLOCATION NULL!!!!\n\n\n");
+            return;
+        }
+        lastLocation = location;
+    }
+
+    private void fallbackProvider() {
+        locationManager.removeUpdates(locationListener);
+        provider = LocationManager.NETWORK_PROVIDER;
+        updateLocation(locationManager.getLastKnownLocation(provider));
+    }
+
+    private class KillGPSWait extends TimerTask {
+
+        @Override
+        public void run() {
+            fallbackProvider();
+        }        
+    }
 }
