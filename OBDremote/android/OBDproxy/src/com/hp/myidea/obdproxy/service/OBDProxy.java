@@ -103,6 +103,7 @@ public class OBDProxy extends Service implements IProxyService {
     private static final long MAX_GPS_WAIT = 10 * 1000; // TEN SECONDS
     private final Timer timer = new Timer();
     private KillGPSWait killGPSWait = null;
+    private static final long UPDATE_LOCATION_INTERVAL = 2 * 1000;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -208,7 +209,7 @@ public class OBDProxy extends Service implements IProxyService {
         }
         updateLocation(locationManager.getLastKnownLocation(provider));
 
-        this.locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
+        this.locationManager.requestLocationUpdates(provider, UPDATE_LOCATION_INTERVAL, 0, locationListener);
 
         this.initialized = true;
         this.notifyUser("OBD Proxy is running. Select to see data and configure.", "OBD Proxy is running...");
@@ -325,7 +326,16 @@ public class OBDProxy extends Service implements IProxyService {
     @Override
     public void notifyDataReceived(String data) {
         if (activityHandler != null) {
-            Message msg = Message.obtain(null,OBDProxy.OBD_DATA);
+            if (lastLocation != null) {
+                StringBuilder sb = new StringBuilder();
+                sb.append('{').append('"').append("location").append('"').append(':').append('[');
+                sb.append(Location.convert(lastLocation.getLatitude(), Location.FORMAT_DEGREES));
+                sb.append(',');
+                sb.append(Location.convert(lastLocation.getLongitude(), Location.FORMAT_DEGREES));
+                sb.append(']').append(',').append('"').append("data").append('"').append(':').append(data);
+                data = sb.toString();
+            }
+            Message msg = Message.obtain(null, OBDProxy.OBD_DATA);
             Bundle bundle = new Bundle();
             bundle.putString(OBDProxy.TEXT_MSG, data);
             msg.setData(bundle);
@@ -409,6 +419,7 @@ public class OBDProxy extends Service implements IProxyService {
     private void fallbackProvider() {
         locationManager.removeUpdates(locationListener);
         provider = LocationManager.NETWORK_PROVIDER;
+        locationManager.requestLocationUpdates(provider, UPDATE_LOCATION_INTERVAL, 0, locationListener);
         updateLocation(locationManager.getLastKnownLocation(provider));
     }
 
