@@ -102,7 +102,6 @@ public class OBDProxy extends Service implements IProxyService {
     private Location lastLocation;
     private static final long MAX_GPS_WAIT = 10 * 1000; // TEN SECONDS
     private final Timer timer = new Timer();
-    private KillGPSWait killGPSWait = null;
     private static final long UPDATE_LOCATION_INTERVAL = 2 * 1000;
 
     @Override
@@ -188,7 +187,6 @@ public class OBDProxy extends Service implements IProxyService {
 
         this.locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-        // Se GPS ligado, tenta c/ GPS por 10 seg então cai para triangulação
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
             // TODO: AJUSTA PROVIDER PARA GPS
@@ -201,13 +199,9 @@ public class OBDProxy extends Service implements IProxyService {
 
             // provider = LocationManager.GPS_PROVIDER; 
             provider = locationManager.getBestProvider(criteria, true);
-
-            this.killGPSWait = new KillGPSWait();
-            this.timer.schedule(this.killGPSWait, MAX_GPS_WAIT);
         } else {
             provider = LocationManager.NETWORK_PROVIDER;
         }
-        updateLocation(locationManager.getLastKnownLocation(provider));
 
         this.locationManager.requestLocationUpdates(provider, UPDATE_LOCATION_INTERVAL, 0, locationListener);
 
@@ -332,7 +326,7 @@ public class OBDProxy extends Service implements IProxyService {
                 sb.append(Location.convert(lastLocation.getLatitude(), Location.FORMAT_DEGREES));
                 sb.append(',');
                 sb.append(Location.convert(lastLocation.getLongitude(), Location.FORMAT_DEGREES));
-                sb.append(']').append(',').append('"').append("data").append('"').append(':').append(data);
+                sb.append(']').append(',').append('"').append("data").append('"').append(':').append(data).append('}');
                 data = sb.toString();
             }
             Message msg = Message.obtain(null, OBDProxy.OBD_DATA);
@@ -386,10 +380,7 @@ public class OBDProxy extends Service implements IProxyService {
         @Override 
         public void onLocationChanged(Location location) { 
             Log.d(TAG, "LocationListener::onLocationChanged()");
-            if (OBDProxy.this.killGPSWait != null) {
-                OBDProxy.this.killGPSWait.cancel();
-            }
-            updateLocation(location);
+            lastLocation = location;
         }
     
         @Override 
@@ -408,26 +399,4 @@ public class OBDProxy extends Service implements IProxyService {
         }
     }; 
 
-    private void updateLocation(Location location) {
-        if (location == null) {
-            Log.d(TAG, "\n\n\nLOCATION NULL!!!!\n\n\n");
-            return;
-        }
-        lastLocation = location;
-    }
-
-    private void fallbackProvider() {
-        locationManager.removeUpdates(locationListener);
-        provider = LocationManager.NETWORK_PROVIDER;
-        locationManager.requestLocationUpdates(provider, UPDATE_LOCATION_INTERVAL, 0, locationListener);
-        updateLocation(locationManager.getLastKnownLocation(provider));
-    }
-
-    private class KillGPSWait extends TimerTask {
-
-        @Override
-        public void run() {
-            fallbackProvider();
-        }        
-    }
 }
