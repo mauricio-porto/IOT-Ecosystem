@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <title>Diagnostico Automotivo Remoto</title>
+
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+
+<script src="jquery-1.8.2.min.js" type="text/javascript"></script>
+
+<body>
+
+<script type="text/template" id="car-list-template">
+
+<table class="table stripped">
+	<thead>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Car</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% _.each(cars, function(car) { %>
+			<tr>
+				<td>#</td>
+				<td><%= car.name %></td>
+				<td><%= car.status %></td>
+			</tr>
+		<% }); %>
+	</tbody>
+</table>
+</script>
+
+
+<div class="container">
+
+	<h1>Sege benvindu</h1>
+	<div id="header" class="header">Diagnostico Automotivo Remoto</div>
+
+	<div class="carlistview"></div>
+
+</div> <!-- container -->
+
+<!-- our app -->
+<script language="javascript" type="text/javascript" src="../backbone/underscore-min.js"></script>
+<script language="javascript" type="text/javascript" src="../backbone/backbone-min.js"></script>
+<script language="javascript" type="text/javascript">
+
+var Car = Backbone.Model.extend({
+	defaults: function() {
+		return {
+			name: 'car name here', status: 'online'
+		};
+	},
+});
+
+var CarList = Backbone.Collection.extend({
+	url: '#/cars',
+	model: Car
+});
+
+var CarListView = Backbone.View.extend({
+	el: '.carlistview',
+	render: function() {
+		var template = _.template($("#car-list-template").html())
+		this.$el.html(template({cars: cars.toJSON() }));
+	}
+});
+
+var Router = Backbone.Router.extend({
+	routes: {
+		'': 'home'
+	}
+});
+
+var car_porto = new Car({ name: 'Amarok-Porto', status: 'online' });
+var car_ricardo = new Car({ name: 'Fiesta-Ricardo', status: 'online' });
+var cars = new CarList([ car_porto, car_ricardo]);
+
+var car_list_view = new CarListView();
+
+var router = new Router();
+router.on('route:home', function() {
+	car_list_view.render();
+});
+
+Backbone.history.start();
+
+</script>
+</body>
+</html>
