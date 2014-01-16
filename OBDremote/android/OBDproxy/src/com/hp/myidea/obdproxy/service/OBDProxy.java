@@ -3,6 +3,9 @@
  */
 package com.hp.myidea.obdproxy.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -320,15 +323,23 @@ public class OBDProxy extends Service implements IProxyService {
     @Override
     public void notifyDataReceived(String data) {
         if (activityHandler != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.US);
+            String nowStr = sdf.format(Calendar.getInstance().getTimeInMillis());
+            StringBuilder sb = new StringBuilder();
+            sb.append('{');
+            sb.append('"').append("timestamp").append('"').append(':');
+            sb.append('"').append(nowStr).append('"').append(',');
             if (lastLocation != null) {
-                StringBuilder sb = new StringBuilder();
-                sb.append('{').append('"').append("location").append('"').append(':').append('[');
+                sb.append('"').append("location").append('"').append(':').append('[');
                 sb.append(Location.convert(lastLocation.getLatitude(), Location.FORMAT_DEGREES));
                 sb.append(',');
                 sb.append(Location.convert(lastLocation.getLongitude(), Location.FORMAT_DEGREES));
-                sb.append(']').append(',').append('"').append("data").append('"').append(':').append(data).append('}');
-                data = sb.toString();
+                sb.append(']').append(',');
             }
+            sb.append(data);
+            sb.append('}');
+            data = sb.toString();
+            
             Message msg = Message.obtain(null, OBDProxy.OBD_DATA);
             Bundle bundle = new Bundle();
             bundle.putString(OBDProxy.TEXT_MSG, data);

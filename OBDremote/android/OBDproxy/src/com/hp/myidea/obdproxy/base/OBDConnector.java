@@ -297,7 +297,7 @@ public class OBDConnector {
         public void run() {
             service.showToastMsg("...");
             StringBuilder sb = new StringBuilder();
-            sb.append('{');
+            sb.append('"').append("data").append('"').append(':').append('{');
             for (int i = 0; i < commandList.length; i++) {
                 OBDCommand command = commandList[i];
                 sb.append('"').append(command.ordinal()).append('"').append(':').append('[');
