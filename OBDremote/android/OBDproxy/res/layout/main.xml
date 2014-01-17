@@ -39,6 +39,11 @@
       <TableRow
       	android:layout_margin="2dip"
         android:background="#000000">
+        <com.hp.myidea.obdproxy.drawable.CoolantGaugeView
+          android:layout_width="330px"
+          android:id="@+id/coolant_gauge"
+		  android:layout_height="50px"
+		  android:layout_margin="7px"/>
 		<ImageView
 		  android:src="@drawable/temp"
 		  android:layout_width="wrap_content"
