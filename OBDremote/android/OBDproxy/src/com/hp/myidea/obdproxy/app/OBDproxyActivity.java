@@ -3,6 +3,7 @@ package com.hp.myidea.obdproxy.app;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -353,16 +354,41 @@ public class OBDproxyActivity extends Activity {
     }
 
     private void showReceivedData(String dataReceived) throws JSONException {
-        JSONObject jsonReceived = new JSONObject(dataReceived);
-        JSONArray arrayData = jsonReceived.getJSONArray("data");
 /*
+ * {"timestamp":"2014-01-12_19_48_11", // name:String
+ * "location":[-30.14781,-51.21668], // name:array[number, number]
+ * "data":{"10":["Engine RPM",831],  // name:objectData, onde objectData é
+ * "9":["Engine Load",99],           // name:array[String, number]
+ * "11":["Vehicle Speed",0],
+ * "6":["Ambient Air Temperature",24],
+ * "7":["Coolant Temperature",35],
+ * "8":["Intake Air Temperature",24],
+ * "12":["Mass Air Flow",7]}}
+ *
+*/
+
+        JSONObject jsonReceived = new JSONObject(dataReceived);
+        String timestamp = jsonReceived.getString("timestamp");
+        JSONArray arrayLocation = jsonReceived.getJSONArray("location");
+        JSONObject objectData = jsonReceived.getJSONObject("data");
+
+        JSONArray param = objectData.getJSONArray("10");    // Engine RPM
+        final int rpm = param.getInt(1);
+
+        param = objectData.getJSONArray("11");    // Vehicle Speed
+        final int speed = param.getInt(1);
+
+        param = objectData.getJSONArray("7");    // Coolant Temperature
+        final int coolantTemp = param.getInt(1);
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dataView.append(data);
-                dataView.append("\n");
+                coolView.setTemp(coolantTemp);
+                tempText.setText(coolantTemp + " C");
+                rpmText.setText(rpm + "");
+                speedText.setText(speed + " km/h");
             }
         });
-*/        
     }
 }
