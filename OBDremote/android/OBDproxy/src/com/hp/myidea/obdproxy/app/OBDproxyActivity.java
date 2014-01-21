@@ -1,13 +1,19 @@
 package com.hp.myidea.obdproxy.app;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,13 +26,11 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hp.myidea.obdproxy.R;
-import com.hp.myidea.obdproxy.base.LogTextBox;
 import com.hp.myidea.obdproxy.base.OBDConnector;
 import com.hp.myidea.obdproxy.drawable.CoolantGaugeView;
 import com.hp.myidea.obdproxy.service.OBDProxy;
@@ -37,37 +41,14 @@ public class OBDproxyActivity extends Activity {
 
     public static final String OBDPROXY_PREFS = "OBDproxySharedPrefs";
 
-    // Local Bluetooth adapter
-    private BluetoothAdapter mBluetoothAdapter = null;
+    private Writer writer;
 
-    private boolean isConfigured = false;
-
-    private OBDProxy btReceiver;
-
-    private boolean receiverSvcConnected = false;
     private boolean isBound = false;
-    private boolean serviceRunning = false;
     private Messenger messageReceiver = null;
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
-    private static final int REQUEST_START_SERVICE = 3;
-    
-    /*
-     * TODO put description
-     */
-    static final int NO_BLUETOOTH_ID = 0;
-    static final int BLUETOOTH_DISABLED = 1;
-    static final int NO_GPS_ID = 2;
-    static final int START_LIVE_DATA = 3;
-    static final int STOP_LIVE_DATA = 4;
-    static final int SETTINGS = 5;
-    static final int COMMAND_ACTIVITY = 6;
-    static final int TABLE_ROW_MARGIN = 7;
-    static final int NO_ORIENTATION_SENSOR = 8;
-
-    private LogTextBox dataView;
 
     private CoolantGaugeView coolView;
     private TextView tempText;
@@ -80,11 +61,10 @@ public class OBDproxyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // Get local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // If the adapter is null, then Bluetooth is not supported
-        if (mBluetoothAdapter == null) {
+        if (BluetoothAdapter.getDefaultAdapter() == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();   // TODO: localize!!!
             finish();
             return;
@@ -104,15 +84,36 @@ public class OBDproxyActivity extends Activity {
         Log.d(TAG, "onResume()");
         super.onResume();
         if (!this.isBound) {
-            this.isBound = this.bindService(new Intent("com.hp.myidea.obdproxy.service.OBDProxy"), this.btReceiverConnection, Context.BIND_AUTO_CREATE);
+            this.isBound = this.bindService(new Intent("com.hp.myidea.obdproxy.service.OBDProxy"), this.proxyServiceConnection, Context.BIND_AUTO_CREATE);
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String fileName = sdf.format(Calendar.getInstance().getTime()) + ".log";
+        
+        try {
+            this.writer = new BufferedWriter(new FileWriter(new File(getFilesDir(), fileName)));
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "ERROR: ", e);
+            // nothing to do
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            Log.e(TAG, "ERROR: ", e);
+        }
+
     }
 
     @Override
     protected void onPause() {
         Log.d(TAG, "onPause()");
         super.onPause();
-        this.unbindBTReceiver();
+
+        try {
+            this.writer.close();
+        } catch (IOException e) {
+            // nothing to do
+        }
+
+        this.unbindProxyService();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -125,7 +126,7 @@ public class OBDproxyActivity extends Activity {
                 // Get the device MAC address
                 String address = data.getExtras().getString(BluetoothDeviceList.EXTRA_DEVICE_ADDRESS);
                 // Attempt to connect to the device
-                Log.d(TAG, "\n\n\n\nonActivityResult() - O ENDERECO DO DEVICE EH: " + address + " e receciverSvcConnected diz: " + this.receiverSvcConnected + "\n\n\n\n");
+                Log.d(TAG, "\n\n\n\nonActivityResult() - O ENDERECO DO DEVICE EH: " + address + "\n\n\n\n");
                 if (address != null) {
                     this.sendTextToService(OBDProxy.CONNECT_TO, address);
                 }
@@ -152,30 +153,6 @@ public class OBDproxyActivity extends Activity {
         }
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, START_LIVE_DATA, 0, "Start Live Data");
-        menu.add(0, COMMAND_ACTIVITY, 0, "Run Command");
-        menu.add(0, STOP_LIVE_DATA, 0, "Stop");
-        menu.add(0, SETTINGS, 0, "Settings");
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case START_LIVE_DATA:
-            startLiveData();
-            break;
-        case STOP_LIVE_DATA:
-            stopLiveData();
-            break;
-        case SETTINGS:
-            break;
-        default:
-            break;
-        }
-        return true;
-    }
-
     private void startOBDProxy() {
         Log.d(TAG, "startOBDProxy()");
         Intent intent = new Intent(OBDProxy.ACTION_START);
@@ -190,56 +167,7 @@ public class OBDproxyActivity extends Activity {
         stopService(intent);
     }
 
-    private void startLiveData() {
-        Log.d(TAG, "Starting live data..");
-
-/*        if (!mServiceConnection.isRunning()) {
-            Log.d(TAG, "Service is not running. Going to start it..");
-            startService(mServiceIntent);
-        }
-*/
-        // start command execution
-        // mHandler.post(mQueueCommands);
-    }
-
-    private void stopLiveData() {
-        Log.d(TAG, "Stopping live data..");
-
-/*        if (mServiceConnection.isRunning())
-            stopService(mServiceIntent);
-*/
-        // remove runnable
-        // mHandler.removeCallbacks(mQueueCommands);
-    }
-
-    protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder build = new AlertDialog.Builder(this);
-        switch (id) {
-        case NO_BLUETOOTH_ID:
-            build.setMessage("Sorry, your device doesn't support Bluetooth.");
-            return build.create();
-        case BLUETOOTH_DISABLED:
-            build.setMessage("You have Bluetooth disabled. Please enable it!");
-            return build.create();
-        case NO_GPS_ID:
-            build.setMessage("Sorry, your device doesn't support GPS.");
-            return build.create();
-        case NO_ORIENTATION_SENSOR:
-            build.setMessage("Orientation sensor missing?");
-            return build.create();
-        }
-        return null;
-    }
-
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem startItem = menu.findItem(START_LIVE_DATA);
-        MenuItem stopItem = menu.findItem(STOP_LIVE_DATA);
-        MenuItem settingsItem = menu.findItem(SETTINGS);
-        MenuItem commandItem = menu.findItem(COMMAND_ACTIVITY);
-        return true;
-    }
-
-    private ServiceConnection btReceiverConnection = new ServiceConnection() {
+    private ServiceConnection proxyServiceConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "OBDProxy connected");
@@ -247,8 +175,6 @@ public class OBDproxyActivity extends Activity {
                 Log.e(TAG, "Connection to the OBDProxy service failed. Giving up...");
                 return;
             }
-            receiverSvcConnected = true;
-
             messageReceiver = new Messenger(service);
             try {
                 Message msg = Message.obtain(null, OBDProxy.REGISTER_HANDLER);
@@ -260,13 +186,12 @@ public class OBDproxyActivity extends Activity {
 
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "OBDProxy disconnected");
-            receiverSvcConnected = false;
         }
 
     };
 
-    private void unbindBTReceiver() {
-        Log.d(TAG, "unbindBTReceiver() - supposing it is bound");
+    private void unbindProxyService() {
+        Log.d(TAG, "unbindProxyService() - supposing it is bound");
         if (this.isBound) {
             if (messageReceiver != null) {
                 try {
@@ -277,11 +202,10 @@ public class OBDproxyActivity extends Activity {
                     // There is nothing special we need to do if the service has crashed.
                 }
             }
-            this.unbindService(btReceiverConnection);
+            this.unbindService(proxyServiceConnection);
         } else {
-            Log.d(TAG, "unbindBTReceiver() - \tBut it was not!!!");
+            Log.d(TAG, "unbindProxyService() - \tBut it was not!!!");
         }
-        this.receiverSvcConnected = false;
         this.isBound = false;
     }
 
@@ -299,6 +223,11 @@ public class OBDproxyActivity extends Activity {
             case OBDProxy.OBD_DATA:
                 final String data = msg.getData().getString(OBDProxy.TEXT_MSG);
                 Log.d(TAG, "Received data: " + data);
+                try {
+                    writer.write(data + "\n");
+                } catch (Exception e) {
+                    // nothing to do
+                }
                 try {
                     showReceivedData(data);
                 } catch (JSONException e) {
@@ -320,7 +249,6 @@ public class OBDproxyActivity extends Activity {
                 Toast.makeText(OBDproxyActivity.this, R.string.title_connecting, Toast.LENGTH_SHORT).show();
                 break;
             case OBDConnector.NOT_RUNNING:
-                serviceRunning = false;
                 break;
             default:
                 break;
