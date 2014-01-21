@@ -295,7 +295,6 @@ public class OBDConnector {
      */
     private Runnable mQueueCommands = new Runnable() {
         public void run() {
-            service.showToastMsg("...");
             StringBuilder sb = new StringBuilder();
             sb.append('"').append("data").append('"').append(':').append('{');
             for (int i = 0; i < commandList.length; i++) {
@@ -304,9 +303,9 @@ public class OBDConnector {
                 sb.append('"').append(command.getName()).append('"').append(',');
                 String readParam = getOBDData(command);
                 if (readParam != null) {
-                    sb.append('"').append(readParam).append('"').append(']');
+                    sb.append(readParam).append(']');
                 } else {
-                    sb.append('0').append(']');
+                    sb.append(0).append(']');
                     Log.e(TAG, "\t\t " + command.getName() + " got null!!!");
                 }
                 if (i < commandList.length - 1) {

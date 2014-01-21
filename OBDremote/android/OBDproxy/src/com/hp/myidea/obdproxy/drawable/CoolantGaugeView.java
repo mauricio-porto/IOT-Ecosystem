@@ -51,7 +51,7 @@ public class CoolantGaugeView extends GradientGaugeView {
 		paint.setColor(Color.BLUE);
 		canvas.drawText("C",left,top+TEXT_SIZE,paint);
 		paint.setColor(Color.RED);
-		canvas.drawText("H", left+width-TEXT_SIZE, top+TEXT_SIZE, paint);
+		canvas.drawText("H", left+width-TEXT_SIZE-10, top+TEXT_SIZE, paint);
 		drawGradient(canvas, container, TEXT_SIZE+5, temp-min_temp,range);
 	}
 }

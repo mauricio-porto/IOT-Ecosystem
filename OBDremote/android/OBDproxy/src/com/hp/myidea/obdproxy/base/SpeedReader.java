@@ -31,7 +31,7 @@ public class SpeedReader extends OBDResponseReader implements IResultReader {
         
         if (!"NODATA".equals(res)) {
             speed = (int) getValue(input);
-            res = String.format("%d%s", speed, " km/h");
+            res = String.format("%d", speed);
         }
 
         return res;

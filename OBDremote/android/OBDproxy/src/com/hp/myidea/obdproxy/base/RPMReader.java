@@ -31,7 +31,7 @@ public class RPMReader extends OBDResponseReader implements IResultReader {
 
         if (!"NODATA".equals(res)) {
             rpm = (int) getValue(input) / 4;
-            res = String.format("%d%s", rpm, " RPM");
+            res = String.format("%d", rpm);
         }
 
         return res;

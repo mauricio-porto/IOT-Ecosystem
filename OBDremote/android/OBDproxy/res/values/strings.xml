@@ -26,4 +26,7 @@
     <string name="enable_gps">Enable GPS?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    
+    <string name="rpm_label">RPM:</string>
+    <string name="speed_label">Speed:</string>
 </resources>

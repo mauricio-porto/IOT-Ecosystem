@@ -322,6 +322,7 @@ public class OBDProxy extends Service implements IProxyService {
 
     @Override
     public void notifyDataReceived(String data) {
+        Toast.makeText(getApplicationContext(), "...", Toast.LENGTH_SHORT).show();
         if (activityHandler != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.US);
             String nowStr = sdf.format(Calendar.getInstance().getTimeInMillis());
@@ -380,11 +381,6 @@ public class OBDProxy extends Service implements IProxyService {
             }
         }
     };
-
-    @Override
-    public void showToastMsg(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-    }
 
     private final LocationListener locationListener = new LocationListener() {
 

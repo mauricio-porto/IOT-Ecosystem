@@ -31,7 +31,7 @@ public class PercentualReader extends OBDResponseReader implements IResultReader
         
         if (!"NODATA".equals(res)) {
             percent = getValue(input);
-            res = String.format("%.0f%s", percent, " %");
+            res = String.format("%.0f", percent);
         }
 
         return res;

@@ -1,15 +1,17 @@
 package com.hp.myidea.obdproxy.app;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.hp.myidea.obdproxy.R;
 import com.hp.myidea.obdproxy.base.LogTextBox;
 import com.hp.myidea.obdproxy.base.OBDConnector;
+import com.hp.myidea.obdproxy.drawable.CoolantGaugeView;
 import com.hp.myidea.obdproxy.service.OBDProxy;
 
 public class OBDproxyActivity extends Activity {
@@ -63,10 +66,12 @@ public class OBDproxyActivity extends Activity {
     static final int TABLE_ROW_MARGIN = 7;
     static final int NO_ORIENTATION_SENSOR = 8;
 
-    private boolean useGPS = true;     // TODO: MUST BE A PREFERENCE
-    private static final int USE_GPS_DIALOG = 0xb0b0ca;
-
     private LogTextBox dataView;
+
+    private CoolantGaugeView coolView;
+    private TextView tempText;
+    private TextView rpmText;
+    private TextView speedText;
 
     public void updateTextView(final TextView view, final String txt) {
         new Handler().post(new Runnable() {
@@ -91,13 +96,14 @@ public class OBDproxyActivity extends Activity {
             finish();
             return;
         }
-        this.dataView = (LogTextBox) findViewById(R.id.data_text);
+
+        this.coolView = (CoolantGaugeView)findViewById(R.id.coolant_gauge);
+        this.tempText = (TextView)findViewById(R.id.cool_temp_text);
+        this.rpmText = (TextView)findViewById(R.id.rpm_text);
+        this.speedText = (TextView)findViewById(R.id.speed_text);
+
         this.startOBDProxy();
 
-        // Se GPS desligado e aceita usar GPS (settings), abre diálogo para habilitar GPS (tipo checkGPS)
-        if (useGPS && !((LocationManager)getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            showDialog(USE_GPS_DIALOG);
-        }
     }
 
     @Override
@@ -216,24 +222,6 @@ public class OBDproxyActivity extends Activity {
     protected Dialog onCreateDialog(int id) {
         AlertDialog.Builder build = new AlertDialog.Builder(this);
         switch (id) {
-        case USE_GPS_DIALOG:
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.enable_gps)
-                .setMessage(R.string.why_enable_gps)
-                .setCancelable(false)  
-                .setPositiveButton(R.string.yes,
-                new DialogInterface.OnClickListener() {  
-                    public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }  
-                });  
-            builder.setNegativeButton(R.string.no,
-                new DialogInterface.OnClickListener() {  
-                    public void onClick(DialogInterface dialog, int id) {  
-                        dialog.cancel();  
-                    }
-                });
-            return builder.create();  
         case NO_BLUETOOTH_ID:
             build.setMessage("Sorry, your device doesn't support Bluetooth.");
             return build.create();
@@ -318,13 +306,11 @@ public class OBDproxyActivity extends Activity {
             case OBDProxy.OBD_DATA:
                 final String data = msg.getData().getString(OBDProxy.TEXT_MSG);
                 Log.d(TAG, "Received data: " + data);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dataView.append(data);
-                        dataView.append("\n");
-                    }
-                });
+                try {
+                    showReceivedData(data);
+                } catch (JSONException e) {
+                    Log.e(TAG, "Error: ", e);
+                }
                 break;
             case OBDConnector.BT_DISABLED:
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -366,4 +352,17 @@ public class OBDproxyActivity extends Activity {
         }       
     }
 
+    private void showReceivedData(String dataReceived) throws JSONException {
+        JSONObject jsonReceived = new JSONObject(dataReceived);
+        JSONArray arrayData = jsonReceived.getJSONArray("data");
+/*
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dataView.append(data);
+                dataView.append("\n");
+            }
+        });
+*/        
+    }
 }

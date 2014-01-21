@@ -26,7 +26,7 @@ public class TemperatureReader extends OBDResponseReader implements IResultReade
         if (!"NODATA".equals(res)) {
             temperature = getValue(input) - 40;  // It ranges from -40 to 215 °C
             
-            res = String.format("%.0f%s", temperature, " C");
+            res = String.format("%.0f", temperature);
         }
 
         return res;

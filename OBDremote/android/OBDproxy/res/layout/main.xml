@@ -1,99 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  	android:id="@+id/vehicle_view"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <TableLayout
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:stretchColumns="1,3"
-      android:background="#dddddd">
-      <TableRow
-      	android:layout_margin="2dip"
-        android:background="#000000">
-        <ImageView
-          android:src="@drawable/mpg"
-          android:layout_gravity="top|left"/>
-      	<TextView
-      	  android:text="0"
-      	  android:id="@+id/fuel_econ_text"
-      	  android:textSize="115px"
-      	  android:gravity="bottom|right"/>
-      	<TextView
-      	  android:text="l/100km"
-      	  android:id="@+id/avg_fuel_econ_lbl"
-      	  android:gravity="bottom|left"/>
-      	<TextView
-      	  android:id="@+id/compass_text"
-      	  android:text="N"
-      	  android:gravity="center"
-      	  android:layout_marginRight="10px"
-      	  android:textSize="115px"/>
-      </TableRow>
-    </TableLayout>
-    <TableLayout
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:background="#dddddd">
-      <TableRow
-      	android:layout_margin="2dip"
-        android:background="#000000">
-        <com.hp.myidea.obdproxy.drawable.CoolantGaugeView
-          android:layout_width="330px"
-          android:id="@+id/coolant_gauge"
-		  android:layout_height="50px"
-		  android:layout_margin="7px"/>
-		<ImageView
-		  android:src="@drawable/temp"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_gravity="center_vertical|center_horizontal"
-		  android:paddingLeft="10px"/>
-		<TextView
-      	  android:id="@+id/air_temp_text"
-      	  android:text=""
-      	  android:layout_marginLeft="15px"
-      	  android:layout_gravity="center_vertical|center_horizontal"/>
-	  </TableRow>
-    </TableLayout>
-    <TableLayout
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:stretchColumns="*"
-      android:background="#dddddd">
-      <TableRow
-      	android:layout_margin="2dip"
-        android:background="#000000">
-      	<TextView
-      	  android:id="@+id/inst_fuel_econ_text"
-      	  android:text="0l/100km"/>
-      	<TextView
-      	  android:id="@+id/run_time_text"
-      	  android:text="00:00:00"/>
-      	<TextView
-      	  android:id="@+id/rpm_text"
-      	  android:text=""/>
-      	<TextView
-      	  android:id="@+id/spd_text"
-      	  android:text=""/>
-      </TableRow>
-    </TableLayout>
-    <com.hp.myidea.obdproxy.base.LogTextBox
-        android:id="@+id/data_text"
-        android:background="@drawable/box"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:scrollbars="vertical"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <ScrollView
-	  android:id="@+id/data_scroll"
-	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content">
-        <TextView
-          android:id="@+id/nothing"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content" />
-    </ScrollView>
-</LinearLayout>
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#dddddd" >
+
+        <TableRow
+            android:layout_margin="2dip"
+            android:background="#000000" >
+
+            <com.hp.myidea.obdproxy.drawable.CoolantGaugeView
+                android:id="@+id/coolant_gauge"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_margin="7dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:paddingLeft="10dp"
+                android:src="@drawable/temp" />
+
+            <TextView
+                android:id="@+id/cool_temp_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="15dp" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/speed_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tableLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="171dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/speed_text"
+        android:layout_alignBottom="@+id/speed_text"
+        android:layout_alignParentLeft="true"
+        android:text="@string/speed_label"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="24dp"
+        android:text="@string/rpm_label"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/rpm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</RelativeLayout>

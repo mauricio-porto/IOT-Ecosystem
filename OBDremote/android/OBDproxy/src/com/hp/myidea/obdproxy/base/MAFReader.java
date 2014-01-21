@@ -31,7 +31,7 @@ public class MAFReader extends OBDResponseReader implements IResultReader {
 
         if (!"NODATA".equals(res)) {
             maf = getValue(input) / 100;
-            res = String.format("%.0f%s", maf, " g/s");
+            res = String.format("%.0f", maf);
         }
 
         return res;
