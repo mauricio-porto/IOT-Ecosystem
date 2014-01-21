@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -29,7 +28,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import com.hp.myidea.obdproxy.ICommunicator;
@@ -73,7 +71,6 @@ public class OBDProxy extends Service implements IProxyService {
     	STOP_SERVICE
     }
 
-    public static final String TOAST = "toast";
     public static final String TEXT_MSG = "text";
     public static final String BOOL_MSG = "bool";
 
@@ -84,8 +81,6 @@ public class OBDProxy extends Service implements IProxyService {
     public static final int DIST_FREQ_RATIO = 75000;
 
     private static NotificationManager notifMgr;
-
-    private Toast toast;
 
     private Messenger activityHandler = null;
 
@@ -128,12 +123,7 @@ public class OBDProxy extends Service implements IProxyService {
         this.obdConnector = new OBDConnector(this);
 
         notifMgr = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
-
-        this.toast = Toast.makeText(this, TAG, Toast.LENGTH_LONG);
-        this.toast.setGravity(Gravity.CENTER, 0, 0);
-
         this.notifier = new Notification(R.drawable.ic_launcher, "OBDproxy is running...", System.currentTimeMillis());
-
         this.notifier.setLatestEventInfo(this, "OBDproxy", "Your roaming service car", this.buildIntent());	// TODO: Localize!!!!
         this.notifier.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
@@ -322,7 +312,6 @@ public class OBDProxy extends Service implements IProxyService {
 
     @Override
     public void notifyDataReceived(String data) {
-        Toast.makeText(getApplicationContext(), "...", Toast.LENGTH_SHORT).show();
         if (activityHandler != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.US);
             String nowStr = sdf.format(Calendar.getInstance().getTimeInMillis());

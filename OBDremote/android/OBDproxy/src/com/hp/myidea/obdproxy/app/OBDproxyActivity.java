@@ -74,14 +74,6 @@ public class OBDproxyActivity extends Activity {
     private TextView rpmText;
     private TextView speedText;
 
-    public void updateTextView(final TextView view, final String txt) {
-        new Handler().post(new Runnable() {
-            public void run() {
-                view.setText(txt);
-            }
-        });
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
@@ -274,7 +266,7 @@ public class OBDproxyActivity extends Activity {
     };
 
     private void unbindBTReceiver() {
-        Log.d(TAG, "unbindBluetoothReceiver() - supposing it is bound");
+        Log.d(TAG, "unbindBTReceiver() - supposing it is bound");
         if (this.isBound) {
             if (messageReceiver != null) {
                 try {
