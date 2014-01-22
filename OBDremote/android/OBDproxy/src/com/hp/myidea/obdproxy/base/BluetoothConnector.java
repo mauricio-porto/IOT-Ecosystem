@@ -42,7 +42,7 @@ public class BluetoothConnector {
     // Debugging
     private static final String TAG = BluetoothConnector.class.getSimpleName();
     private static final boolean D = true;
-    private static String FILE_NAME = "OBDProxy_log.txt";
+    //private static String FILE_NAME = "OBDProxy_log.txt";
     private Context appContext;
     private FileOutputStream fos;
 
@@ -195,7 +195,7 @@ public class BluetoothConnector {
             if (mState != STATE_CONNECTED) return;
             r = mListenerThread;
         }
-        try {
+/*        try {
             this.fos = this.appContext.openFileOutput(FILE_NAME, Context.MODE_APPEND);
             this.fos.write("\nSent: ".getBytes());
             this.fos.write(out);
@@ -205,6 +205,7 @@ public class BluetoothConnector {
         } catch (IOException e) {
             // Nothing to do
         }
+*/
         // Perform the write unsynchronized
         r.write(out);
     }
@@ -224,7 +225,7 @@ public class BluetoothConnector {
         }
         // Perform the read unsynchronized
         byte[] read = r.read();
-        try {
+/*        try {
             this.fos = this.appContext.openFileOutput(FILE_NAME, Context.MODE_APPEND);
             this.fos.write("\nReceived: ".getBytes());
             this.fos.write(read);
@@ -234,6 +235,7 @@ public class BluetoothConnector {
         } catch (IOException e) {
             // Nothing to do
         }
+*/
         return read;
     }
 
