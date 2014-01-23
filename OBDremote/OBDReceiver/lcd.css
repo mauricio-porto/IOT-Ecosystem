@@ -1,0 +1,91 @@
+/* ------------------------------------------- */
+/* ONE COMPLETE NUMBER */
+
+.number {
+	float: left;
+	width: 100px;
+	height: 175px;
+	display: block;
+	position: relative;
+	-webkit-transform: skew(-5deg,0);
+		    transform: skew(-5deg,0);
+}
+	.notchContainer {
+		position: absolute;
+		width: 100%;
+		height: 14.2857142857%;
+		background-color: transparent;
+	}
+		.notchBG {
+			background-color: #C4C7C2;
+			-webkit-animation-iteration-count: infinite;
+					animation-iteration-count: infinite;
+		}
+			.notch {
+				position: absolute;
+				top: 10%;
+				left: 25%;
+				width: 50%;
+				height: 80%;
+				background: inherit;
+				-webkit-transition: background-color 100ms linear;
+				transition: background-color 100ms linear;
+			}
+				.notchEnd {
+					background: inherit;
+					-webkit-transition: background-color 100ms linear;
+					transition: background-color 100ms linear;
+					position: absolute;
+					width: 14.1421356237%;
+					height: 56.5685424949%;
+					display: block;
+					-webkit-transform:rotate(45deg);
+					-webkit-transform-origin: 0% 0%;
+				        transform:rotate(45deg);
+				        transform-origin: 0% 0%;				
+				}
+				.notchEndTop {
+					top: 10%;
+					left: 25%;
+				}
+				.notchEndBtm {
+					top: 10%;
+					left: 75%;
+				}
+
+	.notchVertical {
+		-webkit-transform:rotate(90deg);
+		-webkit-transform-origin: 0% 0%;
+		        transform:rotate(90deg);
+			    transform-origin: 0% 0%;
+	}
+	.notchA {
+		top: 0;
+		left: 0;
+	}
+	.notchB {
+		top: 0;
+		left: 25%;
+	}
+	.notchC {
+		top: 0;
+		left: 100%;
+	}
+	.notchD { /* 30 * 1.42857142857 */
+		top: 42.8571428571%;
+		left: 0;
+	}
+	.notchE {
+		top: 42.8571428571%;
+		left: 25%;
+	}
+	.notchF {
+		top: 42.8571428571%;
+		left: 100%;
+	}
+	.notchG { /* 60 * 1.42857142857 */
+		top: 85.7142857142%;
+		left: 0;
+	}
+
+/* ------------------------------------------- */
