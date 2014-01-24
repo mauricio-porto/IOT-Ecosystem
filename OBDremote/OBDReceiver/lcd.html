@@ -14,17 +14,105 @@
             var display = document.getElementById(e);
             var notches = display.getElementsByClassName("notchBG");
             for (var i=0; i < notches.length; i++) {
-                notches[i].style.backgorund-color="#C4C7C2";
+                notches[i].style.background="#DEDADA";
             }
         }
+
+        function displayNumber(n, digit) {
+            if (digit==null || digit==undefined) {
+                return;
+            }
+if (isNaN(n)) alert('AQUI A PORRA DIZ QUE NAO E NUMERO: ' + n);
+alert(digit);
+            switch(n) {
+                case 0:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
+                    break;
+                case 1:
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    break;
+                case 2:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
+                    break;
+                case 3:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
+                    break;
+                case 4:
+                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    break;
+                case 5:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
+                    break;
+                case 6:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
+                    break;
+                case 7:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    break;
+                case 8:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
+                    break;
+                case 9:
+                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
+                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
+                    break;
+                default:
+alert('A PORRA CAIU FORA!!!!');
+            }
+        }
+
+        function displayDigito(p) {
+            var x = document.forms["aForm"]["digito"].value;
+            if (x==null || x=="") {
+                alert("Escolhe um numero");
+                return;
+            }
+if (isNaN(x)) {
+alert('A PORRA DIZ que NAO E NUMERO!!!');
+}
+            resetDisplay('display_lcd');
+            displayNumber(x,p);
+        }
+
     </script>
-
-    <style>
-        #centena .notchC .notchBG { background-color: #222222 }
-        #centena .notchF .notchBG { background-color: #222222 }
-
-        #dezena .notchB .notchBG { background-color: #222222 }
-    </style>
 </head>
 <body>
 
@@ -32,7 +120,7 @@
 
     <div id="centena" class="number">
 
-        <div class="notchA notchContainer">
+        <div d="notchA" class="notchA notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -40,7 +128,7 @@
             </div>
         </div>
         
-        <div class="notchB notchVertical notchContainer">
+        <div id="notchB" class="notchB notchVertical notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -48,7 +136,7 @@
             </div>
         </div>
         
-        <div class="notchC notchVertical notchContainer">
+        <div id="notchC" class="notchC notchVertical notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -56,7 +144,7 @@
             </div>
         </div>
         
-        <div class="notchD notchContainer">
+        <div id="notchD" class="notchD notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -64,7 +152,7 @@
             </div>
         </div>
                                     
-        <div class="notchE notchVertical notchContainer">
+        <div id="notchE" class="notchE notchVertical notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -72,7 +160,7 @@
             </div>
         </div>
                                     
-        <div class="notchF notchVertical notchContainer">
+        <div id="notchF" class="notchF notchVertical notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -80,7 +168,7 @@
             </div>
         </div>
                                     
-        <div class="notchG notchContainer">
+        <div id="notchG" class="notchG notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -93,7 +181,7 @@
                                     
     <div id="dezena" class="number">
         
-        <div class="notchA notchContainer">
+        <div id="notchA" class="notchA notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -101,7 +189,7 @@
             </div>
         </div>
         
-        <div class="notchB notchVertical notchContainer" >
+        <div id="notchB" class="notchB notchVertical notchContainer" >
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -109,7 +197,7 @@
             </div>
         </div>
         
-        <div class="notchC notchVertical notchContainer">
+        <div id="notchC" class="notchC notchVertical notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -117,32 +205,32 @@
             </div>
         </div>
         
-        <div class="notchD notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchD" class="notchD notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
                                     
-        <div class="notchE notchVertical notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchE" class="notchE notchVertical notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
                                     
-        <div class="notchF notchVertical notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchF" class="notchF notchVertical notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
                                     
-        <div class="notchG notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchG" class="notchG notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
@@ -153,31 +241,31 @@
                                     
     <div id="unidade" class="number">
         
-        <div class="notchA notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchA" class="notchA notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
         
-        <div class="notchB notchVertical notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchB" class="notchB notchVertical notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
         
-        <div class="notchC notchVertical notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchC" class="notchC notchVertical notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
         
-        <div class="notchD notchContainer">
+        <div id="notchD" class="notchD notchContainer">
             <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
@@ -185,24 +273,24 @@
             </div>
         </div>
                                     
-        <div class="notchE notchVertical notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchE" class="notchE notchVertical notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
                                     
-        <div class="notchF notchVertical notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchF" class="notchF notchVertical notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
             </div>
         </div>
                                     
-        <div class="notchG notchContainer">
-            <div class="notchBG" style="background-color:#222222">
+        <div id="notchG" class="notchG notchContainer">
+            <div class="notchBG">
                 <div class="notch"></div>
                 <div class="notchEnd notchEndTop"></div>
                 <div class="notchEnd notchEndBtm"></div>
@@ -213,9 +301,12 @@
 
 </div>
 
-<p>O botao Limpa devera limpar. Jura!?!?!</p>
 <p id="transcript"></p>
-<button type="button" onclick="resetDisplay('display_lcd');">Limpa</button> 
-
+<button type="button" onclick="resetDisplay('display_lcd');">Limpa</button>
+<form name="aForm">
+Digito: <input type="number" name="digito" min="0" max="9">
+<button type="button" onclick="displayDigito(document.getElementById('unidade'));">Vai filhao</button>
+<button type="button" onclick="displayNumber(8, document.getElementById('centena'));">Vai PORRA!!!</button>
+</form>
 </body>
 </html>
