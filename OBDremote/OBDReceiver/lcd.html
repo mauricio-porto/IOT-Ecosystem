@@ -22,8 +22,6 @@
             if (digit==null || digit==undefined) {
                 return;
             }
-if (isNaN(n)) alert('AQUI A PORRA DIZ QUE NAO E NUMERO: ' + n);
-alert(digit);
             switch(n) {
                 case 0:
                     digit.getElementsByClassName("notchBG")[0].style.background="#000000";
@@ -95,24 +93,30 @@ alert(digit);
                     digit.getElementsByClassName("notchBG")[6].style.background="#000000";
                     break;
                 default:
-alert('A PORRA CAIU FORA!!!!');
             }
         }
 
         function displayDigito(p) {
-            var x = document.forms["aForm"]["digito"].value;
-            if (x==null || x=="") {
+            var n = parseInt(document.forms["aForm"]["digito"].value);
+            if (n==null || isNaN(n)) {
                 alert("Escolhe um numero");
                 return;
             }
-if (isNaN(x)) {
-alert('A PORRA DIZ que NAO E NUMERO!!!');
-}
-            resetDisplay('display_lcd');
-            displayNumber(x,p);
+            displayNumber(n,p);
         }
 
     </script>
+    <style>
+
+        .number {
+            width: 64px;
+            height: 112px;
+            margin: 3px;
+        }
+
+        #display_lcd { position:relative; float:right; }
+/*        #display_lcd { margin-left:auto; margin-right:auto; width:70%; } */
+    </style>
 </head>
 <body>
 
@@ -304,9 +308,8 @@ alert('A PORRA DIZ que NAO E NUMERO!!!');
 <p id="transcript"></p>
 <button type="button" onclick="resetDisplay('display_lcd');">Limpa</button>
 <form name="aForm">
-Digito: <input type="number" name="digito" min="0" max="9">
-<button type="button" onclick="displayDigito(document.getElementById('unidade'));">Vai filhao</button>
-<button type="button" onclick="displayNumber(8, document.getElementById('centena'));">Vai PORRA!!!</button>
+Digito: <input type="number" name="digito" min="-1" max="9">
+<button type="button" onclick="resetDisplay('display_lcd');displayDigito(document.getElementById('centena'));displayDigito(document.getElementById('dezena'));displayDigito(document.getElementById('unidade'));">Vai filhao</button>
 </form>
 </body>
 </html>
