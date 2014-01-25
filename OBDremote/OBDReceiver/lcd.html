@@ -8,105 +8,13 @@
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="A LCD style">
     <link rel="stylesheet" href="./lcd.css" type="text/css" />
+    <script src='lcd.js' type="text/javascript"></script>
 
-    <script type="text/javascript">
-        function resetDisplay(e) {
-            var display = document.getElementById(e);
-            var notches = display.getElementsByClassName("notchBG");
-            for (var i=0; i < notches.length; i++) {
-                notches[i].style.background="#DEDADA";
-            }
-        }
-
-        function displayNumber(n, digit) {
-            if (digit==null || digit==undefined) {
-                return;
-            }
-            switch(n) {
-                case 0:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
-                    break;
-                case 1:
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    break;
-                case 2:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
-                    break;
-                case 3:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
-                    break;
-                case 4:
-                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    break;
-                case 5:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
-                    break;
-                case 6:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
-                    break;
-                case 7:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    break;
-                case 8:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[4].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
-                    break;
-                case 9:
-                    digit.getElementsByClassName("notchBG")[0].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[1].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[2].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[3].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[5].style.background="#000000";
-                    digit.getElementsByClassName("notchBG")[6].style.background="#000000";
-                    break;
-                default:
-            }
-        }
-
-        function displayDigito(p) {
-            var n = parseInt(document.forms["aForm"]["digito"].value);
-            if (n==null || isNaN(n)) {
-                alert("Escolhe um numero");
-                return;
-            }
-            displayNumber(n,p);
-        }
-
-    </script>
     <style>
+        div.center {
+            margin:auto;
+            width:50%;
+        }
 
         .number {
             width: 64px;
@@ -114,7 +22,7 @@
             margin: 3px;
         }
 
-        #display_lcd { position:relative; float:right; }
+/*        #display_lcd { position:relative; float:right; } */
 /*        #display_lcd { margin-left:auto; margin-right:auto; width:70%; } */
     </style>
 </head>
@@ -305,11 +213,18 @@
 
 </div>
 
+<div>
+    <h1>km/h</h1>
+</div>
+
+<div class="center">
+    <form name="aForm">
+        Numero:<input type="number" name="numero">
+        <button type="button" onclick="resetDisplay('display_lcd');">Limpa</button>
+        <button type="button" onclick="resetDisplay('display_lcd'); displayNumber();">Vai filhao</button>
+    </form>
+</div>
+
 <p id="transcript"></p>
-<button type="button" onclick="resetDisplay('display_lcd');">Limpa</button>
-<form name="aForm">
-Digito: <input type="number" name="digito" min="-1" max="9">
-<button type="button" onclick="resetDisplay('display_lcd');displayDigito(document.getElementById('centena'));displayDigito(document.getElementById('dezena'));displayDigito(document.getElementById('unidade'));">Vai filhao</button>
-</form>
 </body>
 </html>
