@@ -3,11 +3,17 @@
 <head>
   <title>Strophe.js Echobot Example</title>
   <script type='text/javascript'
-	  src='http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js'></script>
+	  src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
   <script type='text/javascript'
-	  src='../strophe.js'></script>
+    src='./strophe.js'></script>
   <script type='text/javascript'
-	  src='echobot.js'></script>
+    src='./echobot.js'></script>
+  <script type='text/javascript'>
+    function jsonTest() {
+        var obj = jQuery.parseJSON('{"timestamp":"2014_01_28_07:47:53"}');
+        alert("timestamp: " + obj.timestamp);
+    }
+  </script>
 </head>
 <body>
   <div id='login' style='text-align: center'>
@@ -17,6 +23,7 @@
       <label for='pass'>Password:</label>
       <input type='password' id='pass' />
       <input type='button' id='connect' value='connect' />
+      <input type='button' value='json test' onclick='jsonTest();' />
     </form>
   </div>
   <hr />

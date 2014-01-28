@@ -1,4 +1,4 @@
-var BOSH_SERVICE = '/xmpp-httpbind';
+var BOSH_SERVICE = 'http://15.185.92.3:5280/http-bind';
 var connection = null;
 
 function log(msg) 
