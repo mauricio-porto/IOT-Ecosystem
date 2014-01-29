@@ -3,6 +3,10 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
         <title>Diagnostico Automotivo Remoto</title>
+
+        <link rel="stylesheet" href="./lcd.css" type="text/css" />
+        <script src='lcd.js' type="text/javascript"></script>
+
         <link rel="stylesheet" type="text/css" media="screen" href="./styles.css">
 
         <!-- html gauge controls -->
@@ -34,21 +38,593 @@
             });    
         </script>
     </head>
-    <body style="background-color: #111111;">
-        <div class="center"><h1 class="centerTitle">Bullshit</h1></div>
-        <div id="controls" class="center">
+    <body style="background-color:#272737;">
+        <div class="header">Dados do ve&iacute;culo AmarokPorto</div>
 
-            <div class="drop-shadow lifted">
-                <canvas id="smallGauge" width="200" height="200"></canvas>
-            </div>
+        <div style="text-align: center; width: 100%; padding: 10px;">            <table style="width: 1080px;" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="padding: 5px; vertical-align:top; width: 200px; text-align: center;">
+                        <div class="drop-shadow lifted">
+                            <canvas id="smallGauge" width="150" height="150"></canvas><br/>
+                            <canvas id="gaugeWhite" width="150" height="150"></canvas><br/>
+                            <canvas id="aGauge" width="150" height="150"></canvas>
+                        </div>
+                    </td>
+                    <td style="vertical-align: top; text-align: left;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div id="display_speed">
 
-            <div class="drop-shadow lifted">
-                <canvas id="gaugeWhite" width="200" height="200"></canvas>
-            </div>
+                                        <div id="centena" class="number">
 
-            <div class="drop-shadow lifted">
-                <canvas id="aGauge" width="200" height="200"></canvas>
-            </div>
+                                            <div d="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                                        
+                                                                                        
+                                                                        
+                                        <div id="dezena" class="number">
+                                            
+                                            <div id="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer" >
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                
+                                        </div>
+                                                                        
+                                        <div id="unidade" class="number">
+                                            
+                                            <div id="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td class="title" style="font-size:64px;font-weight:bold;">km/h</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>
+                                    <div id="display_maf">
+
+                                        <div id="centena" class="number">
+
+                                            <div d="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                                        
+                                                                                        
+                                                                        
+                                        <div id="dezena" class="number">
+                                            
+                                            <div id="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer" >
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                
+                                        </div>
+                                                                        
+                                        <div id="unidade" class="number">
+                                            
+                                            <div id="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td class="title" style="font-size:64px;font-weight:bold;">MAF (g/s)</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div id="display_seila">
+
+                                        <div id="centena" class="number">
+
+                                            <div d="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                                        
+                                                                                        
+                                                                        
+                                        <div id="dezena" class="number">
+                                            
+                                            <div id="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer" >
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                
+                                        </div>
+                                                                        
+                                        <div id="unidade" class="number">
+                                            
+                                            <div id="notchA" class="notchA notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchB" class="notchB notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchC" class="notchC notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="notchD" class="notchD notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchE" class="notchE notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchF" class="notchF notchVertical notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+                                                                        
+                                            <div id="notchG" class="notchG notchContainer">
+                                                <div class="notchBG">
+                                                    <div class="notch"></div>
+                                                    <div class="notchEnd notchEndTop"></div>
+                                                    <div class="notchEnd notchEndBtm"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td class="title" style="font-size:64px;font-weight:bold;">Carga do motor (%)</td>
+                            </tr>
+
+                        </table>                    </td>
+                </tr>            </table>
         </div>
     </body>
 </hmtl>
