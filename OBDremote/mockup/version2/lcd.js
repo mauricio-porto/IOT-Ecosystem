@@ -2,12 +2,13 @@ function resetDisplay(e) {
     var display = document.getElementById(e);
     var notches = display.getElementsByClassName("notchBG");
     for (var i=0; i < notches.length; i++) {
-        notches[i].style.background="#404040";
+        notches[i].style.background="#202020";
     }
 }
 
 function displayDigit(n, digit) {
     if (digit==null || digit==undefined) {
+alert('wrong: ' + digit);
         return;
     }
     switch(n) {
@@ -93,8 +94,7 @@ function displayDigito(p) {
     displayDigit(n,p);
 }
 
-function displayNumber() {
-    var n = parseInt(document.forms["aForm"]["numero"].value);
+function displayNumber(n, suffix) {
     if (n==null || isNaN(n)) {
         alert("Not a number");
         return;
@@ -110,8 +110,12 @@ function displayNumber() {
     var dezena = parseInt(n / 10);
     var unidade = n - dezena * 10;
 
-    if (centena > 0) displayDigit(centena, document.getElementById('centena'));
-    if (centena > 0 || dezena > 0) displayDigit(dezena, document.getElementById('dezena'));
-    displayDigit(unidade, document.getElementById('unidade'));
+    var idCentena = "centena_".concat(suffix);
+    var idDezena = "dezena_".concat(suffix);
+    var idUnidade = "unidade_".concat(suffix);
+
+    if (centena > 0) displayDigit(centena, document.getElementById(idCentena));
+    if (centena > 0 || dezena > 0) displayDigit(dezena, document.getElementById(idDezena));
+    displayDigit(unidade, document.getElementById(idUnidade));
 
 }
