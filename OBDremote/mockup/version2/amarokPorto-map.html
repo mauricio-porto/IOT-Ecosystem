@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript"
+    src="http://maps.google.com/maps/api/js?sensor=false">
+</script>
+<script type="text/javascript">
+  var amarokMapo = new google.maps.LatLng(-30.1460,-51.2192);
+  var marker;
+  var map;
+
+  function initialize() {
+    var myOptions = {
+      zoom: 5,
+      center: amarokMapo,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+    markerMapo = new google.maps.Marker({
+      position: amarokMapo,
+      map: map, 
+      title:"Amarok Porto", 
+      animation: google.maps.Animation.DROP
+    });
+
+  }
+
+  function changePosition() {
+    var pos = new google.maps.LatLng(-20.1460,-51.2192);
+    markerMapo.setPosition(pos);
+    map.panTo(pos);
+  }
+
+</script>
+</head>
+<body onload="initialize();">
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+</body>
+</html>
