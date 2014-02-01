@@ -1,4 +1,4 @@
 IOT-Ecosystem
 =============
 
-Second project of MyIdea program
+Was the second project of MyIdea program
