@@ -192,7 +192,7 @@ public class XMPPCommunicator extends Service {
 
     private void connect() throws XMPPException {
         // Create the configuration for this new connection
-        ConnectionConfiguration config = new ConnectionConfiguration("15.185.92.3", 5222, "15.185.92.3");
+        ConnectionConfiguration config = new ConnectionConfiguration("ubuntu-jabber.de", 5222, "ubuntu-jabber.de");
         // config.setCompressionEnabled(true);
         // config.setSASLAuthenticationEnabled(true);
 
