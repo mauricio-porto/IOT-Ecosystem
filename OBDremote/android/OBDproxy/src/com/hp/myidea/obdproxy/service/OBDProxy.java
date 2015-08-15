@@ -44,7 +44,7 @@ public class OBDProxy extends Service implements IProxyService {
 
     private static final String TAG = OBDProxy.class.getSimpleName();
 
-    public static final String CAR_SERVICE_JID = "FerraroKaReno@15.185.92.3";    // Deverá ser configurável
+    public static final String CAR_SERVICE_JID = "FerraroKaReno@ubuntu-jabber.net";    // Deverá ser configurável
 
     private static final int OBD_NOTIFICATIONS = 1;
 

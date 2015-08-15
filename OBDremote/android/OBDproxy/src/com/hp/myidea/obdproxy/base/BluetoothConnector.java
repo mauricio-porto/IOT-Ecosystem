@@ -273,8 +273,8 @@ public class BluetoothConnector {
      * succeeds or fails.
      */
     private class ConnectThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final BluetoothDevice mmDevice;
+        private BluetoothSocket mmSocket;
+        private BluetoothDevice mmDevice;
 
         public ConnectThread(BluetoothDevice device) {
             mmDevice = device;
@@ -308,6 +308,16 @@ public class BluetoothConnector {
 	                succeed = true;
 	            } catch (IOException e) {
 	            	Log.e(TAG, "Connection failed: ", e);
+	            	//  http://stackoverflow.com/questions/18657427/ioexception-read-failed-socket-might-closed-bluetooth-on-android-4-3/18786701details
+	            	try {
+	                    Log.e(TAG,"trying fallback...");
+	                    mmSocket = (BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice, 1);
+	                    mmSocket.connect();
+	                    Log.e(TAG,"Connected");
+		                succeed = true;
+	                } catch (Exception e2) {
+	                	Log.e(TAG, "Couldn't establish Bluetooth connection!", e2);
+	                }
 	            	Log.d(TAG, "Will retry " + retries + " times.");
 	            	try {
 						ConnectThread.sleep(1000);
