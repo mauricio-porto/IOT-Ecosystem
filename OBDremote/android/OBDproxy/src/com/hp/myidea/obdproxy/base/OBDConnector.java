@@ -299,7 +299,7 @@ public class OBDConnector {
             sb.append('"').append("data").append('"').append(':').append('{');
             for (int i = 0; i < commandList.length; i++) {
                 OBDCommand command = commandList[i];
-                sb.append('"').append(command.ordinal()).append('"').append(':').append('[');
+                sb.append('"').append(command.getMnemo()).append('"').append(':').append('[');
                 sb.append('"').append(command.getName()).append('"').append(',');
                 String readParam = getOBDData(command);
                 if (readParam != null) {
