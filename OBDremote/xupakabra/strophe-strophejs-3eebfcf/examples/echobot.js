@@ -42,11 +42,11 @@ function onMessage(msg) {
 	log('ECHOBOT: I got a message from ' + from + ': ' + 
 	    Strophe.getText(body));
     
-	var reply = $msg({to: from, from: to, type: 'chat'})
+	// var reply = $msg({to: from, from: to, type: 'chat'})
             .cnode(Strophe.copyElement(body));
-	connection.send(reply.tree());
+	// connection.send(reply.tree());
 
-	log('ECHOBOT: I sent ' + from + ': ' + Strophe.getText(body));
+	// log('ECHOBOT: I sent ' + from + ': ' + Strophe.getText(body));
     }
 
     // we must return true to keep the handler alive.  
@@ -58,11 +58,11 @@ $(document).ready(function () {
     connection = new Strophe.Connection(BOSH_SERVICE);
 
     // Uncomment the following lines to spy on the wire traffic.
-    //connection.rawInput = function (data) { log('RECV: ' + data); };
-    //connection.rawOutput = function (data) { log('SEND: ' + data); };
+    connection.rawInput = function (data) { log('RECV: ' + data); };
+    connection.rawOutput = function (data) { log('SEND: ' + data); };
 
     // Uncomment the following line to see all the debug output.
-    //Strophe.log = function (level, msg) { log('LOG: ' + msg); };
+    Strophe.log = function (level, msg) { log('LOG: ' + msg); };
 
 
     $('#connect').bind('click', function () {

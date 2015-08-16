@@ -1,0 +1,7 @@
+https://en.wikipedia.org/wiki/BOSH
+
+http://xmpp.org/about-xmpp/technology-overview/bosh/
+
+https://help.useresponse.com/knowledge-base/article/how-to-setup-xmpp-bosh-server-based-on-ejabberd
+
+https://www.npmjs.com/package/node-xmpp-bosh

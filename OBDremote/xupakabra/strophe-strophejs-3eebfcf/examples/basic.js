@@ -30,7 +30,7 @@ function onConnect(status)
 	$('#connect').get(0).value = 'connect';
     } else if (status == Strophe.Status.CONNECTED) {
 	log('Strophe is connected.');
-	connection.disconnect();
+	//connection.disconnect();
     }
 }
 
