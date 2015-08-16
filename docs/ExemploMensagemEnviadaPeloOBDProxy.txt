@@ -1,0 +1,1 @@
+18:38:05) amarokmapo@ubuntu-jabber.de: {"timestamp":"2015-08-14_18_38_04","location":[-30.07431,-51.06914],"data":{"10":["Engine RPM",836],"9":["Engine Load",87],"11":["Vehicle Speed",0],"6":["Ambient Air Temperature",25],"7":["Coolant Temperature",49],"8":["Intake Air Temperature",33],"12":["Mass Air Flow",8]}}

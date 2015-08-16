@@ -159,12 +159,12 @@ function setupCoolTempGauge(aGauge) {
     aGauge.props.pointerColor = "red";
     aGauge.props.pointerGradientColor = "maroon";
     aGauge.props.maxValue = 180;
-    aGauge.props.noOfDivisions = 9;
+    aGauge.props.noOfDivisions = 6;
     aGauge.refresh(90);
 }
 
 function setupRpmGauge(wGauge) {
-    wGauge.props.maxValue = 10.0;
+    wGauge.props.maxValue = 6.0;
     wGauge.props.rangeSegments = [];
     wGauge.props.dialColor = "#fff";
     wGauge.props.dialGradientColor = "#fff";
@@ -179,7 +179,7 @@ function setupRpmGauge(wGauge) {
     wGauge.props.dialValueTextFont = "bold 14px Arial Black";
     wGauge.props.dialSubTitleTextFont = "bold 13px Calibri";
     wGauge.props.showGlossiness = false;
-    wGauge.refresh(2.5);
+    wGauge.refresh(1.5);
 }
 
 function setupIntakeTempGauge(aGauge) {

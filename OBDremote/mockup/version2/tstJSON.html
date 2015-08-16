@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+        <title>Teste JSON</title>
+    </head>
+    <body>
+        <p id="timestamp"></p>
+        <p id="location"></p>
+        <p id="rpm"></p>
+        <p id="load"></p>
+        <p id="speed"></p>
+        <p id="ambTemp"></p>
+        <p id="coolant"></p>
+        <p id="intake"></p>
+        <p id="maf"></p>
+        <script language="javascript" type="text/javascript">
+            var linha = '{"timestamp":"2015-08-14_18_38_04","location":[-30.07431,-51.06914],"data":{"rpm":["Engine RPM",836],"load":["Engine Load",87],"speed":["Vehicle Speed",0],"ambTemp":["Ambient Air Temperature",25],"coolant":["Coolant Temperature",49],"intake":["Intake Air Temperature",33],"maf":["Mass Air Flow",8]}}';
+            var lista = JSON.parse(linha);
+            document.getElementById("timestamp").innerHTML = "timestamp: " + lista.timestamp;
+            document.getElementById("location").innerHTML = "lat: " + lista.location[0] + ", long: " + lista.location[1];
+            document.getElementById("rpm").innerHTML = "rpm: " + lista.data.rpm[1];
+            document.getElementById("load").innerHTML = "load: " + lista.data.load[1];
+            document.getElementById("speed").innerHTML = "speed: " + lista.data.speed[1];
+            document.getElementById("ambTemp").innerHTML = "ambTemp: " + lista.data.ambTemp[1];
+            document.getElementById("coolant").innerHTML = "coolant: " + lista.data.coolant[1];
+            document.getElementById("intake").innerHTML = "intake: " + lista.data.intake[1];
+            document.getElementById("maf").innerHTML = "maf: " + lista.data.maf[1];
+       </script>
+    </body>
+</hmtl>

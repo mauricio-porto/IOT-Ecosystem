@@ -1,4 +1,6 @@
-var BOSH_SERVICE = '/xmpp-httpbind';
+// See http://metajack.im/2008/09/08/which-bosh-server-do-you-need/
+
+var BOSH_SERVICE = 'http://bosh.metajack.im:5280/xmpp-httpbind';
 var connection = null;
 
 function log(msg) 
