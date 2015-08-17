@@ -277,13 +277,13 @@ public class OBDproxyActivity extends Activity {
 /*
  * {"timestamp":"2014-01-12_19_48_11", // name:String
  * "location":[-30.14781,-51.21668], // name:array[number, number]
- * "data":{"10":["Engine RPM",831],  // name:objectData, onde objectData é
- * "9":["Engine Load",99],           // name:array[String, number]
- * "11":["Vehicle Speed",0],
- * "6":["Ambient Air Temperature",24],
- * "7":["Coolant Temperature",35],
- * "8":["Intake Air Temperature",24],
- * "12":["Mass Air Flow",7]}}
+ * "data":{"rpm":["Engine RPM",831],  // name:objectData, onde objectData é
+ * "load":["Engine Load",99],           // name:array[String, number]
+ * "speed":["Vehicle Speed",0],
+ * "ambTemp":["Ambient Air Temperature",24],
+ * "coolant":["Coolant Temperature",35],
+ * "intake":["Intake Air Temperature",24],
+ * "maf":["Mass Air Flow",7]}}
  *
 */
 
@@ -292,13 +292,13 @@ public class OBDproxyActivity extends Activity {
         JSONArray arrayLocation = jsonReceived.getJSONArray("location");
         JSONObject objectData = jsonReceived.getJSONObject("data");
 
-        JSONArray param = objectData.getJSONArray("10");    // Engine RPM
+        JSONArray param = objectData.getJSONArray("rpm");    // Engine RPM
         final int rpm = param.getInt(1);
 
-        param = objectData.getJSONArray("11");    // Vehicle Speed
+        param = objectData.getJSONArray("speed");    // Vehicle Speed
         final int speed = param.getInt(1);
 
-        param = objectData.getJSONArray("7");    // Coolant Temperature
+        param = objectData.getJSONArray("coolant");    // Coolant Temperature
         final int coolantTemp = param.getInt(1);
 
         runOnUiThread(new Runnable() {

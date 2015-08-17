@@ -37,27 +37,57 @@
                 log('SENT: ' + data);
             }
 
+var decodeEntities = (function() {
+  // this prevents any overhead from creating the object each time
+  var element = document.createElement('div');
+
+  function decodeHTMLEntities (str) {
+    if(str && typeof str === 'string') {
+      // strip script/html tags
+      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+
+    return str;
+  }
+
+  return decodeHTMLEntities;
+})();
+
             function updateData(msg) {
-                // data sample: '{"timestamp":"2015-08-14_18_38_04","location":[-30.07431,-51.06914],"data":{"rpm":["Engine RPM",836],"load":["Engine Load",87],"speed":["Vehicle Speed",0],"ambTemp":["Ambient Air Temperature",25],"coolant":["Coolant Temperature",49],"intake":["Intake Air Temperature",33],"maf":["Mass Air Flow",8]}}'
-//alert('Received msg: ' + msg);
-var linha = '{"timestamp":"2015-08-14_18_38_04","location":[-30.07431,-51.06914],"data":{"rpm":["Engine RPM",836],"load":["Engine Load",87],"speed":["Vehicle Speed",0],"ambTemp":["Ambient Air Temperature",25],"coolant":["Coolant Temperature",49],"intake":["Intake Air Temperature",33],"maf":["Mass Air Flow",8]}}';
-                var lista = JSON.parse(linha);
-alert('LISTA: ' + lista);
+                // data sample: {"timestamp":"2015-08-14_18_38_04","location":[-30.07431,-51.06914],"data":{"rpm":["Engine RPM",836],"load":["Engine Load",87],"speed":["Vehicle Speed",0],"ambTemp":["Ambient Air Temperature",25],"coolant":["Coolant Temperature",49],"intake":["Intake Air Temperature",33],"maf":["Mass Air Flow",8]}}
+                var jsonMsg = decodeEntities(msg);
+                var lista;
+                try {
+                    lista = JSON.parse(jsonMsg);
+                } catch(err) {
+                    //alert('ERROR: ' + err);
+                    return;
+                }
                 if (lista != null) {
                     var latitude = lista.location[0];
                     var longitude = lista.location[1];
                     if (latitude != null && longitude != null) {
-                        changePosition(latitude, longitude);
+                        //changePosition(latitude, longitude);
                     }
 
                     var rpm = lista.data.rpm[1];
                     if (rpm != null) {};
 
                     var load = lista.data.load[1];
-                    if (load != null) displayNumber(load, 'load');
+                    if (load != null) {
+                        resetDisplay('display_load');
+                        displayNumber(load, 'load');
+                    }
 
                     var speed = lista.data.speed[1];
-                    if (speed != null) displayNumber(speed, 'speed');
+                    if (speed != null) {
+                        resetDisplay('display_speed');
+                        displayNumber(speed, 'speed');
+                    }
 
                     var ambTemp = lista.data.ambTemp[1];
                     if (ambTemp != null) {};
@@ -69,7 +99,10 @@ alert('LISTA: ' + lista);
                     if (intake != null) {};
 
                     var maf = lista.data.maf[1];
-                    if (maf != null) displayNumber(maf, 'maf');
+                    if (maf != null) {
+                        resetDisplay('display_maf');
+                        displayNumber(maf, 'maf');
+                    }
                 }
             }
 

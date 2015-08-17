@@ -33,8 +33,8 @@
 
   }
 
-  function changePosition() {
-    var pos = new google.maps.LatLng(-20.1460,-51.2192);
+  function changePosition(latitude, longitude) {
+    var pos = new google.maps.LatLng(latitude,longitude);
     markerMapo.setPosition(pos);
     map.panTo(pos);
   }
