@@ -8,6 +8,16 @@ function log(msg)
     $('#log').append('<div></div>').append(document.createTextNode(msg));
 }
 
+function rawInput(data)
+{
+    log('RECV: ' + data);
+}
+
+function rawOutput(data)
+{
+    log('SENT: ' + data);
+}
+
 function onConnect(status)
 {
     if (status == Strophe.Status.CONNECTING) {
@@ -42,8 +52,7 @@ function onMessage(msg) {
 	log('ECHOBOT: I got a message from ' + from + ': ' + 
 	    Strophe.getText(body));
     
-	// var reply = $msg({to: from, from: to, type: 'chat'})
-            .cnode(Strophe.copyElement(body));
+	// var reply = $msg({to: from, from: to, type: 'chat'}).cnode(Strophe.copyElement(body));
 	// connection.send(reply.tree());
 
 	// log('ECHOBOT: I sent ' + from + ': ' + Strophe.getText(body));
@@ -56,13 +65,12 @@ function onMessage(msg) {
 
 $(document).ready(function () {
     connection = new Strophe.Connection(BOSH_SERVICE);
-
     // Uncomment the following lines to spy on the wire traffic.
-    connection.rawInput = function (data) { log('RECV: ' + data); };
-    connection.rawOutput = function (data) { log('SEND: ' + data); };
+    connection.rawInput = rawInput;
+    connection.rawOutput = rawOutput;
 
     // Uncomment the following line to see all the debug output.
-    Strophe.log = function (level, msg) { log('LOG: ' + msg); };
+    // Strophe.log = function (level, msg) { log('LOG: ' + msg); };
 
 
     $('#connect').bind('click', function () {
