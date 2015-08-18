@@ -25,6 +25,10 @@
             var connection = null;
             var BOSH_SERVICE = 'http://bosh.metajack.im:5280/xmpp-httpbind';
 
+            var rpmGauge;
+            var coolTempGauge;
+            var intakeTempGauge;
+
             function log(msg) {
                 $('#log').append('<div></div>').append(document.createTextNode(msg));
             }
@@ -75,7 +79,9 @@ var decodeEntities = (function() {
                     }
 
                     var rpm = lista.data.rpm[1];
-                    if (rpm != null) {};
+                    if (rpm != null) {
+                        rpmGauge.refresh(rpm);
+                    }
 
                     var load = lista.data.load[1];
                     if (load != null) {
@@ -93,10 +99,14 @@ var decodeEntities = (function() {
                     if (ambTemp != null) {};
 
                     var coolant = lista.data.coolant[1];
-                    if (coolant != null) {};
+                    if (coolant != null) {
+                        coolTempGauge.refresh(coolant);
+                    }
 
                     var intake = lista.data.intake[1];
-                    if (intake != null) {};
+                    if (intake != null) {
+                        intakeTempGauge.refresh(intake);
+                    }
 
                     var maf = lista.data.maf[1];
                     if (maf != null) {

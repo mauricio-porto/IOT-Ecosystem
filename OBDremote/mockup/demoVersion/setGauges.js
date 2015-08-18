@@ -164,22 +164,22 @@ function setupCoolTempGauge(aGauge) {
 }
 
 function setupRpmGauge(wGauge) {
-    wGauge.props.maxValue = 6.0;
+    wGauge.props.maxValue = 6000;
     wGauge.props.rangeSegments = [];
     wGauge.props.dialColor = "#fff";
     wGauge.props.dialGradientColor = "#fff";
-    wGauge.props.noOfDivisions = 4;
-    wGauge.props.noOfSubDivisions = 8;
+    wGauge.props.noOfDivisions = 6;
+    wGauge.props.noOfSubDivisions = 6;
     wGauge.props.majorDivisionColor = "black";
     wGauge.props.minorDivisionColor = "red";
     wGauge.props.dialTitle = "RPM";
-    wGauge.props.dialSubTitle = "x 1000";
+    wGauge.props.dialSubTitle = " ";
     wGauge.props.dialTitleTextFont = "bold 15px Calibri";
     wGauge.props.dialTitleTextColor = "maroon";
-    wGauge.props.dialValueTextFont = "bold 14px Arial Black";
+    wGauge.props.dialValueTextFont = "bold 10px Arial Black";
     wGauge.props.dialSubTitleTextFont = "bold 13px Calibri";
     wGauge.props.showGlossiness = false;
-    wGauge.refresh(1.5);
+    wGauge.refresh(1500);
 }
 
 function setupIntakeTempGauge(aGauge) {
